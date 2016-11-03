@@ -21,7 +21,7 @@ public class CardReadSerialPortUtil {
     private static CardReadSerialPortUtil portUtil;
 
     // serial port JNI object
-    private SeekerSoftSerialPort mSerialPort;
+    private static SeekerSoftSerialPort mSerialPort;
     private OutputStream mOutputStream;
     private InputStream mInputStream;
 
@@ -49,6 +49,11 @@ public class CardReadSerialPortUtil {
             portUtil = new CardReadSerialPortUtil();
             portUtil.onCreate();
         }
+
+        if (mSerialPort == null) {
+            portUtil.onCreate();
+        }
+
         return portUtil;
     }
 
