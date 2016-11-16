@@ -26,6 +26,7 @@
                 android:id="@+id/et_senddata"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="02303234353033343403"
                 android:hint="@string/cardread_senddata"
                 android:maxLines="1" />
 

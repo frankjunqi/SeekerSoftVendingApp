@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,8 @@ import com.seekersoftvendingapp.serialport.CardReadSerialPortUtil;
  */
 
 public class CardReadSerialPortActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private String TAG = CardReadSerialPortActivity.class.getSimpleName();
 
     private EditText et_senddata;
 
@@ -34,9 +37,14 @@ public class CardReadSerialPortActivity extends AppCompatActivity implements Vie
 
         CardReadSerialPortUtil.getInstance().setOnDataReceiveListener(new CardReadSerialPortUtil.OnDataReceiveListener() {
             @Override
-            public void onDataReceive(byte[] buffer, int size) {
-                String dataReceive = new String(buffer);
-                tv_getdata.setText("Receive Date: " + dataReceive);
+            public void onDataReceiveString(String IDNUM) {
+                Log.e("tag", IDNUM);
+            }
+
+            @Override
+            public void onDataReceiveBuffer(byte[] buffer, int size) {
+                // do nothing
+                Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
     }
@@ -46,7 +54,7 @@ public class CardReadSerialPortActivity extends AppCompatActivity implements Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_send:
-                CardReadSerialPortUtil.getInstance().sendCmds(et_senddata.getText().toString());
+                CardReadSerialPortUtil.getInstance().sendBuffer(CardReadSerialPortUtil.HexToByteArr(et_senddata.getText().toString()));
                 break;
             case R.id.btn_close:
                 CardReadSerialPortUtil.getInstance().closeSerialPort();
