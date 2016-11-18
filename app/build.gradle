@@ -24,7 +24,24 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    // android database greendao
+    compile 'org.greenrobot:greendao:3.2.0'
+
+    // This is only needed if you want to use encrypted databases
+    compile 'net.zetetic:android-database-sqlcipher:3.5.4'
+
+    // android rxjava rxandroid rxbinging
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.8'
+
+    // android network
+
+    // android support libs
     compile 'com.android.support:appcompat-v7:23.2.0'
+    compile "com.android.support:recyclerview-v7:23.2.0"
     compile 'com.android.support:design:23.2.0'
+
+    // android test unit lib
     testCompile 'junit:junit:4.12'
 }

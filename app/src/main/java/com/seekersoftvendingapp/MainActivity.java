@@ -19,14 +19,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.seekersoftvendingapp.database.dao.NoteDaoActivity;
+import com.seekersoftvendingapp.database.rxdao.NoteRXDaoActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -46,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private Button btn_db_dao;
+    private Button btn_db_rxdao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,22 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        btn_db_dao = (Button) findViewById(R.id.btn_db_dao);
+        btn_db_dao.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NoteDaoActivity.class));
+            }
+        });
+        btn_db_rxdao = (Button) findViewById(R.id.btn_db_rxdao);
+        btn_db_rxdao.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NoteRXDaoActivity.class));
+            }
+        });
+
     }
 
     private void populateAutoComplete() {
