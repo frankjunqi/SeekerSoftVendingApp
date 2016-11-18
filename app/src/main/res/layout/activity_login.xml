@@ -89,6 +89,22 @@
                 android:layout_marginTop="16dp"
                 android:text="btn_db_rxdao"
                 android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_network"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="btn_network"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_fresco"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="btn_fresco"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

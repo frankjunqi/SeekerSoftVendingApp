@@ -20,7 +20,7 @@
     </string>
 
     <string name="cardread_senddata">CardRead SendData</string>
-    <string name="cardread_readdata">CardRead ReadData</string>
+    <string name="cardread_readdata">CardRead </string>
     <string name="cardread_click_send">Send Data</string>
     <string name="cardread_click_close">Close Serial Port</string>
 </resources>

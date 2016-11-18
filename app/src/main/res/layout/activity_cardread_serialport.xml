@@ -10,43 +10,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.seekersoftvendingapp.CardReadSerialPortActivity">
 
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
+    <LinearLayout
+        android:id="@+id/email_login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_open"
+            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="16dp"
+            android:text="open serial port"
+            android:textStyle="bold" />
 
+        <EditText
+            android:id="@+id/et_senddata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/cardread_senddata"
+            android:maxLines="1" />
 
-            <EditText
-                android:id="@+id/et_senddata"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="02303234353033343403"
-                android:hint="@string/cardread_senddata"
-                android:maxLines="1" />
+        <Button
+            android:id="@+id/btn_send"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/cardread_click_send"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_send"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/cardread_click_send"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/btn_close"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/cardread_click_close"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_close"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/cardread_click_close"
-                android:textStyle="bold" />
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tv_getdata"
@@ -54,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="@string/cardread_readdata" />
+        </ScrollView>
 
+    </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

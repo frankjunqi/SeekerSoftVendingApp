@@ -17,6 +17,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi' //select ABIs to build APKs for
+            universalApk false //generate an additional APK that contains all the ABIs
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
 }
 
 dependencies {
@@ -35,7 +47,10 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.8'
 
-    // android network
+    // android network okhttp okio
+
+    // android fresco load imageview
+    compile 'com.facebook.fresco:fresco:0.9.0+'
 
     // android support libs
     compile 'com.android.support:appcompat-v7:23.2.0'

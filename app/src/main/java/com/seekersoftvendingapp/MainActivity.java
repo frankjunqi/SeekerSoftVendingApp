@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.seekersoftvendingapp.database.dao.NoteDaoActivity;
 import com.seekersoftvendingapp.database.rxdao.NoteRXDaoActivity;
+import com.seekersoftvendingapp.image.FrescoActivity;
+import com.seekersoftvendingapp.network.NetworkActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btn_db_dao;
     private Button btn_db_rxdao;
+    private Button btn_fresco;
+    private Button btn_network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, NoteRXDaoActivity.class));
+            }
+        });
+
+        btn_fresco = (Button) findViewById(R.id.btn_fresco);
+        btn_fresco.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FrescoActivity.class));
+            }
+        });
+
+        btn_network = (Button) findViewById(R.id.btn_network);
+        btn_network.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, NetworkActivity.class));
             }
         });
 
