@@ -33,6 +33,7 @@
         <activity android:name=".database.rxdao.NoteRXDaoActivity" />
         <activity android:name=".image.FrescoActivity" />
         <activity android:name=".network.NetworkActivity" />
+        <activity android:name=".VendingActivity" />
 
     </application>
 

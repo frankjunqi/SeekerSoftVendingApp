@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_db_rxdao;
     private Button btn_fresco;
     private Button btn_network;
+    private Button btn_rowcol;
+    private Button btn_vending;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +121,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_vending = (Button) findViewById(R.id.btn_vending);
+        btn_vending.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, VendingActivity.class));
+            }
+        });
+
+        final TextView tv_showdata = (TextView) findViewById(R.id.tv_showdata);
+
+        btn_rowcol = (Button) findViewById(R.id.btn_rowcol);
+        btn_rowcol.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cmd = cmdOpenVender(Integer.parseInt(mEmailView.getText().toString()), Integer.parseInt(mPasswordView.getText().toString()));
+                tv_showdata.setText(cmd);
+                System.out.println("CMD open Cmd Check: " + cmd);
+            }
+        });
+
+
+    }
+
+    public static String getVenderCommand(String cmd) {
+        String cmdString = cmd.replaceAll("\\s*", "");
+        return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
+    }
+
+    public static int getBCC(String cmd) {
+        int bcc = 0;
+        for (int i = 1; i <= cmd.length() / 2; i++) {
+            bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
+        }
+        return bcc;
+    }
+
+    public static String cmdOpenVender(int col, int row) {
+        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
     }
 
     private void populateAutoComplete() {
