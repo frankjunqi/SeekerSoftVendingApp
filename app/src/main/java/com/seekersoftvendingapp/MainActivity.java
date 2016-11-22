@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_network;
     private Button btn_rowcol;
     private Button btn_vending;
+    private Button btn_store;
 
 
     @Override
@@ -128,6 +129,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, VendingActivity.class));
             }
         });
+
+
+        btn_store = (Button) findViewById(R.id.btn_store);
+        btn_store.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, StoreActivity.class));
+            }
+        });
+
 
         final TextView tv_showdata = (TextView) findViewById(R.id.tv_showdata);
 

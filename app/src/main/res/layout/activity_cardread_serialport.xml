@@ -18,12 +18,21 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_open"
+            android:id="@+id/btn_open_id"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="open serial port"
+            android:text="open serial port id"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_open_ic"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="open serial port ic"
             android:textStyle="bold" />
 
         <EditText

@@ -13,12 +13,12 @@ import java.io.OutputStream;
  * Created by kjh08490 on 2016/11/1.
  */
 
-public class VendingSerialPortUtil {
+public class ICCardReadSerialPortUtil {
 
-    private String TAG = VendingSerialPortUtil.class.getSimpleName();
+    private String TAG = ICCardReadSerialPortUtil.class.getSimpleName();
 
     // single object
-    private static VendingSerialPortUtil portUtil;
+    private static ICCardReadSerialPortUtil portUtil;
 
     // serial port JNI object
     private static SeekerSoftSerialPort mSerialPort;
@@ -33,7 +33,12 @@ public class VendingSerialPortUtil {
     private boolean isStop = false;
 
     // device & baudrate
-    private String devicePath = "/dev/ttymxc1";// tty02
+    private String devicePath = "/dev/ttymxc4";
+    // tty02--- ttymxc1   ; ttyo3---ttymxc2  ;  tty04---ttymxc3  ;  tty05---ttymxc4  ;
+    //   ICCard is OK        ICCard is Ok       ICCrad is not BAD     ICCard is OK
+    // tty06---ttyES0  ; tty07---ttyES1 ;
+    //  ICCard is OK     ICCard is BAD(IDCardReadSerialPortUtil: length=1; regionStart=0; regionLength=-1)
+
     private int baudrate = 9600;
 
     public interface OnDataReceiveListener {
@@ -46,9 +51,9 @@ public class VendingSerialPortUtil {
         onDataReceiveListener = dataReceiveListener;
     }
 
-    public static VendingSerialPortUtil getInstance() {
+    public static ICCardReadSerialPortUtil getInstance() {
         if (null == portUtil) {
-            portUtil = new VendingSerialPortUtil();
+            portUtil = new ICCardReadSerialPortUtil();
             portUtil.onCreate();
         }
         return portUtil;
@@ -79,7 +84,8 @@ public class VendingSerialPortUtil {
      */
     public boolean sendCmds(String cmd) {
         boolean result = true;
-        byte[] mBuffer = cmd.getBytes();
+        byte[] mBuffer = (cmd + "\r\n").getBytes();
+        //注意：我得项目中需要在每次发送后面加\r\n，大家根据项目项目做修改，也可以去掉，直接发送mBuffer
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(mBuffer);
@@ -131,7 +137,7 @@ public class VendingSerialPortUtil {
                     //Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
 
                     // 默认以 "\n" 结束读取
-                    if (IDNUM.endsWith("\n")) {
+                    if (IDNUM.endsWith("\r\n")) {
                         if (null != onDataReceiveListener) {
                             onDataReceiveListener.onDataReceiveString(IDNUM);
                             IDNUM = "";

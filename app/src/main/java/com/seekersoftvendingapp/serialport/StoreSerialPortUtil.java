@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.IDN;
 
 /**
  * Card Read Serial Port Util
@@ -14,12 +13,12 @@ import java.net.IDN;
  * Created by kjh08490 on 2016/11/1.
  */
 
-public class CardReadSerialPortUtil {
+public class StoreSerialPortUtil {
 
-    private String TAG = CardReadSerialPortUtil.class.getSimpleName();
+    private String TAG = StoreSerialPortUtil.class.getSimpleName();
 
     // single object
-    private static CardReadSerialPortUtil portUtil;
+    private static StoreSerialPortUtil portUtil;
 
     // serial port JNI object
     private static SeekerSoftSerialPort mSerialPort;
@@ -34,8 +33,9 @@ public class CardReadSerialPortUtil {
     private boolean isStop = false;
 
     // device & baudrate
-    private String devicePath = "/dev/ttymxc2";
-    private int baudrate = 9600;
+    private String devicePath = "/dev/ttymxc1";// tty02--- ttymxc1   ; tty6---ttyES0
+
+    private int baudrate = 38400;
 
     public interface OnDataReceiveListener {
         void onDataReceiveString(String IDNUM);
@@ -47,9 +47,9 @@ public class CardReadSerialPortUtil {
         onDataReceiveListener = dataReceiveListener;
     }
 
-    public static CardReadSerialPortUtil getInstance() {
+    public static StoreSerialPortUtil getInstance() {
         if (null == portUtil) {
-            portUtil = new CardReadSerialPortUtil();
+            portUtil = new StoreSerialPortUtil();
             portUtil.onCreate();
         }
         return portUtil;
@@ -80,8 +80,7 @@ public class CardReadSerialPortUtil {
      */
     public boolean sendCmds(String cmd) {
         boolean result = true;
-        byte[] mBuffer = (cmd + "\r\n").getBytes();
-        //注意：我得项目中需要在每次发送后面加\r\n，大家根据项目项目做修改，也可以去掉，直接发送mBuffer
+        byte[] mBuffer = cmd.getBytes();
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(mBuffer);
