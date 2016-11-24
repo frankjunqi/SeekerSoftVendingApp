@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.serialport.StoreSerialPortUtil;
-import com.seekersoftvendingapp.serialport.VendingSerialPortUtil;
+import com.seekersoftvendingapp.serialport.StoreSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
@@ -35,9 +34,9 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         btn_out = (Button) findViewById(R.id.btn_out);
         btn_out.setOnClickListener(this);
 
-        StoreSerialPortUtil.getInstance();
+        StoreSerialPort.getInstance();
 
-        StoreSerialPortUtil.getInstance().setOnDataReceiveListener(new StoreSerialPortUtil.OnDataReceiveListener() {
+        StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
 
@@ -56,7 +55,7 @@ public class StoreActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_out:
                 // 柜子
-                StoreSerialPortUtil.getInstance().sendBuffer(StoreSerialPortUtil.HexToByteArr(cmdOpenStoreDoor(0, 0, 16)));
+                StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmdOpenStoreDoor(0, 0, 16)));
 
                 break;
         }

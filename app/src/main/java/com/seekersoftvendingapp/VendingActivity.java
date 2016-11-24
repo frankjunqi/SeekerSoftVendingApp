@@ -8,8 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.serialport.StoreSerialPortUtil;
-import com.seekersoftvendingapp.serialport.VendingSerialPortUtil;
+import com.seekersoftvendingapp.serialport.VendingSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
@@ -35,9 +34,9 @@ public class VendingActivity extends AppCompatActivity implements View.OnClickLi
         btn_out = (Button) findViewById(R.id.btn_out);
         btn_out.setOnClickListener(this);
 
-        VendingSerialPortUtil.getInstance();
+        VendingSerialPort.getInstance();
 
-        VendingSerialPortUtil.getInstance().setOnDataReceiveListener(new VendingSerialPortUtil.OnDataReceiveListener() {
+        VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
 
@@ -57,47 +56,45 @@ public class VendingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_out:
                 String cmd = cmdOpenVender(Integer.parseInt(et_col.getText().toString()), Integer.parseInt(et_row.getText().toString()));
                 tv_showdata.setText(cmd);
-                // VendingSerialPortUtil.getInstance().sendCmds(cmd);
-                 VendingSerialPortUtil.getInstance().sendBuffer(VendingSerialPortUtil.HexToByteArr(cmd));
+                VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
                 break;
         }
     }
 
+    /**
+     * 业务层面的参数拼接
+     *
+     * @param col 列号
+     * @param row 行号
+     * @return
+     */
+    public static String cmdOpenVender(int col, int row) {
+        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
+    }
 
-    // openStore(ConvertHelper.toInt(this.vendingChn.getVc1LineNum(), Integer.valueOf(0)).intValue(), ConvertHelper.toInt(this.vendingChn.getVc1ColumnNum(), Integer.valueOf(0)).intValue(), ConvertHelper.toInt(this.vendingChn.getVc1Height(), Integer.valueOf(0)).intValue());
-
+    /**
+     * 获取打开螺纹柜的串口命令
+     *
+     * @param cmd
+     * @return
+     */
     public static String getVenderCommand(String cmd) {
         String cmdString = cmd.replaceAll("\\s*", "");
         return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
     }
 
+    /**
+     * 获取校验位
+     *
+     * @param cmd 原始命令
+     * @return
+     */
     public static int getBCC(String cmd) {
         int bcc = 0;
         for (int i = 1; i <= cmd.length() / 2; i++) {
             bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
         }
         return bcc;
-    }
-
-    public static String cmdOpenVender(int col, int row) {
-        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
-    }
-
-    public static String cmdOpenStoreDoor(int type, int number, int door) {
-        return getStoreCommand(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 01 00 01").toString())).append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());
-    }
-
-    public static String getStoreCommand(String cmd) {
-        return (cmd.replaceAll("\\s*", "") + String.format("%04x", new Object[]{Integer.valueOf(getSum(cmd))})).toUpperCase();
-    }
-
-    public static int getSum(String cmd) {
-        int sum = 0;
-        String inHex = cmd.replaceAll("\\s*", "");
-        for (int i = 1; i <= cmd.length() / 2; i++) {
-            sum += Integer.parseInt(inHex.substring((i * 2) - 2, i * 2), 16);
-        }
-        return sum;
     }
 
 }

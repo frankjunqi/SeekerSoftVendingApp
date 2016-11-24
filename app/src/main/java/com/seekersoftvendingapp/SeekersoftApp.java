@@ -23,6 +23,7 @@ public class SeekersoftApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         // Image Fresco Application Init
         Fresco.initialize(getApplicationContext());
 
@@ -30,6 +31,7 @@ public class SeekersoftApp extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? "notes-db-encrypted" : "notes-db");
         Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+
     }
 
     public DaoSession getDaoSession() {

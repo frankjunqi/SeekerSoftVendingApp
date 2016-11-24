@@ -13,12 +13,12 @@ import java.io.OutputStream;
  * Created by kjh08490 on 2016/11/1.
  */
 
-public class StoreSerialPortUtil {
+public class StoreSerialPort {
 
-    private String TAG = StoreSerialPortUtil.class.getSimpleName();
+    private String TAG = StoreSerialPort.class.getSimpleName();
 
     // single object
-    private static StoreSerialPortUtil portUtil;
+    private static StoreSerialPort portUtil;
 
     // serial port JNI object
     private static SeekerSoftSerialPort mSerialPort;
@@ -47,9 +47,9 @@ public class StoreSerialPortUtil {
         onDataReceiveListener = dataReceiveListener;
     }
 
-    public static StoreSerialPortUtil getInstance() {
+    public static StoreSerialPort getInstance() {
         if (null == portUtil) {
-            portUtil = new StoreSerialPortUtil();
+            portUtil = new StoreSerialPort();
             portUtil.onCreate();
         }
         return portUtil;

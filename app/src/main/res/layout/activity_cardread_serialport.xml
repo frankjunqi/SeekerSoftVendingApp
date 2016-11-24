@@ -18,37 +18,12 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_open_id"
+            android:id="@+id/btn_open"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="open serial port id"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btn_open_ic"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="open serial port ic"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/et_senddata"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/cardread_senddata"
-            android:maxLines="1" />
-
-        <Button
-            android:id="@+id/btn_send"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/cardread_click_send"
+            android:text="open card serial port"
             android:textStyle="bold" />
 
         <Button
@@ -57,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/cardread_click_close"
+            android:text="Close card Serial Port"
             android:textStyle="bold" />
 
         <ScrollView

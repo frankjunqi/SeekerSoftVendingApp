@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
+    private TextView tv_permission;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_db_rxdao;
     private Button btn_fresco;
     private Button btn_network;
-    private Button btn_rowcol;
+    private Button btn_read_card;
     private Button btn_vending;
     private Button btn_store;
 
@@ -64,33 +63,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptClickTestSerialPort();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptClickTestSerialPort();
-            }
-        });
-
+        tv_permission = (TextView) findViewById(R.id.tv_permission);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        // Set up the login form.
+        populateAutoComplete();
+
+        // 数据库操作
         btn_db_dao = (Button) findViewById(R.id.btn_db_dao);
         btn_db_dao.setOnClickListener(new OnClickListener() {
             @Override
@@ -98,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, NoteDaoActivity.class));
             }
         });
+
+        // 数据库操作 RX 系列
         btn_db_rxdao = (Button) findViewById(R.id.btn_db_rxdao);
         btn_db_rxdao.setOnClickListener(new OnClickListener() {
             @Override
@@ -106,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 图片加载 FRESCO
         btn_fresco = (Button) findViewById(R.id.btn_fresco);
         btn_fresco.setOnClickListener(new OnClickListener() {
             @Override
@@ -114,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 网络加载 ( POST GET )
         btn_network = (Button) findViewById(R.id.btn_network);
         btn_network.setOnClickListener(new OnClickListener() {
             @Override
@@ -122,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 读卡( ID IC )
+        btn_read_card = (Button) findViewById(R.id.btn_read_card);
+        btn_read_card.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CardReadSerialPortActivity.class));
+            }
+        });
+
+        // 螺纹柜的串口通信
         btn_vending = (Button) findViewById(R.id.btn_vending);
         btn_vending.setOnClickListener(new OnClickListener() {
             @Override
@@ -131,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        // 格子柜的串口通信
         btn_store = (Button) findViewById(R.id.btn_store);
         btn_store.setOnClickListener(new OnClickListener() {
             @Override
@@ -138,38 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, StoreActivity.class));
             }
         });
-
-
-        final TextView tv_showdata = (TextView) findViewById(R.id.tv_showdata);
-
-        btn_rowcol = (Button) findViewById(R.id.btn_rowcol);
-        btn_rowcol.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cmd = cmdOpenVender(Integer.parseInt(mEmailView.getText().toString()), Integer.parseInt(mPasswordView.getText().toString()));
-                tv_showdata.setText(cmd);
-                System.out.println("CMD open Cmd Check: " + cmd);
-            }
-        });
-
-
-    }
-
-    public static String getVenderCommand(String cmd) {
-        String cmdString = cmd.replaceAll("\\s*", "");
-        return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
-    }
-
-    public static int getBCC(String cmd) {
-        int bcc = 0;
-        for (int i = 1; i <= cmd.length() / 2; i++) {
-            bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
-        }
-        return bcc;
-    }
-
-    public static String cmdOpenVender(int col, int row) {
-        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
     }
 
     private void populateAutoComplete() {
@@ -186,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(tv_permission, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -213,15 +176,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptClickTestSerialPort() {
-        startActivity(new Intent(this, CardReadSerialPortActivity.class));
-    }
 
     /**
      * Shows the progress UI and hides the login form.
