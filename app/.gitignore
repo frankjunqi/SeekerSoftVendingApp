@@ -6,7 +6,3 @@ local.properties
 .navigation/
 build/
 captures/
-/Android_Core
-/Android_Service
-/Android_DBGenerator
-app/etongAndroid.keystore
