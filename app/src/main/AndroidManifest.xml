@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".SettingActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,13 +28,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CardReadSerialPortActivity" />
+        <activity android:name=".CardReadActivity" />
         <activity android:name=".database.dao.NoteDaoActivity" />
         <activity android:name=".database.rxdao.NoteRXDaoActivity" />
         <activity android:name=".image.FrescoActivity" />
         <activity android:name=".network.NetworkActivity" />
         <activity android:name=".VendingActivity" />
-        <activity android:name=".StoreActivity"/>
+        <activity android:name=".StoreActivity" />
+        <activity android:name=".StartAppActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".InsertGoodsNumActivity" />
 
     </application>
 

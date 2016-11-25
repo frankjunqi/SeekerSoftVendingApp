@@ -15,12 +15,12 @@ import com.seekersoftvendingapp.serialport.CardReadSerialPort;
  * Created by kjh08490 on 2016/11/2.
  */
 
-public class CardReadSerialPortActivity extends AppCompatActivity implements View.OnClickListener {
+public class CardReadActivity extends AppCompatActivity implements View.OnClickListener {
 
     // 读取卡中的数据的消息
     private static final int CARDRECEIVECODE = 1101;
 
-    private String TAG = CardReadSerialPortActivity.class.getSimpleName();
+    private String TAG = CardReadActivity.class.getSimpleName();
 
     private Button btn_open, btn_close;
 
@@ -41,7 +41,7 @@ public class CardReadSerialPortActivity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardread_serialport);
+        setContentView(R.layout.activity_cardread);
         tv_getdata = (TextView) findViewById(R.id.tv_getdata);
         btn_open = (Button) findViewById(R.id.btn_open);
         btn_close = (Button) findViewById(R.id.btn_close);

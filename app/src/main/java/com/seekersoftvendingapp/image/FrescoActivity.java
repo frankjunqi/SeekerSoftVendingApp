@@ -17,7 +17,7 @@ public class FrescoActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fresco_layout);
+        setContentView(R.layout.activity_fresco);
         iv_icon = (SimpleDraweeView) findViewById(R.id.iv_icon);
         Uri uri = Uri.parse("https://pic4.40017.cn/scenery/destination/2016/07/18/18/wqULcl.jpg");
         iv_icon.setImageURI(uri);

@@ -30,7 +30,7 @@ public class NetworkActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.network_layout);
+        setContentView(R.layout.activity_network);
 
         //asyncGetRequest();
         //asyncPostRequest();

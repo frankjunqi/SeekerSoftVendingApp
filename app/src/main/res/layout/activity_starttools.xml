@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.seekersoftvendingapp.MainActivity">
+    tools:context="com.seekersoftvendingapp.SettingActivity">
 
     <!-- Login progress -->
     <ProgressBar
@@ -35,6 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="SeekerSoftVendingFunction" />
+
+            <Button
+                android:id="@+id/btn_startapp"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="btn_startapp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_db_dao"
