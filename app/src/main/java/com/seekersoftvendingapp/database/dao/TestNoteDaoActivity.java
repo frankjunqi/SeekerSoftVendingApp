@@ -32,7 +32,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class NoteDaoActivity extends AppCompatActivity {
+public class TestNoteDaoActivity extends AppCompatActivity {
 
     private EditText editText;
     private View addNoteButton;
@@ -44,7 +44,7 @@ public class NoteDaoActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dbnote);
+        setContentView(R.layout.test_activity_dbnote);
 
         setUpViews();
 

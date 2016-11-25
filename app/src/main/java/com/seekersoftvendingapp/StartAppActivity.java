@@ -60,7 +60,7 @@ public class StartAppActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 count++;
-                if (count == 3) {
+                if (count / 2 == 0) {
                     successInit();
                 } else {
                     handleLoading();

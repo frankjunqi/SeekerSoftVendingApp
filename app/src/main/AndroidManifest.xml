@@ -28,16 +28,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CardReadActivity" />
-        <activity android:name=".database.dao.NoteDaoActivity" />
-        <activity android:name=".database.rxdao.NoteRXDaoActivity" />
-        <activity android:name=".image.FrescoActivity" />
-        <activity android:name=".network.NetworkActivity" />
-        <activity android:name=".VendingActivity" />
-        <activity android:name=".StoreActivity" />
+        <activity android:name=".test.TestCardReadActivity" />
+        <activity android:name=".database.dao.TestNoteDaoActivity" />
+        <activity android:name=".database.rxdao.TestNoteRXDaoActivity" />
+        <activity android:name=".image.TestFrescoActivity" />
+        <activity android:name=".network.TestNetworkActivity" />
+        <activity android:name=".test.TestVendingActivity" />
+        <activity android:name=".test.TestStoreActivity" />
+
+
         <activity android:name=".StartAppActivity" />
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".InsertGoodsNumActivity" />
+        <activity android:name=".CardReadActivity" />
+        <activity android:name=".HandleResultActivity" />
+
 
     </application>
 

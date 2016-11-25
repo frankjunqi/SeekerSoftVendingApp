@@ -11,28 +11,19 @@ import android.widget.Button;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class CardReadActivity extends AppCompatActivity {
+public class HandleResultActivity extends AppCompatActivity {
 
-    private Button btn_return_goods;
     private Button btn_return_mainpage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardread);
-
-        btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
-        btn_return_goods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CardReadActivity.this, HandleResultActivity.class));
-            }
-        });
+        setContentView(R.layout.activity_handleresult);
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CardReadActivity.this, MainActivity.class);
+                Intent intent = new Intent(HandleResultActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }

@@ -1,4 +1,4 @@
-package com.seekersoftvendingapp;
+package com.seekersoftvendingapp.test;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,15 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.serialport.VendingSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
  */
 
-public class VendingActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestVendingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String TAG = VendingActivity.class.getSimpleName();
+    private String TAG = TestVendingActivity.class.getSimpleName();
     private EditText et_col, et_row;
     private Button btn_out;
     private TextView tv_showdata;
@@ -25,7 +26,7 @@ public class VendingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vending);
+        setContentView(R.layout.test_activity_vending);
         et_col = (EditText) findViewById(R.id.et_col);
         et_row = (EditText) findViewById(R.id.et_row);
 

@@ -25,12 +25,12 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class NetworkActivity extends AppCompatActivity {
+public class TestNetworkActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_network);
+        setContentView(R.layout.test_activity_network);
 
         //asyncGetRequest();
         //asyncPostRequest();
@@ -52,12 +52,12 @@ public class NetworkActivity extends AppCompatActivity {
         updateAction.enqueue(new Callback<UpdaeResBody>() {
             @Override
             public void onResponse(Call<UpdaeResBody> call, Response<UpdaeResBody> response) {
-                Toast.makeText(NetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(Call<UpdaeResBody> call, Throwable throwable) {
-                Toast.makeText(NetworkActivity.this, "asyncGetRequest Failure", Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, "asyncGetRequest Failure", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -74,12 +74,12 @@ public class NetworkActivity extends AppCompatActivity {
         postAction.enqueue(new Callback<PostResBody>() {
             @Override
             public void onResponse(Call<PostResBody> call, Response<PostResBody> response) {
-                Toast.makeText(NetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(Call<PostResBody> call, Throwable throwable) {
-                Toast.makeText(NetworkActivity.this, "asyncPostRequest Failure", Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, "asyncPostRequest Failure", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -114,7 +114,7 @@ public class NetworkActivity extends AppCompatActivity {
         postAction.enqueue(new Callback<PostResBody>() {
             @Override
             public void onResponse(Call<PostResBody> call, Response<PostResBody> response) {
-                Toast.makeText(NetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -138,7 +138,7 @@ public class NetworkActivity extends AppCompatActivity {
         updateAction.enqueue(new Callback<UpdaeResBody>() {
             @Override
             public void onResponse(Call<UpdaeResBody> call, Response<UpdaeResBody> response) {
-                Toast.makeText(NetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TestNetworkActivity.this, response.message(), Toast.LENGTH_LONG).show();
             }
 
             @Override

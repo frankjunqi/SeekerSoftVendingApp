@@ -5,27 +5,20 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_goodnumber"
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="输入货道号: A19"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/btn_goto_read_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_goodnumber"
-        android:layout_marginTop="40dp"
-        android:text="确定，刷卡..." />
+        android:text="处理出货结果：\n 1. 成功 \n 2. 失败 "
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btn_return_mainpage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="返回首页" />
+        android:text="倒计时10秒，返回首页...." />
+
 
 </RelativeLayout>

@@ -34,7 +34,7 @@ import rx.functions.Action1;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class NoteRXDaoActivity extends AppCompatActivity {
+public class TestNoteRXDaoActivity extends AppCompatActivity {
     private EditText editText;
     private View addNoteButton;
 
@@ -45,7 +45,7 @@ public class NoteRXDaoActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rxdbnote);
+        setContentView(R.layout.test_activity_rxdbnote);
 
         setUpViews();
 

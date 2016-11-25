@@ -16,10 +16,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.database.dao.NoteDaoActivity;
-import com.seekersoftvendingapp.database.rxdao.NoteRXDaoActivity;
-import com.seekersoftvendingapp.image.FrescoActivity;
-import com.seekersoftvendingapp.network.NetworkActivity;
+import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
+import com.seekersoftvendingapp.database.rxdao.TestNoteRXDaoActivity;
+import com.seekersoftvendingapp.image.TestFrescoActivity;
+import com.seekersoftvendingapp.network.TestNetworkActivity;
+import com.seekersoftvendingapp.test.TestCardReadActivity;
+import com.seekersoftvendingapp.test.TestStoreActivity;
+import com.seekersoftvendingapp.test.TestVendingActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -81,7 +84,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_db_dao.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, NoteDaoActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestNoteDaoActivity.class));
             }
         });
 
@@ -90,7 +93,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_db_rxdao.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, NoteRXDaoActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestNoteRXDaoActivity.class));
             }
         });
 
@@ -99,7 +102,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_fresco.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, FrescoActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestFrescoActivity.class));
             }
         });
 
@@ -108,7 +111,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_network.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, NetworkActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestNetworkActivity.class));
             }
         });
 
@@ -117,7 +120,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_read_card.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, CardReadActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestCardReadActivity.class));
             }
         });
 
@@ -126,7 +129,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_vending.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, VendingActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestVendingActivity.class));
             }
         });
 
@@ -136,7 +139,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_store.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, StoreActivity.class));
+                startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
             }
         });
     }
