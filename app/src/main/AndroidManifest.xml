@@ -44,6 +44,7 @@
         <activity android:name=".InsertGoodsNumActivity" />
         <activity android:name=".CardReadActivity" />
         <activity android:name=".HandleResultActivity" />
+        <activity android:name=".ManagerGoodsActivity" />
 
 
     </application>
