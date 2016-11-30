@@ -8,6 +8,7 @@ import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.PostResBody;
+import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 
@@ -34,9 +35,31 @@ public class TestNetworkActivity extends AppCompatActivity {
 
         //asyncGetRequest();
         //asyncPostRequest();
+        asyncGetBaseDataRequest();
+        //headerCheckGet();
+        //headerCheckPost();
+    }
 
-        headerCheckGet();
-        headerCheckPost();
+    // Get
+    private void asyncGetBaseDataRequest() {
+        // 加载前
+        // do something
+
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123");
+        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
+            @Override
+            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
+                Toast.makeText(TestNetworkActivity.this, response.body().server_time, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
+                Toast.makeText(TestNetworkActivity.this, "asyncGetRequest Failure", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 

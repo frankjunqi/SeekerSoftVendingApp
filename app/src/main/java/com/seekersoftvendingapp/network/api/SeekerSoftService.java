@@ -3,6 +3,7 @@ package com.seekersoftvendingapp.network.api;
 import android.database.Observable;
 
 import com.seekersoftvendingapp.network.entity.PostResBody;
+import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.entity.TempResBody;
 import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 
@@ -45,4 +46,14 @@ public interface SeekerSoftService {
     @FormUrlEncoded
     @POST("FundPaperTrade/AppUserLogin")
     Observable<Response> getTransData(@FieldMap Map<String, String> map);
+
+
+    // 获取基础数据接口
+    @GET("{api}/{serviceName}/{deviceId}")
+    Call<SynchroBaseDataResBody> getSynchroBaseData(
+            @Path("api") String api,
+            @Path("serviceName") String serviceName,
+            @Path("deviceId") String deviceId
+    );
+
 }
