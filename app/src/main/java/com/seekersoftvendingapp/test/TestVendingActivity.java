@@ -55,8 +55,12 @@ public class TestVendingActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_out:
-                String cmd = cmdOpenVender(Integer.parseInt(et_col.getText().toString()), Integer.parseInt(et_row.getText().toString()));
+                int col = Integer.parseInt(et_col.getText().toString());
+                int row = Integer.parseInt(et_row.getText().toString());
+
+                String cmd = cmdOpenVender(col, row);
                 tv_showdata.setText(cmd);
+                Log.e(TAG, "Open {Col=" + col + "}{Row=" + row + "} CMD: " + cmd);
                 VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
                 break;
         }
