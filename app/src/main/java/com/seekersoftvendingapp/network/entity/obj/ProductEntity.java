@@ -20,6 +20,16 @@ public class ProductEntity implements Serializable {
         public String objectId;
         public String createdAt;
         public String updatedAt;
+
+        @Override
+        public String toString() {
+            return "{ \n        cusProductName = " + cusProductName + ",\n      objectId" + objectId + ",\n     createdAt" + createdAt + ",\n       updatedAt " + updatedAt + "}";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "{ \n    name = " + name + ",\n  objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + ",\n     cusProduct = " + cusProduct.toString() + "}";
     }
 
 }

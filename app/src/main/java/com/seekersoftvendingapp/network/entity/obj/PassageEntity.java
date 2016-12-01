@@ -20,10 +20,21 @@ public class PassageEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
+    @Override
+    public String toString() {
+        return "{ \n    capacity = " + capacity + ",\n  seqNo = " + seqNo + ",\n    whorlSize = " + whorlSize + ",\n    isSend = " + isSend + ",\n      product"
+                + product.toString() + ",\n     borrowState" + borrowState + ",\n    stock = " + stock + ",\n    objectId=" + objectId + ",\n    createdAt = " + createdAt + ",\n    updatedAt = " + updatedAt + "}";
+    }
+
     public class PassageProduct implements Serializable {
         public String __type;
         public String className;
         public String objectId;
+
+        @Override
+        public String toString() {
+            return "{ \n        __type = " + __type + ",\n      className = " + className + ",\n        objectId = " + objectId + "}";
+        }
     }
 
 }

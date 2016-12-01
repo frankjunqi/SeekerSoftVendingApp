@@ -2,6 +2,7 @@ package com.seekersoftvendingapp.network;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.R;
@@ -28,10 +29,13 @@ import retrofit2.Retrofit;
 
 public class TestNetworkActivity extends AppCompatActivity {
 
+    private TextView textView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity_network);
+        textView = (TextView) findViewById(R.id.textView);
 
         //asyncGetRequest();
         //asyncPostRequest();
@@ -53,6 +57,13 @@ public class TestNetworkActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 Toast.makeText(TestNetworkActivity.this, response.body().server_time, Toast.LENGTH_LONG).show();
+                textView.setText("AdminCard: " + response.body().data.AdminCard.size() + "\n"
+                        + "Employee: " + response.body().data.Employee.size() + "\n"
+                        + "EmpPower: " + response.body().data.EmpPower.size() + "\n"
+                        + "Passage: " + response.body().data.Passage.size() + "\n"
+                        + "Product: " + response.body().data.Product.size() + "\n"
+                        + "RES = " + response.body().toString()
+                );
             }
 
             @Override

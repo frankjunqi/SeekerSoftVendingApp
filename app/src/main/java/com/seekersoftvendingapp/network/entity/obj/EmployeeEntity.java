@@ -16,4 +16,10 @@ public class EmployeeEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
+
+    @Override
+    public String toString() {
+        return "{ \n    empNo = " + empNo + ",\n    objectId = " + objectId + ",\n  createdAt" + createdAt +
+                ",\n    updatedAt = " + updatedAt + ",\n    card = " + card.toString() + ",\n   power = " + power.toString() + "}";
+    }
 }

@@ -13,4 +13,8 @@ public class AdminCardEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
+    @Override
+    public String toString() {
+        return "{ \n    card =" + card + ",\n   objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + "}";
+    }
 }
