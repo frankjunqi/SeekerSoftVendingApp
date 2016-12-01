@@ -1,4 +1,4 @@
-package com.seekersoftvendingapp.database;
+package com.seekersoftvendingapp.database.note;
 
 /**
  * Created by kjh08490 on 2016/11/18.

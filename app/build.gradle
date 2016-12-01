@@ -38,6 +38,7 @@ dependencies {
     })
     // android database greendao
     compile 'org.greenrobot:greendao:3.2.0'
+    compile 'de.greenrobot:greendao-generator:1.3.1'
 
     // This is only needed if you want to use encrypted databases
     compile 'net.zetetic:android-database-sqlcipher:3.5.4'

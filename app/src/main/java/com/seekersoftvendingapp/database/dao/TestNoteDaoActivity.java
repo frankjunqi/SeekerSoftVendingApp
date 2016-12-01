@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
-import com.seekersoftvendingapp.database.DaoSession;
-import com.seekersoftvendingapp.database.Note;
-import com.seekersoftvendingapp.database.NoteDao;
+import com.seekersoftvendingapp.database.note.DaoSession;
+import com.seekersoftvendingapp.database.note.Note;
+import com.seekersoftvendingapp.database.note.NoteDao;
 import com.seekersoftvendingapp.database.NoteType;
 import com.seekersoftvendingapp.database.NotesAdapter;
 

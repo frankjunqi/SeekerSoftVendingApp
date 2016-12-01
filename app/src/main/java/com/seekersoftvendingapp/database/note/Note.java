@@ -1,4 +1,7 @@
-package com.seekersoftvendingapp.database;
+package com.seekersoftvendingapp.database.note;
+
+import com.seekersoftvendingapp.database.NoteType;
+import com.seekersoftvendingapp.database.NoteTypeConverter;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;

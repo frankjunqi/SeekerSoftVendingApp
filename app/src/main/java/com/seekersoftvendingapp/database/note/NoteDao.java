@@ -1,4 +1,4 @@
-package com.seekersoftvendingapp.database;
+package com.seekersoftvendingapp.database.note;
 
 /**
  * Created by kjh08490 on 2016/11/18.
@@ -6,6 +6,9 @@ package com.seekersoftvendingapp.database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
+
+import com.seekersoftvendingapp.database.NoteType;
+import com.seekersoftvendingapp.database.NoteTypeConverter;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;

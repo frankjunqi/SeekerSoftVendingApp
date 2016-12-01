@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.seekersoftvendingapp.R;
+import com.seekersoftvendingapp.database.note.Note;
 
 import java.util.ArrayList;
 import java.util.List;
