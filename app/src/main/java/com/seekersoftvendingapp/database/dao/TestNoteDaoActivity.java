@@ -13,14 +13,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
-import com.seekersoftvendingapp.database.note.DaoSession;
-import com.seekersoftvendingapp.database.note.Note;
-import com.seekersoftvendingapp.database.note.NoteDao;
-import com.seekersoftvendingapp.database.NoteType;
 import com.seekersoftvendingapp.database.NotesAdapter;
+import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.Note;
+import com.seekersoftvendingapp.database.table.NoteDao;
 
 import org.greenrobot.greendao.query.Query;
 
@@ -116,7 +114,7 @@ public class TestNoteDaoActivity extends AppCompatActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        Note note = new Note(null, noteText, comment, new Date(), NoteType.TEXT);
+        Note note = new Note(null, noteText, comment, new Date());
         noteDao.insert(note);
         Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
 

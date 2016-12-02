@@ -3,8 +3,8 @@ package com.seekersoftvendingapp;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.seekersoftvendingapp.database.note.DaoMaster;
-import com.seekersoftvendingapp.database.note.DaoSession;
+import com.seekersoftvendingapp.database.table.DaoMaster;
+import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 

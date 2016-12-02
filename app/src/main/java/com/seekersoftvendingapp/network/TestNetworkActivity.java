@@ -15,11 +15,6 @@ import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 
 import java.io.IOException;
 
-import de.greenrobot.daogenerator.DaoGenerator;
-import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
-import de.greenrobot.daogenerator.Schema;
-import de.greenrobot.daogenerator.ToMany;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
