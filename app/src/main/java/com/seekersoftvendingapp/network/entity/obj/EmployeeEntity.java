@@ -1,5 +1,8 @@
 package com.seekersoftvendingapp.network.entity.obj;
 
+import com.seekersoftvendingapp.database.table.Employee;
+import com.seekersoftvendingapp.util.DataFormat;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,6 +19,10 @@ public class EmployeeEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
+
+    public Employee getEmployee() {
+        return new Employee(null, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+    }
 
     @Override
     public String toString() {

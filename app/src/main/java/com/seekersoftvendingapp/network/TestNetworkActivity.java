@@ -24,6 +24,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
+ * 消费流程查询：
+
+ 货道id ----> （查询货道表） ----> 得到产品id  ----> （查询权限表）----> 得到员工id ---->（查询员工卡关系表）----> 得到卡id列表 ----> 匹配读卡器读到的卡号进行匹配是否可以操作
+ *
  * Created by kjh08490 on 2016/11/18.
  */
 
