@@ -1,5 +1,10 @@
 package com.seekersoftvendingapp.network.entity;
 
+import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.EmpPower;
+import com.seekersoftvendingapp.database.table.Employee;
+import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.database.table.Product;
 import com.seekersoftvendingapp.network.entity.obj.AdminCardEntity;
 import com.seekersoftvendingapp.network.entity.obj.EmpPowerEntity;
 import com.seekersoftvendingapp.network.entity.obj.EmployeeEntity;
@@ -20,6 +25,46 @@ public class SynchroBaseDataResBody implements Serializable {
     public String msg;// 服务器返回具体状态码描述信息
     public SyncharBaseEntity data = new SyncharBaseEntity();
     public String server_time;// 返回服务器时间
+
+    public List<AdminCard> getAdminCardList() {
+        ArrayList<AdminCard> adminCards = new ArrayList<AdminCard>();
+        for (AdminCardEntity adminCardEntity : data.AdminCard) {
+            adminCards.add(adminCardEntity.getAdminCard());
+        }
+        return adminCards;
+    }
+
+    public List<Product> getProductList() {
+        ArrayList<Product> products = new ArrayList<Product>();
+        for (ProductEntity productEntity : data.Product) {
+            products.add(productEntity.getProduct());
+        }
+        return products;
+    }
+
+    public List<Employee> getEmployeeList() {
+        List<Employee> employees = new ArrayList<Employee>();
+        for (EmployeeEntity employeeEntity : data.Employee) {
+            employees.add(employeeEntity.getEmployee());
+        }
+        return employees;
+    }
+
+    public List<EmpPower> getEmpPowerList() {
+        List<EmpPower> emppowers = new ArrayList<EmpPower>();
+        for (EmpPowerEntity emppowerEntity : data.EmpPower) {
+            emppowers.add(emppowerEntity.getEmpPower());
+        }
+        return emppowers;
+    }
+
+    public List<Passage> getPassageList() {
+        List<Passage> passages = new ArrayList<Passage>();
+        for (PassageEntity passageEntity : data.Passage) {
+            passages.add(passageEntity.getPassage());
+        }
+        return passages;
+    }
 
     public class SyncharBaseEntity implements Serializable {
 

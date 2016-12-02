@@ -20,6 +20,14 @@ public class EmployeeEntity implements Serializable {
     public String updatedAt;
 
 
+    public static void main(String[] args) throws Exception {
+        ArrayList<String> card = new ArrayList<String>();
+        card.add("123");
+        card.add("456");
+        card.add("789");
+        System.out.print(card.toString());// [123, 456, 789]
+    }
+
     public Employee getEmployee() {
         return new Employee(null, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }

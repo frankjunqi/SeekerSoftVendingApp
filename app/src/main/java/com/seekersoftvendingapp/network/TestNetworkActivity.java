@@ -6,6 +6,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.R;
+import com.seekersoftvendingapp.SeekersoftApp;
+import com.seekersoftvendingapp.database.table.AdminCardDao;
+import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.PostResBody;
@@ -25,9 +28,9 @@ import retrofit2.Retrofit;
 
 /**
  * 消费流程查询：
-
- 货道id ----> （查询货道表） ----> 得到产品id  ----> （查询权限表）----> 得到员工id ---->（查询员工卡关系表）----> 得到卡id列表 ----> 匹配读卡器读到的卡号进行匹配是否可以操作
- *
+ * <p>
+ * 货道id ----> （查询货道表） ----> 得到产品id  ----> （查询权限表）----> 得到员工id ---->（查询员工卡关系表）----> 得到卡id列表 ----> 匹配读卡器读到的卡号进行匹配是否可以操作
+ * <p>
  * Created by kjh08490 on 2016/11/18.
  */
 
@@ -35,17 +38,16 @@ public class TestNetworkActivity extends AppCompatActivity {
 
     private TextView textView;
 
+    private AdminCardDao adminCardDao;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity_network);
         textView = (TextView) findViewById(R.id.textView);
-
-        //asyncGetRequest();
-        //asyncPostRequest();
+        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
+        adminCardDao = daoSession.getAdminCardDao();
         asyncGetBaseDataRequest();
-        //headerCheckGet();
-        //headerCheckPost();
     }
 
     // Get
@@ -68,6 +70,7 @@ public class TestNetworkActivity extends AppCompatActivity {
                         + "Product: " + response.body().data.Product.size() + "\n"
                         + "RES = " + response.body().toString()
                 );
+                adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
             }
 
             @Override

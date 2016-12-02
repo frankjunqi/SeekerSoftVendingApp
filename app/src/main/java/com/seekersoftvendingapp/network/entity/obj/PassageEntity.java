@@ -1,5 +1,8 @@
 package com.seekersoftvendingapp.network.entity.obj;
 
+import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.util.DataFormat;
+
 import java.io.Serializable;
 
 /**
@@ -19,6 +22,11 @@ public class PassageEntity implements Serializable {
     public String objectId;
     public String createdAt;
     public String updatedAt;
+
+
+    public Passage getPassage() {
+        return new Passage(null, capacity, product.objectId, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+    }
 
     @Override
     public String toString() {

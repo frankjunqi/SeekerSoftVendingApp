@@ -1,5 +1,8 @@
 package com.seekersoftvendingapp.network.entity.obj;
 
+import com.seekersoftvendingapp.database.table.Product;
+import com.seekersoftvendingapp.util.DataFormat;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +17,9 @@ public class ProductEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
+    public Product getProduct() {
+        return new Product(null, name, cusProduct.cusProductName, cusProduct.objectId, DataFormat.formatDate(cusProduct.createdAt), DataFormat.formatDate(cusProduct.updatedAt), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+    }
 
     public class CustomProduct implements Serializable {
         public String cusProductName;
