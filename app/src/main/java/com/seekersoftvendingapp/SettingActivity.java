@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.database.dao.TestAdminCardDaoActivity;
 import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
 import com.seekersoftvendingapp.database.rxdao.TestNoteRXDaoActivity;
 import com.seekersoftvendingapp.image.TestFrescoActivity;
@@ -57,6 +58,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button btn_read_card;
     private Button btn_vending;
     private Button btn_store;
+    private Button btn_db_admincard_dao;
 
 
     @Override
@@ -85,6 +87,15 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, TestNoteDaoActivity.class));
+            }
+        });
+
+        // 数据库操作 AdminCard 表
+        btn_db_admincard_dao = (Button) findViewById(R.id.btn_db_admincard_dao);
+        btn_db_admincard_dao.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, TestAdminCardDaoActivity.class));
             }
         });
 

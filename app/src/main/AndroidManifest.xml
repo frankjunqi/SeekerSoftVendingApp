@@ -30,6 +30,8 @@
 
         <activity android:name=".test.TestCardReadActivity" />
         <activity android:name=".database.dao.TestNoteDaoActivity" />
+        <activity android:name=".database.dao.TestAdminCardDaoActivity" />
+
         <activity android:name=".database.rxdao.TestNoteRXDaoActivity" />
         <activity android:name=".image.TestFrescoActivity" />
         <activity android:name=".network.TestNetworkActivity" />

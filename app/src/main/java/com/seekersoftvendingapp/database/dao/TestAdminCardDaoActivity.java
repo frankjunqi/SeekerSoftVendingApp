@@ -16,12 +16,9 @@ import android.widget.TextView;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.AdminCardsAdapter;
-import com.seekersoftvendingapp.database.NotesAdapter;
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.Note;
-import com.seekersoftvendingapp.database.table.NoteDao;
 
 import org.greenrobot.greendao.query.Query;
 
@@ -33,14 +30,10 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNoteDaoActivity extends AppCompatActivity {
+public class TestAdminCardDaoActivity extends AppCompatActivity {
 
     private EditText editText;
     private View addNoteButton;
-
-    private NoteDao noteDao;
-    private Query<Note> notesQuery;
-    private NotesAdapter notesAdapter;
 
     private AdminCardDao adminCardDao;
     private Query<AdminCard> adminCardQuery;
@@ -55,28 +48,18 @@ public class TestNoteDaoActivity extends AppCompatActivity {
 
         // get the note DAO
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        noteDao = daoSession.getNoteDao();
-
-        // query all notes, sorted a-z by their text
-        notesQuery = noteDao.queryBuilder().orderAsc(NoteDao.Properties.Text).build();
-        updateNotes();
-
 
         // get the admincard DAO
         adminCardDao = daoSession.getAdminCardDao();
 
         // query all admincards
         adminCardQuery = adminCardDao.queryBuilder().build();
+        updateAdminCards();
     }
 
-    private void updateNotes() {
-        List<Note> notes = notesQuery.list();
-        notesAdapter.setNotes(notes);
-    }
-
-    private void updateAdminCards(){
+    private void updateAdminCards() {
         List<AdminCard> adminCards = adminCardQuery.list();
-
+        adminCardsAdapter.setNotes(adminCards);
     }
 
     protected void setUpViews() {
@@ -85,8 +68,8 @@ public class TestNoteDaoActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        notesAdapter = new NotesAdapter(noteClickListener);
-        recyclerView.setAdapter(notesAdapter);
+        adminCardsAdapter = new AdminCardsAdapter(noteClickListener);
+        recyclerView.setAdapter(adminCardsAdapter);
 
         addNoteButton = findViewById(R.id.buttonAdd);
         //noinspection ConstantConditions
@@ -98,7 +81,7 @@ public class TestNoteDaoActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addNote();
+                    addAdminCard();
                     return true;
                 }
                 return false;
@@ -123,33 +106,33 @@ public class TestNoteDaoActivity extends AppCompatActivity {
     }
 
     public void onAddButtonClick(View view) {
-        addNote();
+        addAdminCard();
     }
 
-    private void addNote() {
+    private void addAdminCard() {
         String noteText = editText.getText().toString();
         editText.setText("");
 
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        Note note = new Note(null, noteText, comment, new Date());
-        noteDao.insert(note);
-        Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
+        AdminCard adminCard = new AdminCard(null, noteText.toString(), "1212", new Date(), new Date());
+        adminCardDao.insert(adminCard);
+        Log.d("DaoExample", "Inserted new note, ID: " + adminCard.getId());
 
-        updateNotes();
+        updateAdminCards();
     }
 
-    NotesAdapter.NoteClickListener noteClickListener = new NotesAdapter.NoteClickListener() {
+    AdminCardsAdapter.AdminCardClickListener noteClickListener = new AdminCardsAdapter.AdminCardClickListener() {
         @Override
         public void onNoteClick(int position) {
-            Note note = notesAdapter.getNote(position);
-            Long noteId = note.getId();
+            AdminCard note = adminCardsAdapter.getNote(position);
+            Long objectId = note.getId();
 
-            noteDao.deleteByKey(noteId);
-            Log.d("DaoExample", "Deleted note, ID: " + noteId);
+            adminCardDao.deleteByKey(objectId);
+            Log.d("DaoExample", "Deleted note, ID: " + objectId);
 
-            updateNotes();
+            updateAdminCards();
         }
     };
 
