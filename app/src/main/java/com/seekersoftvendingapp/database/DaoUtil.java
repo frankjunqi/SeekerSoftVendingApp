@@ -82,10 +82,8 @@ public class DaoUtil {
         Entity employee = schema.addEntity("Employee");
         employee.addIdProperty();
         employee.addStringProperty("empNo").notNull();
-
         employee.addStringProperty("card");
         employee.addStringProperty("power");
-
         employee.addStringProperty("objectId").notNull();
         employee.addDateProperty("createdAt");
         employee.addDateProperty("updatedAt");
@@ -109,10 +107,7 @@ public class DaoUtil {
         Entity empPower = schema.addEntity("EmpPower");
         empPower.addIdProperty();
         empPower.addStringProperty("unit");
-
-        empPower.addDateProperty("begindate");
-        empPower.addStringProperty("productObjectId");
-
+        empPower.addStringProperty("product");
         empPower.addIntProperty("count");
         empPower.addIntProperty("period");
         empPower.addStringProperty("objectId");
@@ -141,9 +136,7 @@ public class DaoUtil {
         Entity passage = schema.addEntity("Passage");
         passage.addIdProperty();
         passage.addIntProperty("capacity");
-
-        passage.addStringProperty("productObjectId");
-
+        passage.addStringProperty("product");
         passage.addStringProperty("seqNo");
         passage.addBooleanProperty("borrowState");
         passage.addIntProperty("stock");
@@ -168,12 +161,9 @@ public class DaoUtil {
     private static void addProduct(Schema schema) {
         Entity product = schema.addEntity("Product");
         product.addIdProperty();
-        product.addStringProperty("name");
+        product.addStringProperty("productName");
 
         product.addStringProperty("cusProductName");
-        product.addStringProperty("cusProductObjectId");
-        product.addDateProperty("cusProductCreateAt");
-        product.addDateProperty("cusProductUpdateAt");
 
         product.addStringProperty("objectId");
         product.addDateProperty("createdAt");

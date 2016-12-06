@@ -11,31 +11,20 @@ import java.io.Serializable;
 
 public class ProductEntity implements Serializable {
 
-    public String name;
-    public CustomProduct cusProduct = new CustomProduct();
+    public String productName;
+    public String cusProductName;
     public String objectId;
     public String createdAt;
     public String updatedAt;
 
     public Product getProduct() {
-        return new Product(null, name, cusProduct.cusProductName, cusProduct.objectId, DataFormat.formatDate(cusProduct.createdAt), DataFormat.formatDate(cusProduct.updatedAt), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Product(null, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
-    public class CustomProduct implements Serializable {
-        public String cusProductName;
-        public String objectId;
-        public String createdAt;
-        public String updatedAt;
-
-        @Override
-        public String toString() {
-            return "{ \n        cusProductName = " + cusProductName + ",\n      objectId" + objectId + ",\n     createdAt" + createdAt + ",\n       updatedAt " + updatedAt + "}";
-        }
-    }
 
     @Override
     public String toString() {
-        return "{ \n    name = " + name + ",\n  objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + ",\n     cusProduct = " + cusProduct.toString() + "}";
+        return "{ \n    name = " + productName + ",\n  objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + ",\n     cusProduct = " + cusProductName + "}";
     }
 
 }

@@ -23,14 +23,11 @@ public class ProductDao extends AbstractDao<Product, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property ProductName = new Property(1, String.class, "productName", false, "PRODUCT_NAME");
         public final static Property CusProductName = new Property(2, String.class, "cusProductName", false, "CUS_PRODUCT_NAME");
-        public final static Property CusProductObjectId = new Property(3, String.class, "cusProductObjectId", false, "CUS_PRODUCT_OBJECT_ID");
-        public final static Property CusProductCreateAt = new Property(4, java.util.Date.class, "cusProductCreateAt", false, "CUS_PRODUCT_CREATE_AT");
-        public final static Property CusProductUpdateAt = new Property(5, java.util.Date.class, "cusProductUpdateAt", false, "CUS_PRODUCT_UPDATE_AT");
-        public final static Property ObjectId = new Property(6, String.class, "objectId", false, "OBJECT_ID");
-        public final static Property CreatedAt = new Property(7, java.util.Date.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(8, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property ObjectId = new Property(3, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property CreatedAt = new Property(4, java.util.Date.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(5, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
 
 
@@ -47,14 +44,11 @@ public class ProductDao extends AbstractDao<Product, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PRODUCT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"NAME\" TEXT," + // 1: name
+                "\"PRODUCT_NAME\" TEXT," + // 1: productName
                 "\"CUS_PRODUCT_NAME\" TEXT," + // 2: cusProductName
-                "\"CUS_PRODUCT_OBJECT_ID\" TEXT," + // 3: cusProductObjectId
-                "\"CUS_PRODUCT_CREATE_AT\" INTEGER," + // 4: cusProductCreateAt
-                "\"CUS_PRODUCT_UPDATE_AT\" INTEGER," + // 5: cusProductUpdateAt
-                "\"OBJECT_ID\" TEXT," + // 6: objectId
-                "\"CREATED_AT\" INTEGER," + // 7: createdAt
-                "\"UPDATED_AT\" INTEGER);"); // 8: updatedAt
+                "\"OBJECT_ID\" TEXT," + // 3: objectId
+                "\"CREATED_AT\" INTEGER," + // 4: createdAt
+                "\"UPDATED_AT\" INTEGER);"); // 5: updatedAt
     }
 
     /** Drops the underlying database table. */
@@ -72,9 +66,9 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindLong(1, id);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
+        String productName = entity.getProductName();
+        if (productName != null) {
+            stmt.bindString(2, productName);
         }
  
         String cusProductName = entity.getCusProductName();
@@ -82,34 +76,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindString(3, cusProductName);
         }
  
-        String cusProductObjectId = entity.getCusProductObjectId();
-        if (cusProductObjectId != null) {
-            stmt.bindString(4, cusProductObjectId);
-        }
- 
-        java.util.Date cusProductCreateAt = entity.getCusProductCreateAt();
-        if (cusProductCreateAt != null) {
-            stmt.bindLong(5, cusProductCreateAt.getTime());
-        }
- 
-        java.util.Date cusProductUpdateAt = entity.getCusProductUpdateAt();
-        if (cusProductUpdateAt != null) {
-            stmt.bindLong(6, cusProductUpdateAt.getTime());
-        }
- 
         String objectId = entity.getObjectId();
         if (objectId != null) {
-            stmt.bindString(7, objectId);
+            stmt.bindString(4, objectId);
         }
  
         java.util.Date createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(8, createdAt.getTime());
+            stmt.bindLong(5, createdAt.getTime());
         }
  
         java.util.Date updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(9, updatedAt.getTime());
+            stmt.bindLong(6, updatedAt.getTime());
         }
     }
 
@@ -122,9 +101,9 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindLong(1, id);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
+        String productName = entity.getProductName();
+        if (productName != null) {
+            stmt.bindString(2, productName);
         }
  
         String cusProductName = entity.getCusProductName();
@@ -132,34 +111,19 @@ public class ProductDao extends AbstractDao<Product, Long> {
             stmt.bindString(3, cusProductName);
         }
  
-        String cusProductObjectId = entity.getCusProductObjectId();
-        if (cusProductObjectId != null) {
-            stmt.bindString(4, cusProductObjectId);
-        }
- 
-        java.util.Date cusProductCreateAt = entity.getCusProductCreateAt();
-        if (cusProductCreateAt != null) {
-            stmt.bindLong(5, cusProductCreateAt.getTime());
-        }
- 
-        java.util.Date cusProductUpdateAt = entity.getCusProductUpdateAt();
-        if (cusProductUpdateAt != null) {
-            stmt.bindLong(6, cusProductUpdateAt.getTime());
-        }
- 
         String objectId = entity.getObjectId();
         if (objectId != null) {
-            stmt.bindString(7, objectId);
+            stmt.bindString(4, objectId);
         }
  
         java.util.Date createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(8, createdAt.getTime());
+            stmt.bindLong(5, createdAt.getTime());
         }
  
         java.util.Date updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(9, updatedAt.getTime());
+            stmt.bindLong(6, updatedAt.getTime());
         }
     }
 
@@ -172,14 +136,11 @@ public class ProductDao extends AbstractDao<Product, Long> {
     public Product readEntity(Cursor cursor, int offset) {
         Product entity = new Product( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // productName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cusProductName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // cusProductObjectId
-            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // cusProductCreateAt
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // cusProductUpdateAt
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // objectId
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createdAt
-            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updatedAt
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // objectId
+            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // createdAt
+            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // updatedAt
         );
         return entity;
     }
@@ -187,14 +148,11 @@ public class ProductDao extends AbstractDao<Product, Long> {
     @Override
     public void readEntity(Cursor cursor, Product entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setProductName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCusProductName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCusProductObjectId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setCusProductCreateAt(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setCusProductUpdateAt(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setObjectId(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCreatedAt(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setUpdatedAt(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setObjectId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCreatedAt(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
+        entity.setUpdatedAt(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
      }
     
     @Override

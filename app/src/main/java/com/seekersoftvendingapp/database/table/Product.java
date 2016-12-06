@@ -12,11 +12,8 @@ public class Product {
 
     @Id
     private Long id;
-    private String name;
+    private String productName;
     private String cusProductName;
-    private String cusProductObjectId;
-    private java.util.Date cusProductCreateAt;
-    private java.util.Date cusProductUpdateAt;
     private String objectId;
     private java.util.Date createdAt;
     private java.util.Date updatedAt;
@@ -30,13 +27,10 @@ public class Product {
     }
 
     @Generated
-    public Product(Long id, String name, String cusProductName, String cusProductObjectId, java.util.Date cusProductCreateAt, java.util.Date cusProductUpdateAt, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public Product(Long id, String productName, String cusProductName, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
         this.id = id;
-        this.name = name;
+        this.productName = productName;
         this.cusProductName = cusProductName;
-        this.cusProductObjectId = cusProductObjectId;
-        this.cusProductCreateAt = cusProductCreateAt;
-        this.cusProductUpdateAt = cusProductUpdateAt;
         this.objectId = objectId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -50,12 +44,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getCusProductName() {
@@ -64,30 +58,6 @@ public class Product {
 
     public void setCusProductName(String cusProductName) {
         this.cusProductName = cusProductName;
-    }
-
-    public String getCusProductObjectId() {
-        return cusProductObjectId;
-    }
-
-    public void setCusProductObjectId(String cusProductObjectId) {
-        this.cusProductObjectId = cusProductObjectId;
-    }
-
-    public java.util.Date getCusProductCreateAt() {
-        return cusProductCreateAt;
-    }
-
-    public void setCusProductCreateAt(java.util.Date cusProductCreateAt) {
-        this.cusProductCreateAt = cusProductCreateAt;
-    }
-
-    public java.util.Date getCusProductUpdateAt() {
-        return cusProductUpdateAt;
-    }
-
-    public void setCusProductUpdateAt(java.util.Date cusProductUpdateAt) {
-        this.cusProductUpdateAt = cusProductUpdateAt;
     }
 
     public String getObjectId() {

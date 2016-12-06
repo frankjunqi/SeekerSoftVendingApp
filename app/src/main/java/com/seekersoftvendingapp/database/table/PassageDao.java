@@ -24,7 +24,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Capacity = new Property(1, Integer.class, "capacity", false, "CAPACITY");
-        public final static Property ProductObjectId = new Property(2, String.class, "productObjectId", false, "PRODUCT_OBJECT_ID");
+        public final static Property Product = new Property(2, String.class, "product", false, "PRODUCT");
         public final static Property SeqNo = new Property(3, String.class, "seqNo", false, "SEQ_NO");
         public final static Property BorrowState = new Property(4, Boolean.class, "borrowState", false, "BORROW_STATE");
         public final static Property Stock = new Property(5, Integer.class, "stock", false, "STOCK");
@@ -50,7 +50,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"PASSAGE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"CAPACITY\" INTEGER," + // 1: capacity
-                "\"PRODUCT_OBJECT_ID\" TEXT," + // 2: productObjectId
+                "\"PRODUCT\" TEXT," + // 2: product
                 "\"SEQ_NO\" TEXT," + // 3: seqNo
                 "\"BORROW_STATE\" INTEGER," + // 4: borrowState
                 "\"STOCK\" INTEGER," + // 5: stock
@@ -81,9 +81,9 @@ public class PassageDao extends AbstractDao<Passage, Long> {
             stmt.bindLong(2, capacity);
         }
  
-        String productObjectId = entity.getProductObjectId();
-        if (productObjectId != null) {
-            stmt.bindString(3, productObjectId);
+        String product = entity.getProduct();
+        if (product != null) {
+            stmt.bindString(3, product);
         }
  
         String seqNo = entity.getSeqNo();
@@ -141,9 +141,9 @@ public class PassageDao extends AbstractDao<Passage, Long> {
             stmt.bindLong(2, capacity);
         }
  
-        String productObjectId = entity.getProductObjectId();
-        if (productObjectId != null) {
-            stmt.bindString(3, productObjectId);
+        String product = entity.getProduct();
+        if (product != null) {
+            stmt.bindString(3, product);
         }
  
         String seqNo = entity.getSeqNo();
@@ -197,7 +197,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
         Passage entity = new Passage( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // capacity
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // productObjectId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // product
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // seqNo
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // borrowState
             cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // stock
@@ -214,7 +214,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     public void readEntity(Cursor cursor, Passage entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCapacity(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setProductObjectId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setProduct(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setSeqNo(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setBorrowState(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setStock(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));

@@ -13,8 +13,7 @@ public class EmpPower {
     @Id
     private Long id;
     private String unit;
-    private java.util.Date begindate;
-    private String productObjectId;
+    private String product;
     private Integer count;
     private Integer period;
     private String objectId;
@@ -30,11 +29,10 @@ public class EmpPower {
     }
 
     @Generated
-    public EmpPower(Long id, String unit, java.util.Date begindate, String productObjectId, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public EmpPower(Long id, String unit, String product, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
         this.id = id;
         this.unit = unit;
-        this.begindate = begindate;
-        this.productObjectId = productObjectId;
+        this.product = product;
         this.count = count;
         this.period = period;
         this.objectId = objectId;
@@ -58,20 +56,12 @@ public class EmpPower {
         this.unit = unit;
     }
 
-    public java.util.Date getBegindate() {
-        return begindate;
+    public String getProduct() {
+        return product;
     }
 
-    public void setBegindate(java.util.Date begindate) {
-        this.begindate = begindate;
-    }
-
-    public String getProductObjectId() {
-        return productObjectId;
-    }
-
-    public void setProductObjectId(String productObjectId) {
-        this.productObjectId = productObjectId;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public Integer getCount() {

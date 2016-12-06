@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class PassageEntity implements Serializable {
 
     public int capacity;
-    public PassageProduct product = new PassageProduct();
+    public String product;
 
     public String seqNo;
     public boolean borrowState;
@@ -25,7 +25,7 @@ public class PassageEntity implements Serializable {
 
 
     public Passage getPassage() {
-        return new Passage(null, capacity, product.objectId, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Passage(null, capacity, product, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override
@@ -33,16 +33,4 @@ public class PassageEntity implements Serializable {
         return "{ \n    capacity = " + capacity + ",\n  seqNo = " + seqNo + ",\n    whorlSize = " + whorlSize + ",\n    isSend = " + isSend + ",\n      product"
                 + product.toString() + ",\n     borrowState" + borrowState + ",\n    stock = " + stock + ",\n    objectId=" + objectId + ",\n    createdAt = " + createdAt + ",\n    updatedAt = " + updatedAt + "}";
     }
-
-    public class PassageProduct implements Serializable {
-        public String __type;
-        public String className;
-        public String objectId;
-
-        @Override
-        public String toString() {
-            return "{ \n        __type = " + __type + ",\n      className = " + className + ",\n        objectId = " + objectId + "}";
-        }
-    }
-
 }

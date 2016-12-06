@@ -13,7 +13,7 @@ public class Passage {
     @Id
     private Long id;
     private Integer capacity;
-    private String productObjectId;
+    private String product;
     private String seqNo;
     private Boolean borrowState;
     private Integer stock;
@@ -32,10 +32,10 @@ public class Passage {
     }
 
     @Generated
-    public Passage(Long id, Integer capacity, String productObjectId, String seqNo, Boolean borrowState, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public Passage(Long id, Integer capacity, String product, String seqNo, Boolean borrowState, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
         this.id = id;
         this.capacity = capacity;
-        this.productObjectId = productObjectId;
+        this.product = product;
         this.seqNo = seqNo;
         this.borrowState = borrowState;
         this.stock = stock;
@@ -62,12 +62,12 @@ public class Passage {
         this.capacity = capacity;
     }
 
-    public String getProductObjectId() {
-        return productObjectId;
+    public String getProduct() {
+        return product;
     }
 
-    public void setProductObjectId(String productObjectId) {
-        this.productObjectId = productObjectId;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public String getSeqNo() {
