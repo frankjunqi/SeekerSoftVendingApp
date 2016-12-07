@@ -4,6 +4,14 @@ import android.database.Observable;
 
 import com.seekersoftvendingapp.network.entity.PostResBody;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
+import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordReqBody;
+import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
+import com.seekersoftvendingapp.network.entity.error.ErrorReqBody;
+import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
+import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordReqBody;
+import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordResBody;
 import com.seekersoftvendingapp.network.entity.TempResBody;
 import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 
@@ -15,6 +23,8 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -48,7 +58,7 @@ public interface SeekerSoftService {
     Observable<Response> getTransData(@FieldMap Map<String, String> map);
 
 
-    // 获取基础数据接口
+    // 获取基础数据 & 数据更新接口
     @GET("{api}/{serviceName}/{deviceId}/{timestamp}")
     Call<SynchroBaseDataResBody> getSynchroBaseData(
             @Path("api") String api,
@@ -57,4 +67,36 @@ public interface SeekerSoftService {
             @Path("timestamp") String timestamp
     );
 
+    // http://smartbox.leanapp.cn/api/takeout_record
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @POST("/api/takeout_record")
+    Call<TakeoutRecordResBody> takeoutRecord(@Body TakeoutRecordReqBody postStr);
+
+    // http://smartbox.leanapp.cn/api/supply_record
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @POST("/api/supply_record")
+    Call<SupplyRecordResBody> supplyRecord(@Body SupplyRecordReqBody postStr);
+
+
+    // http://smartbox.leanapp.cn/api/borrow_record
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @POST("/api/borrow_record")
+    Call<BorrowRecordResBody> borrowRecord(@Body BorrowRecordReqBody postStr);
+
+    // http://smartbox.leanapp.cn/api/error
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @POST("/api/error")
+    Call<ErrorResBody> error(@Body ErrorReqBody postStr);
 }

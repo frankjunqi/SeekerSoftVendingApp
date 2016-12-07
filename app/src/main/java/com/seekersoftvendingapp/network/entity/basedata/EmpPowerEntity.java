@@ -1,4 +1,4 @@
-package com.seekersoftvendingapp.network.entity.obj;
+package com.seekersoftvendingapp.network.entity.basedata;
 
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.util.DataFormat;
