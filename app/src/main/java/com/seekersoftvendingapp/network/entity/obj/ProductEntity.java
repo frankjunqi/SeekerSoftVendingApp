@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 public class ProductEntity implements Serializable {
-
+    public boolean isDel;
     public String productName;
     public String cusProductName;
     public String objectId;
@@ -18,7 +18,7 @@ public class ProductEntity implements Serializable {
     public String updatedAt;
 
     public Product getProduct() {
-        return new Product(null, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Product(isDel, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
 

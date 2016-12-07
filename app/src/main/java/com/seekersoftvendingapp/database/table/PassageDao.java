@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "PASSAGE".
 */
-public class PassageDao extends AbstractDao<Passage, Long> {
+public class PassageDao extends AbstractDao<Passage, String> {
 
     public static final String TABLENAME = "PASSAGE";
 
@@ -22,7 +22,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property IsDel = new Property(0, Boolean.class, "isDel", false, "IS_DEL");
         public final static Property Capacity = new Property(1, Integer.class, "capacity", false, "CAPACITY");
         public final static Property Product = new Property(2, String.class, "product", false, "PRODUCT");
         public final static Property SeqNo = new Property(3, String.class, "seqNo", false, "SEQ_NO");
@@ -30,7 +30,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
         public final static Property Stock = new Property(5, Integer.class, "stock", false, "STOCK");
         public final static Property WhorlSize = new Property(6, Integer.class, "whorlSize", false, "WHORL_SIZE");
         public final static Property IsSend = new Property(7, Boolean.class, "isSend", false, "IS_SEND");
-        public final static Property ObjectId = new Property(8, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property ObjectId = new Property(8, String.class, "objectId", true, "OBJECT_ID");
         public final static Property CreatedAt = new Property(9, java.util.Date.class, "createdAt", false, "CREATED_AT");
         public final static Property UpdatedAt = new Property(10, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
@@ -48,7 +48,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PASSAGE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"IS_DEL\" INTEGER," + // 0: isDel
                 "\"CAPACITY\" INTEGER," + // 1: capacity
                 "\"PRODUCT\" TEXT," + // 2: product
                 "\"SEQ_NO\" TEXT," + // 3: seqNo
@@ -56,7 +56,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
                 "\"STOCK\" INTEGER," + // 5: stock
                 "\"WHORL_SIZE\" INTEGER," + // 6: whorlSize
                 "\"IS_SEND\" INTEGER," + // 7: isSend
-                "\"OBJECT_ID\" TEXT," + // 8: objectId
+                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 8: objectId
                 "\"CREATED_AT\" INTEGER," + // 9: createdAt
                 "\"UPDATED_AT\" INTEGER);"); // 10: updatedAt
     }
@@ -71,9 +71,9 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     protected final void bindValues(DatabaseStatement stmt, Passage entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         Integer capacity = entity.getCapacity();
@@ -131,9 +131,9 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     protected final void bindValues(SQLiteStatement stmt, Passage entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         Integer capacity = entity.getCapacity();
@@ -188,14 +188,14 @@ public class PassageDao extends AbstractDao<Passage, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8);
     }    
 
     @Override
     public Passage readEntity(Cursor cursor, int offset) {
         Passage entity = new Passage( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0, // isDel
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // capacity
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // product
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // seqNo
@@ -212,7 +212,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Passage entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setIsDel(cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0);
         entity.setCapacity(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
         entity.setProduct(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setSeqNo(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -226,15 +226,14 @@ public class PassageDao extends AbstractDao<Passage, Long> {
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(Passage entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(Passage entity, long rowId) {
+        return entity.getObjectId();
     }
     
     @Override
-    public Long getKey(Passage entity) {
+    public String getKey(Passage entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getObjectId();
         } else {
             return null;
         }
@@ -242,7 +241,7 @@ public class PassageDao extends AbstractDao<Passage, Long> {
 
     @Override
     public boolean hasKey(Passage entity) {
-        return entity.getId() != null;
+        return entity.getObjectId() != null;
     }
 
     @Override

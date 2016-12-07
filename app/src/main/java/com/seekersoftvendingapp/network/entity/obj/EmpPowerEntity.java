@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 public class EmpPowerEntity implements Serializable {
-
+    public boolean isDel;
     public String unit;
 
     public String product;
@@ -22,7 +22,7 @@ public class EmpPowerEntity implements Serializable {
     public String updatedAt;
 
     public EmpPower getEmpPower() {
-        return new EmpPower(null, unit, product, count, period, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new EmpPower(isDel,unit, product, count, period, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

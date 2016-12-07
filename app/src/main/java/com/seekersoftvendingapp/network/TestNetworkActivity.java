@@ -2,11 +2,14 @@ package com.seekersoftvendingapp.network;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
+import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.network.api.Host;
@@ -17,6 +20,8 @@ import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -34,9 +39,10 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNetworkActivity extends AppCompatActivity {
+public class TestNetworkActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView textView;
+    private Button btn_getdata_base, btn_getdata_update, btn_takeout_record, btn_supply_record, btn_borrow_record, btn_error;
 
     private AdminCardDao adminCardDao;
 
@@ -45,9 +51,55 @@ public class TestNetworkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity_network);
         textView = (TextView) findViewById(R.id.textView);
+
+        btn_getdata_base = (Button) findViewById(R.id.btn_getdata_base);
+        btn_getdata_update = (Button) findViewById(R.id.btn_getdata_update);
+
+        btn_takeout_record = (Button) findViewById(R.id.btn_takeout_record);
+        btn_supply_record = (Button) findViewById(R.id.btn_supply_record);
+        btn_borrow_record = (Button) findViewById(R.id.btn_borrow_record);
+        btn_error = (Button) findViewById(R.id.btn_error);
+
+        btn_getdata_base.setOnClickListener(this);
+        btn_getdata_update.setOnClickListener(this);
+
+        btn_takeout_record.setOnClickListener(this);
+        btn_supply_record.setOnClickListener(this);
+        btn_borrow_record.setOnClickListener(this);
+        btn_error.setOnClickListener(this);
+
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
-        asyncGetBaseDataRequest();
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_getdata_base:
+                asyncGetBaseDataRequest();
+                break;
+            case R.id.btn_getdata_update:
+                asyncGetUpdateDataRequest();
+                break;
+
+            case R.id.btn_takeout_record:
+                Toast.makeText(this,"btn_takeout_record",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.btn_supply_record:
+                Toast.makeText(this,"btn_supply_record",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.btn_borrow_record:
+                Toast.makeText(this,"btn_borrow_record",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.btn_error:
+                Toast.makeText(this,"btn_error",Toast.LENGTH_SHORT).show();
+                break;
+
+        }
     }
 
     // Get
@@ -58,11 +110,10 @@ public class TestNetworkActivity extends AppCompatActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123");
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "");
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
-                Toast.makeText(TestNetworkActivity.this, response.body().server_time, Toast.LENGTH_LONG).show();
                 textView.setText("AdminCard: " + response.body().data.AdminCard.size() + "\n"
                         + "Employee: " + response.body().data.Employee.size() + "\n"
                         + "EmpPower: " + response.body().data.EmpPower.size() + "\n"
@@ -71,6 +122,37 @@ public class TestNetworkActivity extends AppCompatActivity {
                         + "RES = " + response.body().toString()
                 );
                 adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
+            }
+
+            @Override
+            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
+                Toast.makeText(TestNetworkActivity.this, "asyncGetRequest Failure", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    // Get
+    private void asyncGetUpdateDataRequest() {
+        // 加载前
+        // do something
+
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "1480763417");
+        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
+            @Override
+            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
+                textView.setText("AdminCard: " + response.body().data.AdminCard.size() + "\n"
+                        + "Employee: " + response.body().data.Employee.size() + "\n"
+                        + "EmpPower: " + response.body().data.EmpPower.size() + "\n"
+                        + "Passage: " + response.body().data.Passage.size() + "\n"
+                        + "Product: " + response.body().data.Product.size() + "\n"
+                        + "RES = " + response.body().toString()
+                );
+                List<AdminCard> list = response.body().getAdminCardList();
+                adminCardDao.insertOrReplaceInTx(list);
             }
 
             @Override
@@ -211,4 +293,6 @@ public class TestNetworkActivity extends AppCompatActivity {
 
         return httpClient;
     }
+
+
 }

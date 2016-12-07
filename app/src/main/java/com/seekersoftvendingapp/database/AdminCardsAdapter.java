@@ -19,7 +19,7 @@ public class AdminCardsAdapter extends RecyclerView.Adapter<AdminCardsAdapter.Ad
     private List<AdminCard> dataset;
 
     public interface AdminCardClickListener {
-        void onNoteClick(int position);
+        void onAdminCardClick(int position);
     }
 
     static class AdminCardViewHolder extends RecyclerView.ViewHolder {
@@ -35,7 +35,7 @@ public class AdminCardsAdapter extends RecyclerView.Adapter<AdminCardsAdapter.Ad
                 @Override
                 public void onClick(View view) {
                     if (clickListener != null) {
-                        clickListener.onNoteClick(getAdapterPosition());
+                        clickListener.onAdminCardClick(getAdapterPosition());
                     }
                 }
             });
@@ -47,12 +47,12 @@ public class AdminCardsAdapter extends RecyclerView.Adapter<AdminCardsAdapter.Ad
         this.dataset = new ArrayList<AdminCard>();
     }
 
-    public void setNotes(@NonNull List<AdminCard> notes) {
+    public void setAdminCards(@NonNull List<AdminCard> notes) {
         dataset = notes;
         notifyDataSetChanged();
     }
 
-    public AdminCard getNote(int position) {
+    public AdminCard getAdminCard(int position) {
         return dataset.get(position);
     }
 
@@ -65,9 +65,9 @@ public class AdminCardsAdapter extends RecyclerView.Adapter<AdminCardsAdapter.Ad
 
     @Override
     public void onBindViewHolder(AdminCardViewHolder holder, int position) {
-        AdminCard note = dataset.get(position);
-        holder.text.setText(note.getCard());
-        holder.comment.setText(note.getCreatedAt().toString());
+        AdminCard adminCard = dataset.get(position);
+        holder.text.setText(adminCard.getCard());
+        holder.comment.setText(adminCard.getIsDel() + "");
     }
 
     @Override

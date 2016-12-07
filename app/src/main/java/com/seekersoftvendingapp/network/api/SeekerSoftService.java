@@ -49,11 +49,12 @@ public interface SeekerSoftService {
 
 
     // 获取基础数据接口
-    @GET("{api}/{serviceName}/{deviceId}")
+    @GET("{api}/{serviceName}/{deviceId}/{timestamp}")
     Call<SynchroBaseDataResBody> getSynchroBaseData(
             @Path("api") String api,
             @Path("serviceName") String serviceName,
-            @Path("deviceId") String deviceId
+            @Path("deviceId") String deviceId,
+            @Path("timestamp") String timestamp
     );
 
 }

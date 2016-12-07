@@ -9,11 +9,11 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class Product {
-
-    @Id
-    private Long id;
+    private Boolean isDel;
     private String productName;
     private String cusProductName;
+
+    @Id
     private String objectId;
     private java.util.Date createdAt;
     private java.util.Date updatedAt;
@@ -22,13 +22,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id) {
-        this.id = id;
+    public Product(String objectId) {
+        this.objectId = objectId;
     }
 
     @Generated
-    public Product(Long id, String productName, String cusProductName, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
-        this.id = id;
+    public Product(Boolean isDel, String productName, String cusProductName, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+        this.isDel = isDel;
         this.productName = productName;
         this.cusProductName = cusProductName;
         this.objectId = objectId;
@@ -36,12 +36,12 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getIsDel() {
+        return isDel;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 
     public String getProductName() {

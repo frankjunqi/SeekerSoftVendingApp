@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "PRODUCT".
 */
-public class ProductDao extends AbstractDao<Product, Long> {
+public class ProductDao extends AbstractDao<Product, String> {
 
     public static final String TABLENAME = "PRODUCT";
 
@@ -22,10 +22,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property IsDel = new Property(0, Boolean.class, "isDel", false, "IS_DEL");
         public final static Property ProductName = new Property(1, String.class, "productName", false, "PRODUCT_NAME");
         public final static Property CusProductName = new Property(2, String.class, "cusProductName", false, "CUS_PRODUCT_NAME");
-        public final static Property ObjectId = new Property(3, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property ObjectId = new Property(3, String.class, "objectId", true, "OBJECT_ID");
         public final static Property CreatedAt = new Property(4, java.util.Date.class, "createdAt", false, "CREATED_AT");
         public final static Property UpdatedAt = new Property(5, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
@@ -43,10 +43,10 @@ public class ProductDao extends AbstractDao<Product, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PRODUCT\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"IS_DEL\" INTEGER," + // 0: isDel
                 "\"PRODUCT_NAME\" TEXT," + // 1: productName
                 "\"CUS_PRODUCT_NAME\" TEXT," + // 2: cusProductName
-                "\"OBJECT_ID\" TEXT," + // 3: objectId
+                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 3: objectId
                 "\"CREATED_AT\" INTEGER," + // 4: createdAt
                 "\"UPDATED_AT\" INTEGER);"); // 5: updatedAt
     }
@@ -61,9 +61,9 @@ public class ProductDao extends AbstractDao<Product, Long> {
     protected final void bindValues(DatabaseStatement stmt, Product entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         String productName = entity.getProductName();
@@ -96,9 +96,9 @@ public class ProductDao extends AbstractDao<Product, Long> {
     protected final void bindValues(SQLiteStatement stmt, Product entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         String productName = entity.getProductName();
@@ -128,14 +128,14 @@ public class ProductDao extends AbstractDao<Product, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3);
     }    
 
     @Override
     public Product readEntity(Cursor cursor, int offset) {
         Product entity = new Product( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0, // isDel
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // productName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cusProductName
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // objectId
@@ -147,7 +147,7 @@ public class ProductDao extends AbstractDao<Product, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Product entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setIsDel(cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0);
         entity.setProductName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setCusProductName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setObjectId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -156,15 +156,14 @@ public class ProductDao extends AbstractDao<Product, Long> {
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(Product entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(Product entity, long rowId) {
+        return entity.getObjectId();
     }
     
     @Override
-    public Long getKey(Product entity) {
+    public String getKey(Product entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getObjectId();
         } else {
             return null;
         }
@@ -172,7 +171,7 @@ public class ProductDao extends AbstractDao<Product, Long> {
 
     @Override
     public boolean hasKey(Product entity) {
-        return entity.getId() != null;
+        return entity.getObjectId() != null;
     }
 
     @Override

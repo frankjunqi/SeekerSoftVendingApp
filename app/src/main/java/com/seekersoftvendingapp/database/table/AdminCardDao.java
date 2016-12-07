@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "ADMIN_CARD".
 */
-public class AdminCardDao extends AbstractDao<AdminCard, Long> {
+public class AdminCardDao extends AbstractDao<AdminCard, String> {
 
     public static final String TABLENAME = "ADMIN_CARD";
 
@@ -22,9 +22,9 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property IsDel = new Property(0, Boolean.class, "isDel", false, "IS_DEL");
         public final static Property Card = new Property(1, String.class, "card", false, "CARD");
-        public final static Property ObjectId = new Property(2, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property ObjectId = new Property(2, String.class, "objectId", true, "OBJECT_ID");
         public final static Property CreatedAt = new Property(3, java.util.Date.class, "createdAt", false, "CREATED_AT");
         public final static Property UpdatedAt = new Property(4, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
@@ -42,9 +42,9 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ADMIN_CARD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"IS_DEL\" INTEGER," + // 0: isDel
                 "\"CARD\" TEXT NOT NULL ," + // 1: card
-                "\"OBJECT_ID\" TEXT," + // 2: objectId
+                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 2: objectId
                 "\"CREATED_AT\" INTEGER," + // 3: createdAt
                 "\"UPDATED_AT\" INTEGER);"); // 4: updatedAt
     }
@@ -59,9 +59,9 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
     protected final void bindValues(DatabaseStatement stmt, AdminCard entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
         stmt.bindString(2, entity.getCard());
  
@@ -85,9 +85,9 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
     protected final void bindValues(SQLiteStatement stmt, AdminCard entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
         stmt.bindString(2, entity.getCard());
  
@@ -108,14 +108,14 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2);
     }    
 
     @Override
     public AdminCard readEntity(Cursor cursor, int offset) {
         AdminCard entity = new AdminCard( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0, // isDel
             cursor.getString(offset + 1), // card
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // objectId
             cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // createdAt
@@ -126,7 +126,7 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
      
     @Override
     public void readEntity(Cursor cursor, AdminCard entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setIsDel(cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0);
         entity.setCard(cursor.getString(offset + 1));
         entity.setObjectId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCreatedAt(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
@@ -134,15 +134,14 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(AdminCard entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(AdminCard entity, long rowId) {
+        return entity.getObjectId();
     }
     
     @Override
-    public Long getKey(AdminCard entity) {
+    public String getKey(AdminCard entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getObjectId();
         } else {
             return null;
         }
@@ -150,7 +149,7 @@ public class AdminCardDao extends AbstractDao<AdminCard, Long> {
 
     @Override
     public boolean hasKey(AdminCard entity) {
-        return entity.getId() != null;
+        return entity.getObjectId() != null;
     }
 
     @Override

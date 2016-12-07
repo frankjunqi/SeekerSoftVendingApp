@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "EMP_POWER".
 */
-public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
+public class EmpPowerDao extends AbstractDao<EmpPower, String> {
 
     public static final String TABLENAME = "EMP_POWER";
 
@@ -22,12 +22,12 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property IsDel = new Property(0, Boolean.class, "isDel", false, "IS_DEL");
         public final static Property Unit = new Property(1, String.class, "unit", false, "UNIT");
         public final static Property Product = new Property(2, String.class, "product", false, "PRODUCT");
         public final static Property Count = new Property(3, Integer.class, "count", false, "COUNT");
         public final static Property Period = new Property(4, Integer.class, "period", false, "PERIOD");
-        public final static Property ObjectId = new Property(5, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property ObjectId = new Property(5, String.class, "objectId", true, "OBJECT_ID");
         public final static Property CreatedAt = new Property(6, java.util.Date.class, "createdAt", false, "CREATED_AT");
         public final static Property UpdatedAt = new Property(7, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
@@ -45,12 +45,12 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"EMP_POWER\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"IS_DEL\" INTEGER," + // 0: isDel
                 "\"UNIT\" TEXT," + // 1: unit
                 "\"PRODUCT\" TEXT," + // 2: product
                 "\"COUNT\" INTEGER," + // 3: count
                 "\"PERIOD\" INTEGER," + // 4: period
-                "\"OBJECT_ID\" TEXT," + // 5: objectId
+                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 5: objectId
                 "\"CREATED_AT\" INTEGER," + // 6: createdAt
                 "\"UPDATED_AT\" INTEGER);"); // 7: updatedAt
     }
@@ -65,9 +65,9 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
     protected final void bindValues(DatabaseStatement stmt, EmpPower entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         String unit = entity.getUnit();
@@ -110,9 +110,9 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
     protected final void bindValues(SQLiteStatement stmt, EmpPower entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(1, isDel ? 1L: 0L);
         }
  
         String unit = entity.getUnit();
@@ -152,14 +152,14 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
     }
 
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public String readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5);
     }    
 
     @Override
     public EmpPower readEntity(Cursor cursor, int offset) {
         EmpPower entity = new EmpPower( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0, // isDel
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // unit
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // product
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // count
@@ -173,7 +173,7 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
      
     @Override
     public void readEntity(Cursor cursor, EmpPower entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setIsDel(cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0);
         entity.setUnit(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setProduct(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCount(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
@@ -184,15 +184,14 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
      }
     
     @Override
-    protected final Long updateKeyAfterInsert(EmpPower entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected final String updateKeyAfterInsert(EmpPower entity, long rowId) {
+        return entity.getObjectId();
     }
     
     @Override
-    public Long getKey(EmpPower entity) {
+    public String getKey(EmpPower entity) {
         if(entity != null) {
-            return entity.getId();
+            return entity.getObjectId();
         } else {
             return null;
         }
@@ -200,7 +199,7 @@ public class EmpPowerDao extends AbstractDao<EmpPower, Long> {
 
     @Override
     public boolean hasKey(EmpPower entity) {
-        return entity.getId() != null;
+        return entity.getObjectId() != null;
     }
 
     @Override

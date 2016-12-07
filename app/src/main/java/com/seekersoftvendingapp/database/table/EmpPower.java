@@ -9,13 +9,13 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class EmpPower {
-
-    @Id
-    private Long id;
+    private Boolean isDel;
     private String unit;
     private String product;
     private Integer count;
     private Integer period;
+
+    @Id
     private String objectId;
     private java.util.Date createdAt;
     private java.util.Date updatedAt;
@@ -24,13 +24,13 @@ public class EmpPower {
     public EmpPower() {
     }
 
-    public EmpPower(Long id) {
-        this.id = id;
+    public EmpPower(String objectId) {
+        this.objectId = objectId;
     }
 
     @Generated
-    public EmpPower(Long id, String unit, String product, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
-        this.id = id;
+    public EmpPower(Boolean isDel, String unit, String product, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+        this.isDel = isDel;
         this.unit = unit;
         this.product = product;
         this.count = count;
@@ -40,12 +40,12 @@ public class EmpPower {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getIsDel() {
+        return isDel;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 
     public String getUnit() {

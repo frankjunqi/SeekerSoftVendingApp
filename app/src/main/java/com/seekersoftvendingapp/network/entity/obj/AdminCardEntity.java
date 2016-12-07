@@ -11,13 +11,14 @@ import java.io.Serializable;
 
 public class AdminCardEntity implements Serializable {
 
+    public boolean isDel;
     public String card; // card id
     public String objectId;
     public String createdAt;
     public String updatedAt;
 
     public AdminCard getAdminCard() {
-        return new AdminCard(null, card, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new AdminCard(isDel, card, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

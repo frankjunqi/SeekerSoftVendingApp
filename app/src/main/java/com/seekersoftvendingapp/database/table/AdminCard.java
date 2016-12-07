@@ -9,12 +9,12 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class AdminCard {
-
-    @Id
-    private Long id;
+    private Boolean isDel;
 
     @NotNull
     private String card;
+
+    @Id
     private String objectId;
     private java.util.Date createdAt;
     private java.util.Date updatedAt;
@@ -23,25 +23,25 @@ public class AdminCard {
     public AdminCard() {
     }
 
-    public AdminCard(Long id) {
-        this.id = id;
+    public AdminCard(String objectId) {
+        this.objectId = objectId;
     }
 
     @Generated
-    public AdminCard(Long id, String card, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
-        this.id = id;
+    public AdminCard(Boolean isDel, String card, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+        this.isDel = isDel;
         this.card = card;
         this.objectId = objectId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getIsDel() {
+        return isDel;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 
     @NotNull

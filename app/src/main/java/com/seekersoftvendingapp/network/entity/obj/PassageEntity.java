@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 public class PassageEntity implements Serializable {
-
+    public boolean isDel;
     public int capacity;
     public String product;
 
@@ -25,7 +25,7 @@ public class PassageEntity implements Serializable {
 
 
     public Passage getPassage() {
-        return new Passage(null, capacity, product, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Passage(isDel,capacity, product, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

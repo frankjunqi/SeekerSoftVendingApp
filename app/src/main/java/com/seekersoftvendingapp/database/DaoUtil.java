@@ -59,9 +59,9 @@ public class DaoUtil {
      */
     private static void addAdminCard(Schema schema) {
         Entity adminCard = schema.addEntity("AdminCard");
-        adminCard.addIdProperty();
+        adminCard.addBooleanProperty("isDel");
         adminCard.addStringProperty("card").notNull();
-        adminCard.addStringProperty("objectId");
+        adminCard.addStringProperty("objectId").primaryKey();
         adminCard.addDateProperty("createdAt");
         adminCard.addDateProperty("updatedAt");
     }
@@ -80,11 +80,11 @@ public class DaoUtil {
      */
     private static void addEmployee(Schema schema) {
         Entity employee = schema.addEntity("Employee");
-        employee.addIdProperty();
+        employee.addBooleanProperty("isDel");
         employee.addStringProperty("empNo").notNull();
         employee.addStringProperty("card");
         employee.addStringProperty("power");
-        employee.addStringProperty("objectId").notNull();
+        employee.addStringProperty("objectId").primaryKey();
         employee.addDateProperty("createdAt");
         employee.addDateProperty("updatedAt");
 
@@ -105,12 +105,12 @@ public class DaoUtil {
      */
     private static void addEmpPower(Schema schema) {
         Entity empPower = schema.addEntity("EmpPower");
-        empPower.addIdProperty();
+        empPower.addBooleanProperty("isDel");
         empPower.addStringProperty("unit");
         empPower.addStringProperty("product");
         empPower.addIntProperty("count");
         empPower.addIntProperty("period");
-        empPower.addStringProperty("objectId");
+        empPower.addStringProperty("objectId").primaryKey();
         empPower.addDateProperty("createdAt");
         empPower.addDateProperty("updatedAt");
 
@@ -134,7 +134,7 @@ public class DaoUtil {
      */
     private static void addPassage(Schema schema) {
         Entity passage = schema.addEntity("Passage");
-        passage.addIdProperty();
+        passage.addBooleanProperty("isDel");
         passage.addIntProperty("capacity");
         passage.addStringProperty("product");
         passage.addStringProperty("seqNo");
@@ -142,7 +142,7 @@ public class DaoUtil {
         passage.addIntProperty("stock");
         passage.addIntProperty("whorlSize");
         passage.addBooleanProperty("isSend");
-        passage.addStringProperty("objectId");
+        passage.addStringProperty("objectId").primaryKey();
         passage.addDateProperty("createdAt");
         passage.addDateProperty("updatedAt");
     }
@@ -160,12 +160,10 @@ public class DaoUtil {
      */
     private static void addProduct(Schema schema) {
         Entity product = schema.addEntity("Product");
-        product.addIdProperty();
+        product.addBooleanProperty("isDel");
         product.addStringProperty("productName");
-
         product.addStringProperty("cusProductName");
-
-        product.addStringProperty("objectId");
+        product.addStringProperty("objectId").primaryKey();
         product.addDateProperty("createdAt");
         product.addDateProperty("updatedAt");
     }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 
 public class EmployeeEntity implements Serializable {
-
+    public boolean isDel;
     public String empNo;
     public ArrayList<String> card = new ArrayList<String>();
     public ArrayList<String> power = new ArrayList<String>();
@@ -29,7 +29,7 @@ public class EmployeeEntity implements Serializable {
     }
 
     public Employee getEmployee() {
-        return new Employee(null, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Employee(isDel, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

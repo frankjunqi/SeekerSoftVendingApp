@@ -42,7 +42,7 @@ public class TestAdminCardDaoActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_activity_dbnote);
+        setContentView(R.layout.test_activity_dbadmincard);
 
         setUpViews();
 
@@ -59,7 +59,7 @@ public class TestAdminCardDaoActivity extends AppCompatActivity {
 
     private void updateAdminCards() {
         List<AdminCard> adminCards = adminCardQuery.list();
-        adminCardsAdapter.setNotes(adminCards);
+        adminCardsAdapter.setAdminCards(adminCards);
     }
 
     protected void setUpViews() {
@@ -116,18 +116,18 @@ public class TestAdminCardDaoActivity extends AppCompatActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        AdminCard adminCard = new AdminCard(null, noteText.toString(), "1212", new Date(), new Date());
+        AdminCard adminCard = new AdminCard( false, noteText.toString(), "1212", new Date(), new Date());
         adminCardDao.insert(adminCard);
-        Log.d("DaoExample", "Inserted new note, ID: " + adminCard.getId());
+        Log.d("DaoExample", "Inserted new note, ID: " + adminCard.getObjectId());
 
         updateAdminCards();
     }
 
     AdminCardsAdapter.AdminCardClickListener noteClickListener = new AdminCardsAdapter.AdminCardClickListener() {
         @Override
-        public void onNoteClick(int position) {
-            AdminCard note = adminCardsAdapter.getNote(position);
-            Long objectId = note.getId();
+        public void onAdminCardClick(int position) {
+            AdminCard note = adminCardsAdapter.getAdminCard(position);
+            String objectId = note.getObjectId();
 
             adminCardDao.deleteByKey(objectId);
             Log.d("DaoExample", "Deleted note, ID: " + objectId);
