@@ -58,7 +58,12 @@ public interface SeekerSoftService {
     Observable<Response> getTransData(@FieldMap Map<String, String> map);
 
 
-    // 获取基础数据 & 数据更新接口
+    /*
+    http://smartbox.leanapp.cn/api/getData/[deviceid]/[timestamp] 获取基础数据 & 数据更新接口
+    根据上一次同步的时间戳获取更新时间大于时间戳的数据
+    参数：deviceid(设备ID)，timestamp(上一次同步的时间戳)
+    返回值：data:{表1:[],表2:[]...}
+    与初始化返回的数据表形式一致*/
     @GET("{api}/{serviceName}/{deviceId}/{timestamp}")
     Call<SynchroBaseDataResBody> getSynchroBaseData(
             @Path("api") String api,
@@ -67,7 +72,62 @@ public interface SeekerSoftService {
             @Path("timestamp") String timestamp
     );
 
-    // http://smartbox.leanapp.cn/api/takeout_record
+
+    /*
+    http://smartbox.leanapp.cn/api/takeout/[deviceid]/[card]/[passage]
+    根据设备号、卡号、货道号判断是否能出货
+    参数：deviceid(设备ID)，card(员工卡号)，passage(货道号)
+    返回值：data:{result:true/false,objectId:abc123}
+    true:可以出货
+    false:不能出货*/
+
+
+    /*
+    http://smartbox.leanapp.cn/api/takeout/success/[objectId]
+    设备成功出货后回调此接口上传交易成功记录
+    参数：objectId(取货记录ID)
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败
+    */
+
+
+    /*
+    http://smartbox.leanapp.cn/api/borrow/[deviceid]/[card]/[passage]
+    根据设备号、卡号、货道号判断是否借出货
+    参数：deviceid(设备ID)，card(员工卡号)，passage(货道号)
+    返回值：data:{result:true/false,objectId:abc123}
+    true:可以出货
+    false:不能出货*/
+
+
+
+    /*
+    http://smartbox.leanapp.cn/api/borrow/success/[objectId]
+    设备成功出货后回调此接口上传交易成功记录
+    参数：objectId(取货记录ID)
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败*/
+
+
+    /*
+    http://smartbox.leanapp.cn/api/return/[deviceid]/[passage]
+    还货记录
+    参数：deviceid(设备ID)，passage(货道号)
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败*/
+
+
+
+    /*
+    http://smartbox.leanapp.cn/api/takeout_record
+    提交取货记录
+    参数：deviceId(设备号)，record:[passage(货道号)，card(卡号)，time(取货时间)]
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败*/
     @Headers({
             "Accept: application/json",
             "Content-type: application/json"
@@ -75,7 +135,15 @@ public interface SeekerSoftService {
     @POST("/api/takeout_record")
     Call<TakeoutRecordResBody> takeoutRecord(@Body TakeoutRecordReqBody postStr);
 
-    // http://smartbox.leanapp.cn/api/supply_record
+
+
+    /*
+    http://smartbox.leanapp.cn/api/supply_record
+    提交补货记录
+    参数：deviceId(设备号)，record:[passage(货道号)，card(卡号)，count(补货数量)，time(补货时间)]
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败*/
     @Headers({
             "Accept: application/json",
             "Content-type: application/json"
@@ -84,7 +152,13 @@ public interface SeekerSoftService {
     Call<SupplyRecordResBody> supplyRecord(@Body SupplyRecordReqBody postStr);
 
 
-    // http://smartbox.leanapp.cn/api/borrow_record
+    /*
+    http://smartbox.leanapp.cn/api/borrow_record
+    提交借还记录
+    参数：deviceId(设备号)，record:[passage(货道号)，card(卡号)，borrow(true:借/false:还)，time(借还时间)]
+    返回值：bool
+    true:成功
+    false:失败*/
     @Headers({
             "Accept: application/json",
             "Content-type: application/json"
@@ -92,7 +166,15 @@ public interface SeekerSoftService {
     @POST("/api/borrow_record")
     Call<BorrowRecordResBody> borrowRecord(@Body BorrowRecordReqBody postStr);
 
-    // http://smartbox.leanapp.cn/api/error
+
+
+    /*
+    http://smartbox.leanapp.cn/api/error
+    提交异常记录
+    参数：deviceId(设备号)，error:[passage(货道号)，card(卡号)，info(异常信息)，time(异常时间)]
+    返回值：bool
+    true:成功
+    false:失败*/
     @Headers({
             "Accept: application/json",
             "Content-type: application/json"
