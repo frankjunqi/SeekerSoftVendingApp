@@ -29,6 +29,10 @@ public class KeyBordView extends RelativeLayout implements View.OnClickListener 
         initView(context);
     }
 
+    public String getKeyBoradStr() {
+        return enterBuild.toString();
+    }
+
     private void initView(Context context) {
         inflate(context, R.layout.keybord_view, this);
         tv_showstr = (TextView) findViewById(R.id.tv_showstr);

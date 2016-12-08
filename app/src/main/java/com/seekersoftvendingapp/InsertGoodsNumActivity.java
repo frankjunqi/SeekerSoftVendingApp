@@ -44,16 +44,14 @@ public class InsertGoodsNumActivity extends AppCompatActivity {
         keyBordView.setSureClickListen(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToReadCard();
+                if (keyBordView.getKeyBoradStr().length() > 0) {
+                    startActivity(new Intent(InsertGoodsNumActivity.this, CardReadActivity.class));
+                } else {
+                    Toast.makeText(InsertGoodsNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         ll_keyboard.addView(keyBordView);
-
     }
 
-
-    private void goToReadCard() {
-        Toast.makeText(InsertGoodsNumActivity.this, "确定，刷卡...", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(InsertGoodsNumActivity.this, CardReadActivity.class));
-    }
 }
