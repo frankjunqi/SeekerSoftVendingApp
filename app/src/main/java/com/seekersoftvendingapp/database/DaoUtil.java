@@ -27,6 +27,11 @@ public class DaoUtil {
         addPassage(schema);
         addProduct(schema);
 
+        addTakeoutRecord(schema);
+        addSupplyRecord(schema);
+        addBorrowRecord(schema);
+        addErrorRecord(schema);
+
         try {
             new DaoGenerator().generateAll(schema, "../SeekerSoftVendingApp/app/src/main/java");
         } catch (Exception e) {
@@ -107,6 +112,7 @@ public class DaoUtil {
         Entity empPower = schema.addEntity("EmpPower");
         empPower.addBooleanProperty("isDel");
         empPower.addStringProperty("unit");
+        empPower.addDateProperty("begin");
         empPower.addStringProperty("product");
         empPower.addIntProperty("count");
         empPower.addIntProperty("period");
@@ -168,6 +174,63 @@ public class DaoUtil {
         product.addDateProperty("updatedAt");
     }
 
+
+    /**
+     * 取货记录接口
+     */
+    private static void addTakeoutRecord(Schema schema) {
+        Entity takeoutRecord = schema.addEntity("TakeoutRecord");
+        takeoutRecord.addIdProperty().primaryKey();
+        takeoutRecord.addBooleanProperty("isFlag");
+        takeoutRecord.addStringProperty("passaga");
+        takeoutRecord.addStringProperty("card");
+        takeoutRecord.addStringProperty("time");
+    }
+
+
+    /**
+     * 补货记录接口
+     */
+    private static void addSupplyRecord(Schema schema) {
+        Entity supplyRecord = schema.addEntity("SupplyRecord");
+        supplyRecord.addIdProperty().primaryKey();
+        supplyRecord.addBooleanProperty("isFlag");
+        supplyRecord.addStringProperty("passage");
+        supplyRecord.addStringProperty("card");
+        supplyRecord.addIntProperty("count");
+        supplyRecord.addStringProperty("time");
+    }
+
+
+    /**
+     * 借还记录接口
+     */
+    private static void addBorrowRecord(Schema schema) {
+        Entity borrowRecord = schema.addEntity("BorrowRecord");
+        borrowRecord.addIdProperty().primaryKey();
+        borrowRecord.addBooleanProperty("isFlag");
+        borrowRecord.addStringProperty("passage");
+        borrowRecord.addStringProperty("card");
+        borrowRecord.addBooleanProperty("borrow");
+        borrowRecord.addStringProperty("time");
+    }
+
+
+    /**
+     * 提交异常记录
+     *
+     * @param schema
+     */
+    private static void addErrorRecord(Schema schema) {
+        Entity errorRecord = schema.addEntity("ErrorRecord");
+        errorRecord.addIdProperty().primaryKey();
+        errorRecord.addBooleanProperty("isFlag");
+        errorRecord.addStringProperty("passage");
+        errorRecord.addStringProperty("card");
+        errorRecord.addStringProperty("node");
+        errorRecord.addStringProperty("info");
+        errorRecord.addStringProperty("time");
+    }
 
     private static void addCustomerOrder(Schema schema) {
         // customer

@@ -11,6 +11,7 @@ import org.greenrobot.greendao.annotation.*;
 public class EmpPower {
     private Boolean isDel;
     private String unit;
+    private java.util.Date begin;
     private String product;
     private Integer count;
     private Integer period;
@@ -29,9 +30,10 @@ public class EmpPower {
     }
 
     @Generated
-    public EmpPower(Boolean isDel, String unit, String product, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public EmpPower(Boolean isDel, String unit, java.util.Date begin, String product, Integer count, Integer period, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
         this.isDel = isDel;
         this.unit = unit;
+        this.begin = begin;
         this.product = product;
         this.count = count;
         this.period = period;
@@ -54,6 +56,14 @@ public class EmpPower {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public java.util.Date getBegin() {
+        return begin;
+    }
+
+    public void setBegin(java.util.Date begin) {
+        this.begin = begin;
     }
 
     public String getProduct() {

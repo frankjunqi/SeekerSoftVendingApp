@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 取货
      */
     private void getProduct() {
-        Toast.makeText(MainActivity.this, "取货", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(MainActivity.this, InsertGoodsNumActivity.class));
     }
 

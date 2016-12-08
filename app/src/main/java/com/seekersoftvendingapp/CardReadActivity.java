@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
 /**
  * Created by kjh08490 on 2016/11/25.
  */
@@ -16,10 +18,14 @@ public class CardReadActivity extends AppCompatActivity {
     private Button btn_return_goods;
     private Button btn_return_mainpage;
 
+    // 货道的产品
+    private String productId = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardread);
+        productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
         btn_return_goods.setOnClickListener(new View.OnClickListener() {

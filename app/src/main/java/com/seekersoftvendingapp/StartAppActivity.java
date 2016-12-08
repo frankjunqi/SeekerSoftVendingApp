@@ -11,7 +11,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seekersoftvendingapp.database.table.AdminCardDao;
+import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpPowerDao;
+import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.database.table.ProductDao;
+import com.seekersoftvendingapp.network.TestNetworkActivity;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * 0. 获取设备号；
@@ -34,7 +50,12 @@ public class StartAppActivity extends AppCompatActivity {
     private static Button btn_tryagain;
     private static TextView tv_resultdata;
 
-    private static int count = 0;
+    private AdminCardDao adminCardDao;
+    private EmployeeDao employeeDao;
+    private EmpPowerDao empPowerDao;
+    private PassageDao passageDao;
+    private ProductDao productDao;
+
 
     private static Handler mHander = new Handler() {
         @Override
@@ -55,26 +76,62 @@ public class StartAppActivity extends AppCompatActivity {
         pb_loadingdata = (ProgressBar) findViewById(R.id.pb_loadingdata);
         btn_tryagain = (Button) findViewById(R.id.btn_tryagain);
         tv_resultdata = (TextView) findViewById(R.id.tv_resultdata);
-        requestInitData();
+
+
+        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
+        adminCardDao = daoSession.getAdminCardDao();
+        employeeDao = daoSession.getEmployeeDao();
+        empPowerDao = daoSession.getEmpPowerDao();
+        passageDao = daoSession.getPassageDao();
+        productDao = daoSession.getProductDao();
+
+
+        asyncGetBaseDataRequest();
+
         btn_tryagain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
-                if (count / 2 == 0) {
-                    successInit();
-                } else {
-                    handleLoading();
-                    mHander.sendEmptyMessageDelayed(RequestError, 3000);
-                }
+                handleLoading();
+                mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
             }
         });
     }
 
-    private void requestInitData() {
-        Toast.makeText(StartAppActivity.this, "初始化基础数据", Toast.LENGTH_LONG).show();
-        mHander.sendEmptyMessageDelayed(RequestError, 3000);
-    }
+    /**
+     * 基础数据 GET
+     */
+    private void asyncGetBaseDataRequest() {
+        // 加载前
+        // do something
 
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "");
+        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
+            @Override
+            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
+                if (response != null && response.body() != null) {
+                    adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
+                    employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
+                    empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
+                    passageDao.insertOrReplaceInTx(response.body().getPassageList());
+                    productDao.insertOrReplaceInTx(response.body().getProductList());
+                    // 成功初始化基础数据
+                    successInit();
+                } else {
+                    mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
+                    Toast.makeText(StartAppActivity.this, "基础数据获取失败. response == null or response.body() == null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
+                mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
+                Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private static void handleError() {
         tv_resultdata.setText("网络处理失败,设备号：\n" + SeekerSoftConstant.DEVICEID + " \n 请联系管理员进行初始化设备基础信息。");

@@ -24,12 +24,13 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
     public static class Properties {
         public final static Property IsDel = new Property(0, Boolean.class, "isDel", false, "IS_DEL");
         public final static Property Unit = new Property(1, String.class, "unit", false, "UNIT");
-        public final static Property Product = new Property(2, String.class, "product", false, "PRODUCT");
-        public final static Property Count = new Property(3, Integer.class, "count", false, "COUNT");
-        public final static Property Period = new Property(4, Integer.class, "period", false, "PERIOD");
-        public final static Property ObjectId = new Property(5, String.class, "objectId", true, "OBJECT_ID");
-        public final static Property CreatedAt = new Property(6, java.util.Date.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(7, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property Begin = new Property(2, java.util.Date.class, "begin", false, "BEGIN");
+        public final static Property Product = new Property(3, String.class, "product", false, "PRODUCT");
+        public final static Property Count = new Property(4, Integer.class, "count", false, "COUNT");
+        public final static Property Period = new Property(5, Integer.class, "period", false, "PERIOD");
+        public final static Property ObjectId = new Property(6, String.class, "objectId", true, "OBJECT_ID");
+        public final static Property CreatedAt = new Property(7, java.util.Date.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(8, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
     }
 
 
@@ -47,12 +48,13 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
         db.execSQL("CREATE TABLE " + constraint + "\"EMP_POWER\" (" + //
                 "\"IS_DEL\" INTEGER," + // 0: isDel
                 "\"UNIT\" TEXT," + // 1: unit
-                "\"PRODUCT\" TEXT," + // 2: product
-                "\"COUNT\" INTEGER," + // 3: count
-                "\"PERIOD\" INTEGER," + // 4: period
-                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 5: objectId
-                "\"CREATED_AT\" INTEGER," + // 6: createdAt
-                "\"UPDATED_AT\" INTEGER);"); // 7: updatedAt
+                "\"BEGIN\" INTEGER," + // 2: begin
+                "\"PRODUCT\" TEXT," + // 3: product
+                "\"COUNT\" INTEGER," + // 4: count
+                "\"PERIOD\" INTEGER," + // 5: period
+                "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 6: objectId
+                "\"CREATED_AT\" INTEGER," + // 7: createdAt
+                "\"UPDATED_AT\" INTEGER);"); // 8: updatedAt
     }
 
     /** Drops the underlying database table. */
@@ -75,34 +77,39 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
             stmt.bindString(2, unit);
         }
  
+        java.util.Date begin = entity.getBegin();
+        if (begin != null) {
+            stmt.bindLong(3, begin.getTime());
+        }
+ 
         String product = entity.getProduct();
         if (product != null) {
-            stmt.bindString(3, product);
+            stmt.bindString(4, product);
         }
  
         Integer count = entity.getCount();
         if (count != null) {
-            stmt.bindLong(4, count);
+            stmt.bindLong(5, count);
         }
  
         Integer period = entity.getPeriod();
         if (period != null) {
-            stmt.bindLong(5, period);
+            stmt.bindLong(6, period);
         }
  
         String objectId = entity.getObjectId();
         if (objectId != null) {
-            stmt.bindString(6, objectId);
+            stmt.bindString(7, objectId);
         }
  
         java.util.Date createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(7, createdAt.getTime());
+            stmt.bindLong(8, createdAt.getTime());
         }
  
         java.util.Date updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(8, updatedAt.getTime());
+            stmt.bindLong(9, updatedAt.getTime());
         }
     }
 
@@ -120,40 +127,45 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
             stmt.bindString(2, unit);
         }
  
+        java.util.Date begin = entity.getBegin();
+        if (begin != null) {
+            stmt.bindLong(3, begin.getTime());
+        }
+ 
         String product = entity.getProduct();
         if (product != null) {
-            stmt.bindString(3, product);
+            stmt.bindString(4, product);
         }
  
         Integer count = entity.getCount();
         if (count != null) {
-            stmt.bindLong(4, count);
+            stmt.bindLong(5, count);
         }
  
         Integer period = entity.getPeriod();
         if (period != null) {
-            stmt.bindLong(5, period);
+            stmt.bindLong(6, period);
         }
  
         String objectId = entity.getObjectId();
         if (objectId != null) {
-            stmt.bindString(6, objectId);
+            stmt.bindString(7, objectId);
         }
  
         java.util.Date createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(7, createdAt.getTime());
+            stmt.bindLong(8, createdAt.getTime());
         }
  
         java.util.Date updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(8, updatedAt.getTime());
+            stmt.bindLong(9, updatedAt.getTime());
         }
     }
 
     @Override
     public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5);
+        return cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6);
     }    
 
     @Override
@@ -161,12 +173,13 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
         EmpPower entity = new EmpPower( //
             cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0, // isDel
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // unit
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // product
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // count
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // period
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // objectId
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // createdAt
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)) // updatedAt
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // begin
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // product
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // count
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // period
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // objectId
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createdAt
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updatedAt
         );
         return entity;
     }
@@ -175,12 +188,13 @@ public class EmpPowerDao extends AbstractDao<EmpPower, String> {
     public void readEntity(Cursor cursor, EmpPower entity, int offset) {
         entity.setIsDel(cursor.isNull(offset + 0) ? null : cursor.getShort(offset + 0) != 0);
         entity.setUnit(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setProduct(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCount(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setPeriod(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setObjectId(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCreatedAt(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setUpdatedAt(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setBegin(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setProduct(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCount(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setPeriod(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setObjectId(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreatedAt(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setUpdatedAt(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
      }
     
     @Override
