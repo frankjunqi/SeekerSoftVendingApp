@@ -4,16 +4,21 @@ import android.database.Observable;
 
 import com.seekersoftvendingapp.network.entity.PostResBody;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
+import com.seekersoftvendingapp.network.entity.TempResBody;
+import com.seekersoftvendingapp.network.entity.UpdaeResBody;
+import com.seekersoftvendingapp.network.entity.borrow.BorrowResBody;
+import com.seekersoftvendingapp.network.entity.borrow.BorrowSuccessResBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordReqBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorReqBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
+import com.seekersoftvendingapp.network.entity.returnpro.ReturnProResBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
+import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
+import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordReqBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordResBody;
-import com.seekersoftvendingapp.network.entity.TempResBody;
-import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 
 import java.util.Map;
 
@@ -23,7 +28,6 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -80,6 +84,12 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false,objectId:abc123}
     true:可以出货
     false:不能出货*/
+    @GET("api/takeout/{deviceid}/{card}/{passage}")
+    Call<TakeOutResBody> takeOut(
+            @Path("deviceid") String deviceid,
+            @Path("card") String card,
+            @Path("passage") String passage
+    );
 
 
     /*
@@ -90,6 +100,10 @@ public interface SeekerSoftService {
     true:成功
     false:失败
     */
+    @GET("api/takeout/success/{objectId}")
+    Call<TakeOutSuccessResBody> takeOutSuccess(
+            @Path("objectId") String objectId
+    );
 
 
     /*
@@ -99,7 +113,12 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false,objectId:abc123}
     true:可以出货
     false:不能出货*/
-
+    @GET("api/borrow/{deviceid}/{card}/{passage}")
+    Call<BorrowResBody> borrow(
+            @Path("deviceid") String deviceid,
+            @Path("card") String card,
+            @Path("passage") String passage
+    );
 
 
     /*
@@ -109,7 +128,10 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false}
     true:成功
     false:失败*/
-
+    @GET("api/borrow/success/{objectId}")
+    Call<BorrowSuccessResBody> borrowSuccess(
+            @Path("objectId") String objectId
+    );
 
     /*
     http://smartbox.leanapp.cn/api/return/[deviceid]/[passage]
@@ -118,8 +140,11 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false}
     true:成功
     false:失败*/
-
-
+    @GET("api/return/{deviceid}/{passage}")
+    Call<ReturnProResBody> returnPro(
+            @Path("deviceid") String deviceid,
+            @Path("passage") String passage
+    );
 
     /*
     http://smartbox.leanapp.cn/api/takeout_record
@@ -134,7 +159,6 @@ public interface SeekerSoftService {
     })
     @POST("/api/takeout_record")
     Call<TakeoutRecordResBody> takeoutRecord(@Body TakeoutRecordReqBody postStr);
-
 
 
     /*
@@ -165,7 +189,6 @@ public interface SeekerSoftService {
     })
     @POST("/api/borrow_record")
     Call<BorrowRecordResBody> borrowRecord(@Body BorrowRecordReqBody postStr);
-
 
 
     /*

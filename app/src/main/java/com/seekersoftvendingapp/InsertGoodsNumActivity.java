@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.seekersoftvendingapp.view.KeyBordView;
 
 /**
  * Created by kjh08490 on 2016/11/25.
@@ -14,22 +18,17 @@ import android.widget.Toast;
 
 public class InsertGoodsNumActivity extends AppCompatActivity {
 
-    private Button btn_goto_read_card;
     private Button btn_return_mainpage;
+
+    private LinearLayout ll_keyboard;
+
+    private KeyBordView keyBordView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insertgoodsnum);
 
-        btn_goto_read_card = (Button) findViewById(R.id.btn_goto_read_card);
-
-        btn_goto_read_card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToReadCard();
-            }
-        });
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +38,17 @@ public class InsertGoodsNumActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
+        keyBordView = new KeyBordView(this);
+        keyBordView.setSureClickListen(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToReadCard();
+            }
+        });
+        ll_keyboard.addView(keyBordView);
+
     }
 
 

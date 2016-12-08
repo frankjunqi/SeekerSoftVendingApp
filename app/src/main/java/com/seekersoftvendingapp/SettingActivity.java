@@ -153,6 +153,7 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
             }
         });
+
     }
 
     private void populateAutoComplete() {
