@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 /**
+ * 成功 失败 页面（包括成功，失败描述信息页面） 共用
  * Created by kjh08490 on 2016/11/25.
  */
 

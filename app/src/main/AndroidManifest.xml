@@ -43,8 +43,18 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".InsertGoodsNumActivity" />
-        <activity android:name=".CardReadActivity" />
+        <activity android:name=".TakeOutInsertNumActivity" />
+        <activity android:name=".TakeOutCardReadActivity" />
+
+
+        <activity android:name=".BorrowInsertNumActivity" />
+        <activity android:name=".BorrowCardReadActivity" />
+
+
+        <activity android:name=".ReturnInsertNumActivity" />
+        <activity android:name=".ReturnCardReadActivity" />
+
+
         <activity android:name=".HandleResultActivity" />
         <activity android:name=".ManagerGoodsActivity" />
 

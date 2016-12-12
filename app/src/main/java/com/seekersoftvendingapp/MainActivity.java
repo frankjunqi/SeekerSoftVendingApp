@@ -54,21 +54,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 取货
      */
     private void getProduct() {
-        startActivity(new Intent(MainActivity.this, InsertGoodsNumActivity.class));
+        startActivity(new Intent(MainActivity.this, TakeOutInsertNumActivity.class));
     }
 
     /**
      * 借货
      */
     private void borrowProduct() {
-        Toast.makeText(MainActivity.this, "借货", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, BorrowInsertNumActivity.class));
     }
 
     /**
      * 还货
      */
     private void backProduct() {
-        Toast.makeText(MainActivity.this, "还货", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, ReturnInsertNumActivity.class));
     }
 
     /**

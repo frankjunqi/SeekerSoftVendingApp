@@ -3,32 +3,27 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.List;
 
 /**
+ * 1. 取货 输入货道号页面
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class InsertGoodsNumActivity extends AppCompatActivity {
+public class TakeOutInsertNumActivity extends AppCompatActivity {
 
     private Button btn_return_mainpage;
 
@@ -50,7 +45,7 @@ public class InsertGoodsNumActivity extends AppCompatActivity {
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InsertGoodsNumActivity.this, MainActivity.class);
+                Intent intent = new Intent(TakeOutInsertNumActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -75,7 +70,7 @@ public class InsertGoodsNumActivity extends AppCompatActivity {
     private void checkPassageDirectUser(String keyPassage) {
         // 检查用户输入的货道号的校验
         if (TextUtils.isEmpty(keyPassage)) {
-            Toast.makeText(InsertGoodsNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TakeOutInsertNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -95,11 +90,12 @@ public class InsertGoodsNumActivity extends AppCompatActivity {
             //
             //
 
-            Intent intent = new Intent(InsertGoodsNumActivity.this, CardReadActivity.class);
+            Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PRODUCTID, productId);
+            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
             startActivity(intent);
         } else {
-            Toast.makeText(InsertGoodsNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
+            Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
             return;
         }
 

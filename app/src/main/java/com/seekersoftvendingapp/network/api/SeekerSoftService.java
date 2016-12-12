@@ -136,13 +136,14 @@ public interface SeekerSoftService {
     /*
     http://smartbox.leanapp.cn/api/return/[deviceid]/[passage]
     还货记录
-    参数：deviceid(设备ID)，passage(货道号)
+    参数：deviceid(设备ID)，card(卡号),passage(货道号)
     返回值：data:{result:true/false}
     true:成功
     false:失败*/
-    @GET("api/return/{deviceid}/{passage}")
+    @GET("api/return/{deviceid}/{card}/{passage}")
     Call<ReturnProResBody> returnPro(
             @Path("deviceid") String deviceid,
+            @Path("card") String crad,
             @Path("passage") String passage
     );
 

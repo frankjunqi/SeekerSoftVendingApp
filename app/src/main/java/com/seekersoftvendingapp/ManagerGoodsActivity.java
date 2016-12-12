@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 /**
+ * 4. 管理员 管理页面
  * Created by kjh08490 on 2016/11/28.
  */
 
