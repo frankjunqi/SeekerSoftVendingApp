@@ -73,7 +73,7 @@ public class TestCardReadActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_open:
-                CardReadSerialPort.getCradSerialInstance().openReadSerial();
+                CardReadSerialPort.getCradSerialInstance();
                 break;
             case R.id.btn_close:
                 CardReadSerialPort.getCradSerialInstance().closeReadSerial();

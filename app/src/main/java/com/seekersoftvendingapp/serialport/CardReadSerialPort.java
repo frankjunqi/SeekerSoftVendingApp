@@ -62,37 +62,27 @@ public class CardReadSerialPort {
     public static CardReadSerialPort getCradSerialInstance() {
         if (null == cardReadSerialPort) {
             cardReadSerialPort = new CardReadSerialPort();
-            cardReadSerialPort.startReadThread();
+            cardReadSerialPort.onCreate();
         }
         return cardReadSerialPort;
     }
 
     /**
-     * 开启 串口 读取 线程
-     */
-    private void startReadThread() {
-        // 开启 串口 读取 线程
-        mReadThread = new ReadThread();
-        mReadThread.start();
-    }
-
-    /**
      * 打开 Card Serial
      */
-    public void openReadSerial() {
+    private void onCreate() {
         try {
             //  打开 Card Serial
-            if (isStop && mSerialPort == null) {
-                mSerialPort = new SeekerSoftSerialPort(new File(devicePath), baudrate, 0);
-                mOutputStream = mSerialPort.getOutputStream();
-                mInputStream = mSerialPort.getInputStream();
-                isStop = false;
-            }
+            mSerialPort = new SeekerSoftSerialPort(new File(devicePath), baudrate, 0);
+            mOutputStream = mSerialPort.getOutputStream();
+            mInputStream = mSerialPort.getInputStream();
         } catch (Exception e) {
             Log.e(TAG, "Init Card Serial Open Port Failed");
             mSerialPort = null;
-            isStop = true;
         }
+        // 开启 串口 读取 线程
+        mReadThread = new ReadThread();
+        mReadThread.start();
     }
 
     /**
@@ -100,9 +90,13 @@ public class CardReadSerialPort {
      */
     public void closeReadSerial() {
         isStop = true;
+        if (mReadThread != null) {
+            mReadThread.interrupt();
+        }
         if (mSerialPort != null) {
             mSerialPort.close();
             mSerialPort = null;
+            cardReadSerialPort = null;
         }
     }
 
@@ -159,36 +153,31 @@ public class CardReadSerialPort {
         public void run() {
             super.run();
             String IDNUM = "";
-            while (!isInterrupted()) {
-                Log.e(TAG, "isStop" + isStop);
-                if (isStop) {
-                    // 串口关闭的话，逻辑上不做处理。
-                } else {
-                    // 串口开启，做读取数据
-                    try {
-                        int size;
-                        if (mInputStream == null) {
-                            return;
-                        }
-                        byte[] buffer = new byte[1];
-                        size = mInputStream.read(buffer);
-                        IDNUM = IDNUM + new String(buffer, 0, size);
-
-                        // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
-                        onDataReceiveListener.onDataReceiveBuffer(buffer, size);
-                        Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
-
-                        // 默认以 "\r\n" 结束读取
-                        if (IDNUM.endsWith("\r\n")) {
-                            if (null != onDataReceiveListener) {
-                                onDataReceiveListener.onDataReceiveString(IDNUM);
-                                IDNUM = "";
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
+            while (!isStop && !isInterrupted()) {
+                // 串口开启，做读取数据
+                try {
+                    int size;
+                    if (mInputStream == null) {
                         return;
                     }
+                    byte[] buffer = new byte[1];
+                    size = mInputStream.read(buffer);
+                    IDNUM = IDNUM + new String(buffer, 0, size);
+
+                    // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
+                    onDataReceiveListener.onDataReceiveBuffer(buffer, size);
+                    Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
+
+                    // 默认以 "\r\n" 结束读取
+                    if (IDNUM.endsWith("\r\n")) {
+                        if (null != onDataReceiveListener) {
+                            onDataReceiveListener.onDataReceiveString(IDNUM);
+                            IDNUM = "";
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                    return;
                 }
             }
         }

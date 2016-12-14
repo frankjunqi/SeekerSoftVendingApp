@@ -11,11 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpPower;
+import com.seekersoftvendingapp.database.table.EmpPowerDao;
+import com.seekersoftvendingapp.database.table.Employee;
+import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +37,7 @@ public class TakeOutInsertNumActivity extends AppCompatActivity {
     private KeyBordView keyBordView;
 
     private PassageDao passageDao;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,21 +80,20 @@ public class TakeOutInsertNumActivity extends AppCompatActivity {
             return;
         }
 
-        // 检查数据库是否有该货道的资源数据
+        // 检查数据库是否有该货道的资源数据（唯一）
         // isDel = false & Stock > 0 & seqNo == keyPassage
         List<Passage> list = passageDao.queryBuilder()
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0))
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
         if (list != null && list.size() > 0) {
-            // 说明货道可以进行消费产品
-            String productId = list.get(0).getProduct();
-            // 周期消费次数??
-
-
             // 检查是否有该硬件货道??
             //
-            //
+
+            // 货道实体
+            Passage passage = list.get(0);
+            // 说明货道可以进行消费产品
+            String productId = passage.getProduct();
 
             Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PRODUCTID, productId);

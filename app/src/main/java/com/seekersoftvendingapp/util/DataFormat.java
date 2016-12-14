@@ -15,12 +15,8 @@ public class DataFormat {
 
 
     public static void main(String[] args) throws Exception {
-        Date outDate = fromISODate("2016-11-19T09:02:43.972Z");
-        System.out.print(outDate.toString());
-
-
-//        Date outDate1 = formatDate("2016-11-19T09:02:43.972Z");
-//        System.out.print(outDate1.toString());
+        String outDate = formatDatetime(periodUnitGetStartDate(14, "month"));
+        System.out.print(outDate);
     }
 
     /**
@@ -39,6 +35,77 @@ public class DataFormat {
             e.printStackTrace();
         }
         return c;
+    }
+
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     * Get Today Date
+     *
+     * @return
+     */
+    public static Date getTodayDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        String dateStr = format.format(c.getTime());
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    /**
+     * yyyy-MM-dd
+     * Get Befor Today Date
+     *
+     * @return
+     */
+    public static Date getBeforTodayDate(int period) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar canlendar = Calendar.getInstance();
+        canlendar.add(Calendar.DATE, -period);
+        String dateStr = format.format(canlendar.getTime());
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    /**
+     * yyyy-MM-dd
+     * Get Month Today Date
+     *
+     * @return
+     */
+    public static Date getBeforMonthDate(int period) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar canlendar = Calendar.getInstance();
+        canlendar.add(Calendar.MONTH, -period);
+        String dateStr = format.format(canlendar.getTime());
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
+    /**
+     * yyyy-MM-dd
+     * Get Year Today Date
+     *
+     * @return
+     */
+    public static Date getBeforYearDate(int period) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar canlendar = Calendar.getInstance();
+        canlendar.add(Calendar.YEAR, -period);
+        String dateStr = format.format(canlendar.getTime());
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            return new Date();
+        }
     }
 
     public static String getNowTime() {
@@ -102,5 +169,36 @@ public class DataFormat {
         ca.setTime(date);
         ca.add(Calendar.HOUR_OF_DAY, 8);
         return ca.getTime();
+    }
+
+    /**
+     * 消费本地判断
+     *
+     * @param period
+     * @param unit
+     * @return
+     */
+    public static Date periodUnitGetStartDate(int period, String unit) {
+        switch (unit) {
+            case "day":
+                if (period <= 0) {
+                    return getBeforTodayDate(0);
+                } else {
+                    return getBeforTodayDate(period - 1);
+                }
+            case "month":
+                if (period <= 0) {
+                    return getBeforMonthDate(0);
+                } else {
+                    return getBeforMonthDate(period - 1);
+                }
+            case "year":
+                if (period <= 0) {
+                    return getBeforYearDate(0);
+                } else {
+                    return getBeforYearDate(period - 1);
+                }
+        }
+        return new Date();
     }
 }

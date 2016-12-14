@@ -176,15 +176,16 @@ public class DaoUtil {
 
 
     /**
-     * 取货记录接口
+     * 取货消费记录接口
      */
     private static void addTakeoutRecord(Schema schema) {
         Entity takeoutRecord = schema.addEntity("TakeoutRecord");
         takeoutRecord.addIdProperty().primaryKey();
-        takeoutRecord.addBooleanProperty("isFlag");
-        takeoutRecord.addStringProperty("passaga");
+        takeoutRecord.addBooleanProperty("isDel");
+        takeoutRecord.addStringProperty("passage");
         takeoutRecord.addStringProperty("card");
-        takeoutRecord.addStringProperty("time");
+        takeoutRecord.addStringProperty("productId");
+        takeoutRecord.addDateProperty("time");
     }
 
 

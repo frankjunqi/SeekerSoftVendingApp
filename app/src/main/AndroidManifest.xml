@@ -58,7 +58,11 @@
         <activity android:name=".HandleResultActivity" />
         <activity android:name=".ManagerGoodsActivity" />
 
-
+        <receiver android:name=".util.NetworkBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

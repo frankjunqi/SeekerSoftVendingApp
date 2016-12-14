@@ -23,10 +23,11 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property IsFlag = new Property(1, Boolean.class, "isFlag", false, "IS_FLAG");
-        public final static Property Passaga = new Property(2, String.class, "passaga", false, "PASSAGA");
+        public final static Property IsDel = new Property(1, Boolean.class, "isDel", false, "IS_DEL");
+        public final static Property Passage = new Property(2, String.class, "passage", false, "PASSAGE");
         public final static Property Card = new Property(3, String.class, "card", false, "CARD");
-        public final static Property Time = new Property(4, String.class, "time", false, "TIME");
+        public final static Property ProductId = new Property(4, String.class, "productId", false, "PRODUCT_ID");
+        public final static Property Time = new Property(5, java.util.Date.class, "time", false, "TIME");
     }
 
 
@@ -43,10 +44,11 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"TAKEOUT_RECORD\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"IS_FLAG\" INTEGER," + // 1: isFlag
-                "\"PASSAGA\" TEXT," + // 2: passaga
+                "\"IS_DEL\" INTEGER," + // 1: isDel
+                "\"PASSAGE\" TEXT," + // 2: passage
                 "\"CARD\" TEXT," + // 3: card
-                "\"TIME\" TEXT);"); // 4: time
+                "\"PRODUCT_ID\" TEXT," + // 4: productId
+                "\"TIME\" INTEGER);"); // 5: time
     }
 
     /** Drops the underlying database table. */
@@ -64,14 +66,14 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
             stmt.bindLong(1, id);
         }
  
-        Boolean isFlag = entity.getIsFlag();
-        if (isFlag != null) {
-            stmt.bindLong(2, isFlag ? 1L: 0L);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(2, isDel ? 1L: 0L);
         }
  
-        String passaga = entity.getPassaga();
-        if (passaga != null) {
-            stmt.bindString(3, passaga);
+        String passage = entity.getPassage();
+        if (passage != null) {
+            stmt.bindString(3, passage);
         }
  
         String card = entity.getCard();
@@ -79,9 +81,14 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
             stmt.bindString(4, card);
         }
  
-        String time = entity.getTime();
+        String productId = entity.getProductId();
+        if (productId != null) {
+            stmt.bindString(5, productId);
+        }
+ 
+        java.util.Date time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindLong(6, time.getTime());
         }
     }
 
@@ -94,14 +101,14 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
             stmt.bindLong(1, id);
         }
  
-        Boolean isFlag = entity.getIsFlag();
-        if (isFlag != null) {
-            stmt.bindLong(2, isFlag ? 1L: 0L);
+        Boolean isDel = entity.getIsDel();
+        if (isDel != null) {
+            stmt.bindLong(2, isDel ? 1L: 0L);
         }
  
-        String passaga = entity.getPassaga();
-        if (passaga != null) {
-            stmt.bindString(3, passaga);
+        String passage = entity.getPassage();
+        if (passage != null) {
+            stmt.bindString(3, passage);
         }
  
         String card = entity.getCard();
@@ -109,9 +116,14 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
             stmt.bindString(4, card);
         }
  
-        String time = entity.getTime();
+        String productId = entity.getProductId();
+        if (productId != null) {
+            stmt.bindString(5, productId);
+        }
+ 
+        java.util.Date time = entity.getTime();
         if (time != null) {
-            stmt.bindString(5, time);
+            stmt.bindLong(6, time.getTime());
         }
     }
 
@@ -124,10 +136,11 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
     public TakeoutRecord readEntity(Cursor cursor, int offset) {
         TakeoutRecord entity = new TakeoutRecord( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // isFlag
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // passaga
+            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // isDel
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // passage
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // time
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // productId
+            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // time
         );
         return entity;
     }
@@ -135,10 +148,11 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
     @Override
     public void readEntity(Cursor cursor, TakeoutRecord entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIsFlag(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
-        entity.setPassaga(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setIsDel(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
+        entity.setPassage(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCard(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setTime(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setProductId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setTime(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
      }
     
     @Override

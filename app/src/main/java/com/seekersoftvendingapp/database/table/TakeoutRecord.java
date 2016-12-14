@@ -12,10 +12,11 @@ public class TakeoutRecord {
 
     @Id
     private Long id;
-    private Boolean isFlag;
-    private String passaga;
+    private Boolean isDel;
+    private String passage;
     private String card;
-    private String time;
+    private String productId;
+    private java.util.Date time;
 
     @Generated
     public TakeoutRecord() {
@@ -26,11 +27,12 @@ public class TakeoutRecord {
     }
 
     @Generated
-    public TakeoutRecord(Long id, Boolean isFlag, String passaga, String card, String time) {
+    public TakeoutRecord(Long id, Boolean isDel, String passage, String card, String productId, java.util.Date time) {
         this.id = id;
-        this.isFlag = isFlag;
-        this.passaga = passaga;
+        this.isDel = isDel;
+        this.passage = passage;
         this.card = card;
+        this.productId = productId;
         this.time = time;
     }
 
@@ -42,20 +44,20 @@ public class TakeoutRecord {
         this.id = id;
     }
 
-    public Boolean getIsFlag() {
-        return isFlag;
+    public Boolean getIsDel() {
+        return isDel;
     }
 
-    public void setIsFlag(Boolean isFlag) {
-        this.isFlag = isFlag;
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 
-    public String getPassaga() {
-        return passaga;
+    public String getPassage() {
+        return passage;
     }
 
-    public void setPassaga(String passaga) {
-        this.passaga = passaga;
+    public void setPassage(String passage) {
+        this.passage = passage;
     }
 
     public String getCard() {
@@ -66,11 +68,19 @@ public class TakeoutRecord {
         this.card = card;
     }
 
-    public String getTime() {
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public java.util.Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(java.util.Date time) {
         this.time = time;
     }
 
