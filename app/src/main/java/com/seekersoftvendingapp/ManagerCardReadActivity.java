@@ -2,18 +2,28 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.AdminCardDao;
+import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,24 +37,68 @@ import retrofit2.Retrofit;
 
 public class ManagerCardReadActivity extends AppCompatActivity {
 
-    private Button btn_return_goods;
+    private Button btn_login;
     private Button btn_return_mainpage;
 
-    // 货道的产品
-    private String productId = "";
-    private String pasageId = "";
+    private AdminCardDao adminCardDao;
+
+    private Handler mHandle = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SeekerSoftConstant.ADMINCARDRECECIVECODE:
+                    // 管理员卡号
+                    String adminCardNum = msg.obj.toString();
+                    if (TextUtils.isEmpty(adminCardNum)) {
+                        // TODO 读到的卡号为null or ""
+                        Toast.makeText(ManagerCardReadActivity.this, "卡号为空，请重新读卡.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        CardReadSerialPort.getCradSerialInstance().closeReadSerial();
+                        // TODO 处理业务
+                        handleReadCardAfterBusniess(adminCardNum);
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 查询是否是管理员
+     *
+     * @param adminCardNum 管理员卡号
+     */
+    private void handleReadCardAfterBusniess(String adminCardNum) {
+        List<AdminCard> adminList = adminCardDao.queryBuilder().where(AdminCardDao.Properties.IsDel.eq(false))
+                .where(AdminCardDao.Properties.Card.eq(adminCardNum)).list();
+        if (adminList != null && adminList.size() > 0) {
+            // 此人是管理员
+            AdminCard adminCard = adminList.get(0);
+            Intent intent = new Intent(ManagerCardReadActivity.this, ManagerGoodsActivity.class);
+            intent.putExtra(SeekerSoftConstant.ADMINCARD, adminCard);
+            startActivity(intent);
+            this.finish();
+        } else {
+            // 此人不是管理员则提示他不是管理员，并且重新打开串口
+            Toast.makeText(ManagerCardReadActivity.this, "此卡不是管理卡.", Toast.LENGTH_SHORT).show();
+            openAndsetLinsten();
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardread);
-        productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
-        pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
-        btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
-        btn_return_goods.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_manager_cardread);
+        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
+        adminCardDao = daoSession.getAdminCardDao();
+
+        openAndsetLinsten();
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isTakeOutPro(SeekerSoftConstant.CARDID);
+                handleReadCardAfterBusniess(SeekerSoftConstant.ADMINCARDNUM);
             }
         });
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
@@ -56,84 +110,26 @@ public class ManagerCardReadActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // TODO 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行取货接口
-        // Open Serial Port Codeing Here
-
     }
 
     /**
-     * （接口）判断是否能出货
+     * 打开串口以及监听串口
      */
-    private void isTakeOutPro(String cardId) {
-        // 加载前
-        // do something
-
-        // 异步加载(get)
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, pasageId);
-        updateAction.enqueue(new Callback<TakeOutResBody>() {
+    private void openAndsetLinsten() {
+        // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行登录管理页面
+        CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
-            public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {
-                if (response != null && response.body() != null && response.body().data.result) {
-                    Toast.makeText(ManagerCardReadActivity.this, "可以出货,true", Toast.LENGTH_LONG).show();
-                    // TODO 本地数据库进行库存的消耗
-
-
-                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 fasle
-
-
-                    // TODO 串口打开passageID
-
-
-                    // TODO 提交成功接口
-                    takeOutSuccess(response.body().data.objectId);
-
-                    // TODO 到取货成功页面
-                    startActivity(new Intent(ManagerCardReadActivity.this, HandleResultActivity.class));
-
-                } else {
-                    Toast.makeText(ManagerCardReadActivity.this, "不可以出货,false", Toast.LENGTH_LONG).show();
-                }
+            public void onDataReceiveString(String IDNUM) {
+                Log.e("tag", IDNUM);
+                Message message = new Message();
+                message.what = SeekerSoftConstant.ADMINCARDRECECIVECODE;
+                message.obj = IDNUM;
+                mHandle.sendMessage(message);
             }
 
             @Override
-            public void onFailure(Call<TakeOutResBody> call, Throwable throwable) {
-                Toast.makeText(ManagerCardReadActivity.this, "basedate :  Failure", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    /**
-     * （接口）出货成功的通知接口
-     */
-    private void takeOutSuccess(String takeOutObjectId) {
-        // 加载前
-        // do something
-
-        // 异步加载(get)
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutSuccessResBody> updateAction = service.takeOutSuccess(takeOutObjectId);
-        updateAction.enqueue(new Callback<TakeOutSuccessResBody>() {
-            @Override
-            public void onResponse(Call<TakeOutSuccessResBody> call, Response<TakeOutSuccessResBody> response) {
-                if (response != null && response.body() != null && response.body().data) {
-                    Toast.makeText(ManagerCardReadActivity.this, "出货成功标识提交服务端成功,true", Toast.LENGTH_LONG).show();
-                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 true
-
-
-                } else {
-                    // TODO DO Nothing
-                    Toast.makeText(ManagerCardReadActivity.this, "提交失败,false", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TakeOutSuccessResBody> call, Throwable throwable) {
-                // TODO DO Nothing
-                Toast.makeText(ManagerCardReadActivity.this, "网络问题", Toast.LENGTH_LONG).show();
+            public void onDataReceiveBuffer(byte[] buffer, int size) {
+                Log.e("tag", "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
     }

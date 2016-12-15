@@ -57,6 +57,7 @@
 
         <activity android:name=".HandleResultActivity" />
         <activity android:name=".ManagerGoodsActivity" />
+        <activity android:name=".ManagerPassageActivity"/>
 
         <receiver android:name=".util.NetworkBroadcastReceiver">
             <intent-filter>

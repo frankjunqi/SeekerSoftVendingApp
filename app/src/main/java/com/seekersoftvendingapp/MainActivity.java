@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
 /**
  * Created by kjh08490 on 2016/11/25.
  */
@@ -30,6 +32,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_borrow.setOnClickListener(this);
         btn_back.setOnClickListener(this);
         btn_manage.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int exitFlag = intent.getIntExtra(SeekerSoftConstant.EXITAPP, 0);
+        if (exitFlag == 1) {
+            // 退出程序
+            this.finish();
+        }
     }
 
     @Override

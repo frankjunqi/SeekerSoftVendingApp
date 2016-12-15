@@ -11,16 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpPower;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.Employee;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
