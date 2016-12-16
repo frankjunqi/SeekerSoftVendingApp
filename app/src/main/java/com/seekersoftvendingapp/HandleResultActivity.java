@@ -16,7 +16,7 @@ import com.seekersoftvendingapp.util.TakeOutError;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class HandleResultActivity extends AppCompatActivity {
+public class HandleResultActivity extends BaseActivity {
 
     private Button btn_return_mainpage;
 

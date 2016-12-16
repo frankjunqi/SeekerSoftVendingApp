@@ -35,7 +35,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class ManagerCardReadActivity extends AppCompatActivity {
+public class ManagerCardReadActivity extends BaseActivity {
 
     private Button btn_login;
     private Button btn_return_mainpage;

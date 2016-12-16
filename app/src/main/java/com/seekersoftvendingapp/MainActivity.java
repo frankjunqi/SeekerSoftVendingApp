@@ -14,7 +14,7 @@ import com.seekersoftvendingapp.util.SeekerSoftConstant;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private Button btn_getproduct, btn_borrow, btn_back, btn_manage;
 

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.serialport.VendingSerialPort;
 
@@ -15,7 +16,7 @@ import com.seekersoftvendingapp.serialport.VendingSerialPort;
  * Created by Frank on 16/11/20.
  */
 
-public class TestVendingActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestVendingActivity extends BaseActivity implements View.OnClickListener {
 
     private String TAG = TestVendingActivity.class.getSimpleName();
     private EditText et_col, et_row;

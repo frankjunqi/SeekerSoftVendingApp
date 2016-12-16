@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.database.dao;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -13,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.AdminCardsAdapter;
@@ -33,7 +33,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNoteDaoActivity extends AppCompatActivity {
+public class TestNoteDaoActivity extends BaseActivity {
 
     private EditText editText;
     private View addNoteButton;

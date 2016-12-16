@@ -24,7 +24,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/12/15.
  */
 
-public class ManagerPassageActivity extends AppCompatActivity implements View.OnClickListener {
+public class ManagerPassageActivity extends BaseActivity implements View.OnClickListener {
 
     private Button btn_main, btn_a, btn_b, btn_c;
     private EmptyRecyclerView recyclerView;

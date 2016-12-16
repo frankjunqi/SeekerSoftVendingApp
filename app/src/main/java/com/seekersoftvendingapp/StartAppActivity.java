@@ -41,7 +41,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class StartAppActivity extends AppCompatActivity {
+public class StartAppActivity extends BaseActivity {
 
     // 初始化失败
     private static final int RequestError = -1;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.table.AdminCard;
@@ -52,7 +53,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNetworkActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestNetworkActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView textView;
     private Button btn_getdata_base, btn_getdata_update, btn_takeout_record, btn_supply_record, btn_borrow_record, btn_error;

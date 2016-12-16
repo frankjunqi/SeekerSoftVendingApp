@@ -17,7 +17,6 @@ import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
-import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
 import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -45,7 +44,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class TakeOutCardReadActivity extends AppCompatActivity {
+public class TakeOutCardReadActivity extends BaseActivity {
 
     private String TAG = TakeOutCardReadActivity.class.getSimpleName();
 

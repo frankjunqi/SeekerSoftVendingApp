@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class ReturnCardReadActivity extends AppCompatActivity {
+public class ReturnCardReadActivity extends BaseActivity {
 
     private Button btn_return_goods;
     private Button btn_return_mainpage;

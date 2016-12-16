@@ -23,7 +23,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class BorrowInsertNumActivity extends AppCompatActivity {
+public class BorrowInsertNumActivity extends BaseActivity {
 
     private Button btn_return_mainpage;
 

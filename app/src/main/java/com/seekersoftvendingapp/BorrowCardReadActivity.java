@@ -43,7 +43,7 @@ import retrofit2.Retrofit;
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class BorrowCardReadActivity extends AppCompatActivity {
+public class BorrowCardReadActivity extends BaseActivity {
 
     private Button btn_return_goods;
     private Button btn_return_mainpage;

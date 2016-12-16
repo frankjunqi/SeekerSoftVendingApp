@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 
@@ -16,7 +17,7 @@ import com.seekersoftvendingapp.serialport.CardReadSerialPort;
  * Created by kjh08490 on 2016/11/2.
  */
 
-public class TestCardReadActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestCardReadActivity extends BaseActivity implements View.OnClickListener {
 
     // 读取卡中的数据的消息
     private static final int CARDRECEIVECODE = 1101;

@@ -23,7 +23,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/28.
  */
 
-public class ManagerGoodsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ManagerGoodsActivity extends BaseActivity implements View.OnClickListener {
 
     private Button btn_onekeyinsert;
     private Button btn_onebyoneinsert;
