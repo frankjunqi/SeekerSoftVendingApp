@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 
 public class PassageEntity implements Serializable {
+    public String flag;// 副柜的 ABCD 的标识
     public boolean isDel;// 软删除的标记
     public int capacity;// 容量
     public String product;// 产品id
@@ -25,7 +26,7 @@ public class PassageEntity implements Serializable {
 
 
     public Passage getPassage() {
-        return new Passage(isDel, capacity, product, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Passage(flag, isDel, capacity, product, seqNo, borrowState, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

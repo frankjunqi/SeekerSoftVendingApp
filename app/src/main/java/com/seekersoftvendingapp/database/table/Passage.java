@@ -9,6 +9,7 @@ import org.greenrobot.greendao.annotation.*;
  */
 @Entity
 public class Passage {
+    private String flag;
     private Boolean isDel;
     private Integer capacity;
     private String product;
@@ -32,7 +33,8 @@ public class Passage {
     }
 
     @Generated
-    public Passage(Boolean isDel, Integer capacity, String product, String seqNo, Boolean borrowState, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public Passage(String flag, Boolean isDel, Integer capacity, String product, String seqNo, Boolean borrowState, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+        this.flag = flag;
         this.isDel = isDel;
         this.capacity = capacity;
         this.product = product;
@@ -44,6 +46,14 @@ public class Passage {
         this.objectId = objectId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     public Boolean getIsDel() {

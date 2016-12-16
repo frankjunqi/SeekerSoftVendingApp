@@ -88,6 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void manageProduct() {
         Toast.makeText(MainActivity.this, "管理货物", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(MainActivity.this, ManagerGoodsActivity.class));
+        startActivity(new Intent(MainActivity.this, ManagerCardReadActivity.class));
     }
 }

@@ -202,6 +202,7 @@ public class BorrowCardReadActivity extends AppCompatActivity {
         Intent intent = new Intent(BorrowCardReadActivity.this, HandleResultActivity.class);
         intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
         startActivity(intent);
+        this.finish();
     }
 
 
@@ -213,8 +214,8 @@ public class BorrowCardReadActivity extends AppCompatActivity {
     private TakeOutError localBorrowPro(String productId, String cardId) {
         // 同一个商品 权限详细信息list 消费频次 周期消费次数
         List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.Product.eq(productId)).list();
+                .where(EmpPowerDao.Properties.IsDel.eq(false))
+                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
 
         if (listEmpPowers == null || listEmpPowers.size() == 0) {
             // 此商品暂时没有赋予出货权限
@@ -269,7 +270,8 @@ public class BorrowCardReadActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<BorrowResBody> call, Throwable throwable) {
                 Toast.makeText(BorrowCardReadActivity.this, "basedate :  Failure", Toast.LENGTH_LONG).show();
-                localBorrowPro(productId, SeekerSoftConstant.CARDID);
+                TakeOutError takeOutError = localBorrowPro(productId, SeekerSoftConstant.CARDID);
+                outProResult(takeOutError);
             }
         });
     }

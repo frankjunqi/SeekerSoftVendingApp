@@ -149,5 +149,6 @@ public class StartAppActivity extends AppCompatActivity {
     private void successInit() {
         Toast.makeText(StartAppActivity.this, "初始化基础数据成功", Toast.LENGTH_LONG).show();
         startActivity(new Intent(StartAppActivity.this, MainActivity.class));
+        this.finish();
     }
 }

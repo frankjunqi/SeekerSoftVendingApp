@@ -87,13 +87,11 @@ public class TakeOutInsertNumActivity extends AppCompatActivity {
 
             // 货道实体
             Passage passage = list.get(0);
-            // 说明货道可以进行消费产品
-            String productId = passage.getProduct();
-
             Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PRODUCTID, productId);
+            intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());// 说明货道可以进行消费产品
             intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
             startActivity(intent);
+            this.finish();
         } else {
             Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
             return;

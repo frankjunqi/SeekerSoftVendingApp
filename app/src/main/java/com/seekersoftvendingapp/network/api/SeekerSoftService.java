@@ -84,6 +84,10 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false,objectId:abc123}
     true:可以出货
     false:不能出货*/
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
     @GET("api/takeout/{deviceid}/{card}/{passage}")
     Call<TakeOutResBody> takeOut(
             @Path("deviceid") String deviceid,
@@ -100,6 +104,10 @@ public interface SeekerSoftService {
     true:成功
     false:失败
     */
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
     @GET("api/takeout/success/{objectId}")
     Call<TakeOutSuccessResBody> takeOutSuccess(
             @Path("objectId") String objectId
@@ -113,6 +121,10 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false,objectId:abc123}
     true:可以出货
     false:不能出货*/
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
     @GET("api/borrow/{deviceid}/{card}/{passage}")
     Call<BorrowResBody> borrow(
             @Path("deviceid") String deviceid,
@@ -128,6 +140,10 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false}
     true:成功
     false:失败*/
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
     @GET("api/borrow/success/{objectId}")
     Call<BorrowSuccessResBody> borrowSuccess(
             @Path("objectId") String objectId

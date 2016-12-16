@@ -37,7 +37,7 @@ public class SeekersoftApp extends Application {
         daoSession = new DaoMaster(db).newSession();
 
         // 初始化设备信息
-        SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
+        // SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
 
     }
 

@@ -65,10 +65,7 @@ public class ManagerGoodsActivity extends AppCompatActivity implements View.OnCl
                 startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
                 break;
             case R.id.btn_exit:
-                Intent exitIntent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
-                exitIntent.putExtra(SeekerSoftConstant.EXITAPP, SeekerSoftConstant.EXITAPPFALG);
-                exitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(exitIntent);
+                exitDialog();
                 break;
             case R.id.btn_backtomain:
                 Intent intent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
@@ -76,6 +73,30 @@ public class ManagerGoodsActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent);
                 break;
         }
+    }
+
+    /**
+     * 退出系统弹框提醒
+     */
+    private void exitDialog() {
+        new AlertDialog.Builder(ManagerGoodsActivity.this)
+                .setTitle("退出系统")
+                .setMessage("你确定要退出系统吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent exitIntent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
+                        exitIntent.putExtra(SeekerSoftConstant.EXITAPP, SeekerSoftConstant.EXITAPPFALG);
+                        exitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(exitIntent);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCancelable(false).show();
     }
 
     /**

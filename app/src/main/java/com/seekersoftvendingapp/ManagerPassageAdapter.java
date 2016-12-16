@@ -66,8 +66,8 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
     @Override
     public void onBindViewHolder(ManagerPassageViewHolder holder, int position) {
         Passage passage = dataset.get(position);
-        holder.text.setText(passage.getSeqNo());
-        holder.comment.setText(passage.getStock());
+        holder.text.setText("货道序号：" + String.valueOf(passage.getSeqNo()));
+        holder.comment.setText("最大库存: " + String.valueOf(passage.getCapacity()) + "; 实际库存: " + String.valueOf(passage.getStock()));
     }
 
     @Override

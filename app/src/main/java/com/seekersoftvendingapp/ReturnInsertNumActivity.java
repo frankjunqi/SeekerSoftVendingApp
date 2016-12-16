@@ -80,7 +80,7 @@ public class ReturnInsertNumActivity extends AppCompatActivity {
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .where(PassageDao.Properties.IsSend.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0))
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
+                .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
             // TODO 检查是否有该硬件货道??

@@ -140,6 +140,7 @@ public class DaoUtil {
      */
     private static void addPassage(Schema schema) {
         Entity passage = schema.addEntity("Passage");
+        passage.addStringProperty("flag");// 副柜的 ABCD 的标识
         passage.addBooleanProperty("isDel");
         passage.addIntProperty("capacity");
         passage.addStringProperty("product");

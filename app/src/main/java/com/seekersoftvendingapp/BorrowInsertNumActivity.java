@@ -80,9 +80,10 @@ public class BorrowInsertNumActivity extends AppCompatActivity {
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .where(PassageDao.Properties.IsSend.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0))
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
+                .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
+            passage.setBorrowState(false);
             // TODO 检查是否有该硬件货道??
 
             // 判断此货道是否可以借出去: true是借出,false是归还
@@ -95,6 +96,7 @@ public class BorrowInsertNumActivity extends AppCompatActivity {
             intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());// 说明货道可以进行消费产品
             intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
             startActivity(intent);
+            this.finish();
         } else {
             Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
             return;

@@ -203,6 +203,7 @@ public class TakeOutCardReadActivity extends AppCompatActivity {
         Intent intent = new Intent(TakeOutCardReadActivity.this, HandleResultActivity.class);
         intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
         startActivity(intent);
+        this.finish();
     }
 
 
@@ -214,8 +215,8 @@ public class TakeOutCardReadActivity extends AppCompatActivity {
     private TakeOutError localTakeOutPro(String productId, String cardId) {
         // 同一个商品 权限详细信息list 消费频次 周期消费次数
         List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.Product.eq(productId)).list();
+                .where(EmpPowerDao.Properties.IsDel.eq(false))
+                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
 
         if (listEmpPowers == null || listEmpPowers.size() == 0) {
             // 此商品暂时没有赋予出货权限
@@ -287,7 +288,8 @@ public class TakeOutCardReadActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TakeOutResBody> call, Throwable throwable) {
                 Toast.makeText(TakeOutCardReadActivity.this, "网络链接问题，本地进行出货操作", Toast.LENGTH_LONG).show();
-                localTakeOutPro(productId, cardId);
+                TakeOutError takeOutError = localTakeOutPro(productId, SeekerSoftConstant.CARDID);
+                outProResult(takeOutError);
             }
         });
     }

@@ -6,14 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.view.EmptyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,8 @@ import java.util.List;
 public class ManagerPassageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn_main, btn_a, btn_b, btn_c;
-    private RecyclerView recyclerView;
+    private EmptyRecyclerView recyclerView;
+    private RelativeLayout rl_empty;
 
     private ManagerPassageAdapter managerPassageAdapter;
 
@@ -39,15 +42,21 @@ public class ManagerPassageActivity extends AppCompatActivity implements View.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_passage);
+        rl_empty = (RelativeLayout) findViewById(R.id.rl_empty);
+
         btn_main = (Button) findViewById(R.id.btn_main);
+        btn_main.setOnClickListener(this);
         btn_a = (Button) findViewById(R.id.btn_a);
+        btn_a.setOnClickListener(this);
         btn_b = (Button) findViewById(R.id.btn_b);
+        btn_b.setOnClickListener(this);
         btn_c = (Button) findViewById(R.id.btn_c);
+        btn_c.setOnClickListener(this);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView = (EmptyRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -59,15 +68,10 @@ public class ManagerPassageActivity extends AppCompatActivity implements View.On
             }
         });
         recyclerView.setAdapter(managerPassageAdapter);
-
-        List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
-        for (Passage passage : passageList) {
-
-        }
-
+        recyclerView.setEmptyView(rl_empty);
+        updatePassageList();
         // 默认主柜信息列表
         managerPassageAdapter.setPassageList(passageListMain);
-
     }
 
 
@@ -91,13 +95,13 @@ public class ManagerPassageActivity extends AppCompatActivity implements View.On
             Toast.makeText(ManagerPassageActivity.this, "最大库存和当前库存可能存在脏数据.", Toast.LENGTH_SHORT).show();
             return;
         }
-        final String[] intlist = new String[capacity - 1];
+        final String[] intlist = new String[capacity];
         for (int i = 0; i < capacity; i++) {
             intlist[i] = String.valueOf(i + 1);
         }
         new AlertDialog.Builder(ManagerPassageActivity.this)
                 .setTitle("设置库存")
-                .setSingleChoiceItems(intlist, currentStock, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 当前设置的库存 ,更新本地库存
@@ -109,8 +113,41 @@ public class ManagerPassageActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         passageDao.insertOrReplace(passage);
+                        updatePassageList();
                     }
                 }).setNegativeButton("取消", null).show();
+    }
+
+    /**
+     * 读取最新数据库数据
+     */
+    private void updatePassageList() {
+        List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).orderAsc(PassageDao.Properties.SeqNo).list();
+        passageListMain.clear();
+        passageListA.clear();
+        passageListB.clear();
+        passageListC.clear();
+        for (Passage passage : passageList) {
+            if (TextUtils.isEmpty(passage.getFlag())) {
+                passageListMain.add(passage);
+            } else {
+                switch (passage.getFlag()) {
+                    case "A":
+                        passageListA.add(passage);
+                        break;
+                    case "B":
+                        passageListB.add(passage);
+                        break;
+                    case "C":
+                        passageListC.add(passage);
+                        break;
+                    default:
+                        passageListMain.add(passage);
+                        break;
+                }
+            }
+
+        }
     }
 
     @Override
