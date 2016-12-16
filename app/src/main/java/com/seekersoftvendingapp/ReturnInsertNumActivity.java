@@ -78,20 +78,21 @@ public class ReturnInsertNumActivity extends AppCompatActivity {
         // isDel = false & Stock > 0 & seqNo == keyPassage
         List<Passage> list = passageDao.queryBuilder()
                 .where(PassageDao.Properties.IsDel.eq(false))
+                .where(PassageDao.Properties.IsSend.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0))
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
         if (list != null && list.size() > 0) {
-            // 说明货道可以进行消费产品
-            String productId = list.get(0).getProduct();
-            // 周期消费次数??
+            Passage passage = list.get(0);
+            // TODO 检查是否有该硬件货道??
 
-
-            // 检查是否有该硬件货道??
-            //
-            //
+            // 判断此货道是否可以借出去: true是借出,false是归还
+            if (!passage.getBorrowState()) {
+                Toast.makeText(ReturnInsertNumActivity.this, "此货道货品已经归还。", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             Intent intent = new Intent(ReturnInsertNumActivity.this, ReturnCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PRODUCTID, productId);
+            intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());
             intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
             startActivity(intent);
         } else {

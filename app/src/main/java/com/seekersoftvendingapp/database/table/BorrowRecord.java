@@ -16,7 +16,7 @@ public class BorrowRecord {
     private String passage;
     private String card;
     private Boolean borrow;
-    private String time;
+    private java.util.Date time;
 
     @Generated
     public BorrowRecord() {
@@ -27,7 +27,7 @@ public class BorrowRecord {
     }
 
     @Generated
-    public BorrowRecord(Long id, Boolean isFlag, String passage, String card, Boolean borrow, String time) {
+    public BorrowRecord(Long id, Boolean isFlag, String passage, String card, Boolean borrow, java.util.Date time) {
         this.id = id;
         this.isFlag = isFlag;
         this.passage = passage;
@@ -76,11 +76,11 @@ public class BorrowRecord {
         this.borrow = borrow;
     }
 
-    public String getTime() {
+    public java.util.Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(java.util.Date time) {
         this.time = time;
     }
 

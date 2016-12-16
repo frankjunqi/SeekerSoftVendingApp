@@ -213,7 +213,7 @@ public class DaoUtil {
         borrowRecord.addStringProperty("passage");
         borrowRecord.addStringProperty("card");
         borrowRecord.addBooleanProperty("borrow");
-        borrowRecord.addStringProperty("time");
+        borrowRecord.addDateProperty("time");
     }
 
 

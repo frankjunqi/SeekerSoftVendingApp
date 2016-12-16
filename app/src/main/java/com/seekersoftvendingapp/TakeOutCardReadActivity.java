@@ -180,6 +180,14 @@ public class TakeOutCardReadActivity extends AppCompatActivity {
         boolean open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
         VendingSerialPort.getInstance().closeSerialPort();
         if (open) {
+
+            // TODO 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端
+            // 本地数据库进行库存的消耗
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            takeOutRecordDao.insertOrReplaceInTx(takeoutRecord);
+            // TODO 提交成功接口
+            // takeOutSuccess(response.body().data.objectId);
+
             // 串口打开螺纹柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
@@ -269,13 +277,6 @@ public class TakeOutCardReadActivity extends AppCompatActivity {
                 if (response != null && response.body() != null && response.body().data.result) {
                     Toast.makeText(TakeOutCardReadActivity.this, "可以出货,true", Toast.LENGTH_LONG).show();
                     cmdBufferVendingSerial();
-
-                    // TODO 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端
-                    // 本地数据库进行库存的消耗
-                    TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, pasageId, cardId, productId, new Date());
-                    takeOutRecordDao.insertOrReplaceInTx(takeoutRecord);
-                    // 提交成功接口
-                    takeOutSuccess(response.body().data.objectId);
                 } else {
                     Toast.makeText(TakeOutCardReadActivity.this, "不可以出货,false", Toast.LENGTH_LONG).show();
                     // 不可以出货

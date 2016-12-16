@@ -1,14 +1,22 @@
 package com.seekersoftvendingapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
+import java.util.List;
 
 /**
  * 4. 管理员 管理页面
@@ -23,11 +31,15 @@ public class ManagerGoodsActivity extends AppCompatActivity implements View.OnCl
     private Button btn_backtomain;
 
     private AdminCard adminCard;
+    private PassageDao passageDao;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managergoods);
+
+        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
+        passageDao = daoSession.getPassageDao();
 
         adminCard = (AdminCard) getIntent().getSerializableExtra(SeekerSoftConstant.ADMINCARD);
 
@@ -47,7 +59,7 @@ public class ManagerGoodsActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_onekeyinsert:
-
+                plainDialogDemo();
                 break;
             case R.id.btn_onebyoneinsert:
                 startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
@@ -64,5 +76,31 @@ public class ManagerGoodsActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent);
                 break;
         }
+    }
+
+    /**
+     * 一键补货
+     */
+    private void plainDialogDemo() {
+        new AlertDialog.Builder(ManagerGoodsActivity.this)
+                .setTitle("一键补货")
+                .setMessage("确定把所有货道上的货品设置成最大库存？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 一键补货,补货到最大库存
+                        List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
+                        for (Passage passage : passageList) {
+                            passage.setStock(passage.getCapacity());
+                        }
+                        passageDao.insertOrReplaceInTx(passageList);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCancelable(false).show();
     }
 }

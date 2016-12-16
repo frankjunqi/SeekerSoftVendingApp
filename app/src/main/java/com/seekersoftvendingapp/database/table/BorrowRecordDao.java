@@ -27,7 +27,7 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         public final static Property Passage = new Property(2, String.class, "passage", false, "PASSAGE");
         public final static Property Card = new Property(3, String.class, "card", false, "CARD");
         public final static Property Borrow = new Property(4, Boolean.class, "borrow", false, "BORROW");
-        public final static Property Time = new Property(5, String.class, "time", false, "TIME");
+        public final static Property Time = new Property(5, java.util.Date.class, "time", false, "TIME");
     }
 
 
@@ -48,7 +48,7 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
                 "\"PASSAGE\" TEXT," + // 2: passage
                 "\"CARD\" TEXT," + // 3: card
                 "\"BORROW\" INTEGER," + // 4: borrow
-                "\"TIME\" TEXT);"); // 5: time
+                "\"TIME\" INTEGER);"); // 5: time
     }
 
     /** Drops the underlying database table. */
@@ -86,9 +86,9 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
             stmt.bindLong(5, borrow ? 1L: 0L);
         }
  
-        String time = entity.getTime();
+        java.util.Date time = entity.getTime();
         if (time != null) {
-            stmt.bindString(6, time);
+            stmt.bindLong(6, time.getTime());
         }
     }
 
@@ -121,9 +121,9 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
             stmt.bindLong(5, borrow ? 1L: 0L);
         }
  
-        String time = entity.getTime();
+        java.util.Date time = entity.getTime();
         if (time != null) {
-            stmt.bindString(6, time);
+            stmt.bindLong(6, time.getTime());
         }
     }
 
@@ -140,7 +140,7 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // passage
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // borrow
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // time
+            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // time
         );
         return entity;
     }
@@ -152,7 +152,7 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         entity.setPassage(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCard(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setBorrow(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setTime(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTime(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
      }
     
     @Override
