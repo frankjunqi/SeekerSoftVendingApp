@@ -78,11 +78,11 @@ public class TakeOutInsertNumActivity extends BaseActivity {
         // isDel = false & Stock > 0 & seqNo == keyPassage
         List<Passage> list = passageDao.queryBuilder()
                 .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.Stock.gt(0))
+                .where(PassageDao.Properties.Stock.gt(0)) // 判断库存
+                .where(PassageDao.Properties.IsSend.eq(true))// issend: "true:销售 false:借还"
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
         if (list != null && list.size() > 0) {
             // 检查是否有该硬件货道??
-            //
 
             // 货道实体
             Passage passage = list.get(0);
@@ -92,11 +92,8 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             startActivity(intent);
             this.finish();
         } else {
-            Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
-            return;
+            Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，可能无库存，请联系管理员。", Toast.LENGTH_LONG).show();
         }
-
-
     }
 
 }

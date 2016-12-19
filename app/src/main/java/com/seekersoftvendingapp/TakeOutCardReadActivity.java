@@ -138,6 +138,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
             }
         });
 
+
+
     }
 
     /**
@@ -161,8 +163,14 @@ public class TakeOutCardReadActivity extends BaseActivity {
      */
     private void outProResult(TakeOutError takeOutError) {
         if (takeOutError.isSuccess()) {
-            // 串口螺纹passageID操作
-            cmdBufferVendingSerial();
+            // 串口螺纹passageID操作 || 格子消费柜子的passageId操作
+            if (pasageId.length() >= 3) {
+                // TODO 串口副柜
+                pasageId.charAt(0);
+            } else {
+                // 串口螺纹
+                cmdBufferVendingSerial();
+            }
         } else {
             // 不可以出货
             handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));

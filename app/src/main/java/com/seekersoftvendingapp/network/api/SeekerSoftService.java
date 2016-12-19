@@ -150,7 +150,7 @@ public interface SeekerSoftService {
     );
 
     /*
-    http://smartbox.leanapp.cn/api/return/[deviceid]/[passage]
+    http://smartbox.leanapp.cn/api/return/[deviceid]/{card}/[passage]
     还货记录
     参数：deviceid(设备ID)，card(卡号),passage(货道号)
     返回值：data:{result:true/false}

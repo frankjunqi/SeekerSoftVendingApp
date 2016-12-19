@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
-import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
+import com.seekersoftvendingapp.network.entity.returnpro.ReturnProResBody;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
@@ -262,10 +261,10 @@ public class ReturnCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, pasageId);
-        updateAction.enqueue(new Callback<TakeOutResBody>() {
+        Call<ReturnProResBody> updateAction = service.returnPro(SeekerSoftConstant.DEVICEID, cardId, pasageId);
+        updateAction.enqueue(new Callback<ReturnProResBody>() {
             @Override
-            public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {
+            public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
                     Toast.makeText(ReturnCardReadActivity.this, "可以还货,true", Toast.LENGTH_LONG).show();
                     cmdBufferStoreSerial();
@@ -275,7 +274,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<TakeOutResBody> call, Throwable throwable) {
+            public void onFailure(Call<ReturnProResBody> call, Throwable throwable) {
                 Toast.makeText(ReturnCardReadActivity.this, "basedate :  Failure", Toast.LENGTH_LONG).show();
                 localReturnPro(productId, SeekerSoftConstant.CARDID);
             }
