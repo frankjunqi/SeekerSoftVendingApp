@@ -2,16 +2,16 @@ package com.seekersoftvendingapp.image;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 
 /**
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestFrescoActivity extends AppCompatActivity {
+public class TestFrescoActivity extends BaseActivity {
     private SimpleDraweeView iv_icon;
 
     @Override

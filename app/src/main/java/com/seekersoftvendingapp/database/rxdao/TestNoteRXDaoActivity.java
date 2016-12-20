@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.database.rxdao;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.widget.EditText;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.NotesAdapter;
@@ -32,7 +32,7 @@ import rx.functions.Action1;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNoteRXDaoActivity extends AppCompatActivity {
+public class TestNoteRXDaoActivity extends BaseActivity {
     private EditText editText;
     private View addNoteButton;
 

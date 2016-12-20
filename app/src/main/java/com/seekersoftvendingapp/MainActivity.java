@@ -3,16 +3,17 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 /**
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private Button btn_getproduct, btn_borrow, btn_back, btn_manage;
 
@@ -30,6 +31,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_borrow.setOnClickListener(this);
         btn_back.setOnClickListener(this);
         btn_manage.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int exitFlag = intent.getIntExtra(SeekerSoftConstant.EXITAPP, 0);
+        if (exitFlag == 1) {
+            // 退出程序
+            this.finish();
+        }
     }
 
     @Override
@@ -54,22 +65,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 取货
      */
     private void getProduct() {
-        Toast.makeText(MainActivity.this, "取货", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(MainActivity.this, InsertGoodsNumActivity.class));
+        startActivity(new Intent(MainActivity.this, TakeOutInsertNumActivity.class));
     }
 
     /**
      * 借货
      */
     private void borrowProduct() {
-        Toast.makeText(MainActivity.this, "借货", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, BorrowInsertNumActivity.class));
     }
 
     /**
      * 还货
      */
     private void backProduct() {
-        Toast.makeText(MainActivity.this, "还货", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, ReturnInsertNumActivity.class));
     }
 
     /**
@@ -77,6 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void manageProduct() {
         Toast.makeText(MainActivity.this, "管理货物", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(MainActivity.this, ManagerGoodsActivity.class));
+        startActivity(new Intent(MainActivity.this, ManagerCardReadActivity.class));
     }
 }

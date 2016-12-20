@@ -5,11 +5,11 @@ import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.Product;
-import com.seekersoftvendingapp.network.entity.obj.AdminCardEntity;
-import com.seekersoftvendingapp.network.entity.obj.EmpPowerEntity;
-import com.seekersoftvendingapp.network.entity.obj.EmployeeEntity;
-import com.seekersoftvendingapp.network.entity.obj.PassageEntity;
-import com.seekersoftvendingapp.network.entity.obj.ProductEntity;
+import com.seekersoftvendingapp.network.entity.basedata.AdminCardEntity;
+import com.seekersoftvendingapp.network.entity.basedata.EmpPowerEntity;
+import com.seekersoftvendingapp.network.entity.basedata.EmployeeEntity;
+import com.seekersoftvendingapp.network.entity.basedata.PassageEntity;
+import com.seekersoftvendingapp.network.entity.basedata.ProductEntity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

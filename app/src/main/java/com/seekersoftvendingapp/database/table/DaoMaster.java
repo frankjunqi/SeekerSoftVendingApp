@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 
 import org.greenrobot.greendao.AbstractDaoMaster;
-import org.greenrobot.greendao.database.StandardDatabase;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseOpenHelper;
+import org.greenrobot.greendao.database.StandardDatabase;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
 
@@ -27,6 +27,10 @@ public class DaoMaster extends AbstractDaoMaster {
         EmpPowerDao.createTable(db, ifNotExists);
         PassageDao.createTable(db, ifNotExists);
         ProductDao.createTable(db, ifNotExists);
+        TakeoutRecordDao.createTable(db, ifNotExists);
+        SupplyRecordDao.createTable(db, ifNotExists);
+        BorrowRecordDao.createTable(db, ifNotExists);
+        ErrorRecordDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -37,6 +41,10 @@ public class DaoMaster extends AbstractDaoMaster {
         EmpPowerDao.dropTable(db, ifExists);
         PassageDao.dropTable(db, ifExists);
         ProductDao.dropTable(db, ifExists);
+        TakeoutRecordDao.dropTable(db, ifExists);
+        SupplyRecordDao.dropTable(db, ifExists);
+        BorrowRecordDao.dropTable(db, ifExists);
+        ErrorRecordDao.dropTable(db, ifExists);
     }
 
     /**
@@ -61,6 +69,10 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(EmpPowerDao.class);
         registerDaoClass(PassageDao.class);
         registerDaoClass(ProductDao.class);
+        registerDaoClass(TakeoutRecordDao.class);
+        registerDaoClass(SupplyRecordDao.class);
+        registerDaoClass(BorrowRecordDao.class);
+        registerDaoClass(ErrorRecordDao.class);
     }
 
     public DaoSession newSession() {

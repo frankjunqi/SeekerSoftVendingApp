@@ -1,4 +1,4 @@
-package com.seekersoftvendingapp.network.entity.obj;
+package com.seekersoftvendingapp.network.entity.basedata;
 
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.util.DataFormat;
@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 
 public class EmployeeEntity implements Serializable {
-
-    public String empNo;
-    public ArrayList<String> card = new ArrayList<String>();
-    public ArrayList<String> power = new ArrayList<String>();
+    public boolean isDel;// 软删除的标记
+    public String empNo;// 员工编号
+    public ArrayList<String> card = new ArrayList<String>();// 卡号（数组）
+    public ArrayList<String> power = new ArrayList<String>();// 权限（数组）
     public String objectId;
     public String createdAt;
     public String updatedAt;
@@ -29,7 +29,7 @@ public class EmployeeEntity implements Serializable {
     }
 
     public Employee getEmployee() {
-        return new Employee(null, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Employee(isDel, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

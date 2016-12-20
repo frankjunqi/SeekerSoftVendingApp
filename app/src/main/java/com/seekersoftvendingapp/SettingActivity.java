@@ -5,17 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.database.dao.TestAdminCardDaoActivity;
 import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
 import com.seekersoftvendingapp.database.rxdao.TestNoteRXDaoActivity;
 import com.seekersoftvendingapp.image.TestFrescoActivity;
@@ -29,7 +28,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -57,6 +56,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button btn_read_card;
     private Button btn_vending;
     private Button btn_store;
+    private Button btn_db_admincard_dao;
 
 
     @Override
@@ -85,6 +85,15 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, TestNoteDaoActivity.class));
+            }
+        });
+
+        // 数据库操作 AdminCard 表
+        btn_db_admincard_dao = (Button) findViewById(R.id.btn_db_admincard_dao);
+        btn_db_admincard_dao.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, TestAdminCardDaoActivity.class));
             }
         });
 
@@ -142,6 +151,7 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
             }
         });
+
     }
 
     private void populateAutoComplete() {

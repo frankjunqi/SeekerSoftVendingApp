@@ -3,12 +3,12 @@ package com.seekersoftvendingapp.test;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 
@@ -16,7 +16,7 @@ import com.seekersoftvendingapp.serialport.CardReadSerialPort;
  * Created by kjh08490 on 2016/11/2.
  */
 
-public class TestCardReadActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestCardReadActivity extends BaseActivity implements View.OnClickListener {
 
     // 读取卡中的数据的消息
     private static final int CARDRECEIVECODE = 1101;
@@ -73,7 +73,7 @@ public class TestCardReadActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_open:
-                CardReadSerialPort.getCradSerialInstance().openReadSerial();
+                CardReadSerialPort.getCradSerialInstance();
                 break;
             case R.id.btn_close:
                 CardReadSerialPort.getCradSerialInstance().closeReadSerial();

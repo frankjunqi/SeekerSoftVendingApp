@@ -1,21 +1,20 @@
 package com.seekersoftvendingapp.test;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
-import com.seekersoftvendingapp.serialport.StoreSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
  */
 
-public class TestStoreActivity extends AppCompatActivity implements View.OnClickListener {
+public class TestStoreActivity extends BaseActivity implements View.OnClickListener {
 
     private String TAG = TestStoreActivity.class.getSimpleName();
     private EditText et_line, et_column, et_height;

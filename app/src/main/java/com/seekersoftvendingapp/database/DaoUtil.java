@@ -27,6 +27,11 @@ public class DaoUtil {
         addPassage(schema);
         addProduct(schema);
 
+        addTakeoutRecord(schema);
+        addSupplyRecord(schema);
+        addBorrowRecord(schema);
+        addErrorRecord(schema);
+
         try {
             new DaoGenerator().generateAll(schema, "../SeekerSoftVendingApp/app/src/main/java");
         } catch (Exception e) {
@@ -59,9 +64,9 @@ public class DaoUtil {
      */
     private static void addAdminCard(Schema schema) {
         Entity adminCard = schema.addEntity("AdminCard");
-        adminCard.addIdProperty();
+        adminCard.addBooleanProperty("isDel");
         adminCard.addStringProperty("card").notNull();
-        adminCard.addStringProperty("objectId");
+        adminCard.addStringProperty("objectId").primaryKey();
         adminCard.addDateProperty("createdAt");
         adminCard.addDateProperty("updatedAt");
     }
@@ -80,13 +85,11 @@ public class DaoUtil {
      */
     private static void addEmployee(Schema schema) {
         Entity employee = schema.addEntity("Employee");
-        employee.addIdProperty();
+        employee.addBooleanProperty("isDel");
         employee.addStringProperty("empNo").notNull();
-
         employee.addStringProperty("card");
         employee.addStringProperty("power");
-
-        employee.addStringProperty("objectId").notNull();
+        employee.addStringProperty("objectId").primaryKey();
         employee.addDateProperty("createdAt");
         employee.addDateProperty("updatedAt");
 
@@ -107,15 +110,13 @@ public class DaoUtil {
      */
     private static void addEmpPower(Schema schema) {
         Entity empPower = schema.addEntity("EmpPower");
-        empPower.addIdProperty();
+        empPower.addBooleanProperty("isDel");
         empPower.addStringProperty("unit");
-
-        empPower.addDateProperty("begindate");
-        empPower.addStringProperty("productObjectId");
-
+        empPower.addDateProperty("begin");
+        empPower.addStringProperty("product");
         empPower.addIntProperty("count");
         empPower.addIntProperty("period");
-        empPower.addStringProperty("objectId");
+        empPower.addStringProperty("objectId").primaryKey();
         empPower.addDateProperty("createdAt");
         empPower.addDateProperty("updatedAt");
 
@@ -139,17 +140,16 @@ public class DaoUtil {
      */
     private static void addPassage(Schema schema) {
         Entity passage = schema.addEntity("Passage");
-        passage.addIdProperty();
+        passage.addStringProperty("flag");// 副柜的 ABCD 的标识
+        passage.addBooleanProperty("isDel");
         passage.addIntProperty("capacity");
-
-        passage.addStringProperty("productObjectId");
-
+        passage.addStringProperty("product");
         passage.addStringProperty("seqNo");
         passage.addBooleanProperty("borrowState");
         passage.addIntProperty("stock");
         passage.addIntProperty("whorlSize");
         passage.addBooleanProperty("isSend");
-        passage.addStringProperty("objectId");
+        passage.addStringProperty("objectId").primaryKey();
         passage.addDateProperty("createdAt");
         passage.addDateProperty("updatedAt");
     }
@@ -167,19 +167,72 @@ public class DaoUtil {
      */
     private static void addProduct(Schema schema) {
         Entity product = schema.addEntity("Product");
-        product.addIdProperty();
-        product.addStringProperty("name");
-
+        product.addBooleanProperty("isDel");
+        product.addStringProperty("productName");
         product.addStringProperty("cusProductName");
-        product.addStringProperty("cusProductObjectId");
-        product.addDateProperty("cusProductCreateAt");
-        product.addDateProperty("cusProductUpdateAt");
-
-        product.addStringProperty("objectId");
+        product.addStringProperty("objectId").primaryKey();
         product.addDateProperty("createdAt");
         product.addDateProperty("updatedAt");
     }
 
+
+    /**
+     * 取货消费记录接口
+     */
+    private static void addTakeoutRecord(Schema schema) {
+        Entity takeoutRecord = schema.addEntity("TakeoutRecord");
+        takeoutRecord.addIdProperty().primaryKey();
+        takeoutRecord.addBooleanProperty("isDel");
+        takeoutRecord.addStringProperty("passage");
+        takeoutRecord.addStringProperty("card");
+        takeoutRecord.addStringProperty("productId");
+        takeoutRecord.addDateProperty("time");
+    }
+
+
+    /**
+     * 补货记录接口
+     */
+    private static void addSupplyRecord(Schema schema) {
+        Entity supplyRecord = schema.addEntity("SupplyRecord");
+        supplyRecord.addIdProperty().primaryKey();
+        supplyRecord.addBooleanProperty("isFlag");
+        supplyRecord.addStringProperty("passage");
+        supplyRecord.addStringProperty("card");
+        supplyRecord.addIntProperty("count");
+        supplyRecord.addStringProperty("time");
+    }
+
+
+    /**
+     * 借还记录接口
+     */
+    private static void addBorrowRecord(Schema schema) {
+        Entity borrowRecord = schema.addEntity("BorrowRecord");
+        borrowRecord.addIdProperty().primaryKey();
+        borrowRecord.addBooleanProperty("isFlag");
+        borrowRecord.addStringProperty("passage");
+        borrowRecord.addStringProperty("card");
+        borrowRecord.addBooleanProperty("borrow");
+        borrowRecord.addDateProperty("time");
+    }
+
+
+    /**
+     * 提交异常记录
+     *
+     * @param schema
+     */
+    private static void addErrorRecord(Schema schema) {
+        Entity errorRecord = schema.addEntity("ErrorRecord");
+        errorRecord.addIdProperty().primaryKey();
+        errorRecord.addBooleanProperty("isFlag");
+        errorRecord.addStringProperty("passage");
+        errorRecord.addStringProperty("card");
+        errorRecord.addStringProperty("node");
+        errorRecord.addStringProperty("info");
+        errorRecord.addStringProperty("time");
+    }
 
     private static void addCustomerOrder(Schema schema) {
         // customer

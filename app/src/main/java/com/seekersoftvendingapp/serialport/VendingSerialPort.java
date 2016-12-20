@@ -203,4 +203,41 @@ public class VendingSerialPort {
         }
     }
 
+
+    /**
+     * 业务层面的参数拼接
+     *
+     * @param col 列号
+     * @param row 行号
+     * @return
+     */
+    public static String cmdOpenVender(int col, int row) {
+        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
+    }
+
+    /**
+     * 获取打开螺纹柜的串口命令
+     *
+     * @param cmd
+     * @return
+     */
+    public static String getVenderCommand(String cmd) {
+        String cmdString = cmd.replaceAll("\\s*", "");
+        return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
+    }
+
+    /**
+     * 获取校验位
+     *
+     * @param cmd 原始命令
+     * @return
+     */
+    public static int getBCC(String cmd) {
+        int bcc = 0;
+        for (int i = 1; i <= cmd.length() / 2; i++) {
+            bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
+        }
+        return bcc;
+    }
+
 }

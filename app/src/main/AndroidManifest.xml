@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".SeekersoftApp"
@@ -30,6 +31,8 @@
 
         <activity android:name=".test.TestCardReadActivity" />
         <activity android:name=".database.dao.TestNoteDaoActivity" />
+        <activity android:name=".database.dao.TestAdminCardDaoActivity" />
+
         <activity android:name=".database.rxdao.TestNoteRXDaoActivity" />
         <activity android:name=".image.TestFrescoActivity" />
         <activity android:name=".network.TestNetworkActivity" />
@@ -41,12 +44,28 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".InsertGoodsNumActivity" />
-        <activity android:name=".CardReadActivity" />
+        <activity android:name=".TakeOutInsertNumActivity" />
+        <activity android:name=".TakeOutCardReadActivity" />
+
+
+        <activity android:name=".BorrowInsertNumActivity" />
+        <activity android:name=".BorrowCardReadActivity" />
+
+
+        <activity android:name=".ReturnInsertNumActivity" />
+        <activity android:name=".ReturnCardReadActivity" />
+
+
         <activity android:name=".HandleResultActivity" />
         <activity android:name=".ManagerGoodsActivity" />
+        <activity android:name=".ManagerPassageActivity" />
+        <activity android:name=".ManagerCardReadActivity" />
 
-
+        <receiver android:name=".util.NetworkBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

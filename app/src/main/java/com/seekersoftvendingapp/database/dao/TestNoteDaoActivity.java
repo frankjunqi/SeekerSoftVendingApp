@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.database.dao;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -13,9 +12,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.SeekersoftApp;
+import com.seekersoftvendingapp.database.AdminCardsAdapter;
 import com.seekersoftvendingapp.database.NotesAdapter;
+import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Note;
 import com.seekersoftvendingapp.database.table.NoteDao;
@@ -30,7 +33,7 @@ import java.util.List;
  * Created by kjh08490 on 2016/11/18.
  */
 
-public class TestNoteDaoActivity extends AppCompatActivity {
+public class TestNoteDaoActivity extends BaseActivity {
 
     private EditText editText;
     private View addNoteButton;
@@ -38,6 +41,10 @@ public class TestNoteDaoActivity extends AppCompatActivity {
     private NoteDao noteDao;
     private Query<Note> notesQuery;
     private NotesAdapter notesAdapter;
+
+    private AdminCardDao adminCardDao;
+    private Query<AdminCard> adminCardQuery;
+    private AdminCardsAdapter adminCardsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +60,23 @@ public class TestNoteDaoActivity extends AppCompatActivity {
         // query all notes, sorted a-z by their text
         notesQuery = noteDao.queryBuilder().orderAsc(NoteDao.Properties.Text).build();
         updateNotes();
+
+
+        // get the admincard DAO
+        adminCardDao = daoSession.getAdminCardDao();
+
+        // query all admincards
+        adminCardQuery = adminCardDao.queryBuilder().build();
     }
 
     private void updateNotes() {
         List<Note> notes = notesQuery.list();
         notesAdapter.setNotes(notes);
+    }
+
+    private void updateAdminCards(){
+        List<AdminCard> adminCards = adminCardQuery.list();
+
     }
 
     protected void setUpViews() {
