@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +21,10 @@ import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
-import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.serialport.VendingSerialPort;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
@@ -139,7 +138,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
         });
 
 
-
     }
 
     /**
@@ -187,13 +185,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
         boolean open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
         VendingSerialPort.getInstance().closeSerialPort();
         if (open) {
-
-            // TODO 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端
-            // 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
-            takeOutRecordDao.insertOrReplaceInTx(takeoutRecord);
-            // TODO 提交成功接口
-            // takeOutSuccess(response.body().data.objectId);
+            // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(takeoutRecord);
 
             // 串口打开螺纹柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
@@ -297,38 +291,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Toast.makeText(TakeOutCardReadActivity.this, "网络链接问题，本地进行出货操作", Toast.LENGTH_LONG).show();
                 TakeOutError takeOutError = localTakeOutPro(productId, SeekerSoftConstant.CARDID);
                 outProResult(takeOutError);
-            }
-        });
-    }
-
-    /**
-     * （接口）出货成功的通知接口
-     */
-    private void takeOutSuccess(String takeOutObjectId) {
-        // 加载前
-        // do something
-
-        // 异步加载(get)
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutSuccessResBody> updateAction = service.takeOutSuccess(takeOutObjectId);
-        updateAction.enqueue(new Callback<TakeOutSuccessResBody>() {
-            @Override
-            public void onResponse(Call<TakeOutSuccessResBody> call, Response<TakeOutSuccessResBody> response) {
-                if (response != null && response.body() != null && response.body().data) {
-                    Toast.makeText(TakeOutCardReadActivity.this, "出货成功标识提交服务端成功,true", Toast.LENGTH_LONG).show();
-                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 true
-
-                } else {
-                    // TODO DO Nothing
-                    Toast.makeText(TakeOutCardReadActivity.this, "提交失败,false", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TakeOutSuccessResBody> call, Throwable throwable) {
-                // TODO DO Nothing
-                Toast.makeText(TakeOutCardReadActivity.this, "网络问题", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,7 +1,5 @@
 package com.seekersoftvendingapp.network.entity.error;
 
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

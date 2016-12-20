@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,20 +14,10 @@ import android.widget.Toast;
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.network.api.Host;
-import com.seekersoftvendingapp.network.api.SeekerSoftService;
-import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
-import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
-import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * 4. 管理员 读卡 页面

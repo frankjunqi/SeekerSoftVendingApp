@@ -1,5 +1,7 @@
 package com.seekersoftvendingapp.network.entity.borrowrecord;
 
+import com.seekersoftvendingapp.database.table.BorrowRecord;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,5 +13,5 @@ import java.util.List;
 public class BorrowRecordReqBody implements Serializable {
     public String deviceId;
 
-    public List<BorrowRecordObj> record = new ArrayList<BorrowRecordObj>();
+    public List<BorrowRecord> record = new ArrayList<BorrowRecord>();
 }

@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.network;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,8 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.PostResBody;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
-import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordObj;
+import com.seekersoftvendingapp.network.entity.UpdaeResBody;
+import com.seekersoftvendingapp.network.entity.borrow.BorrowSuccessResBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordReqBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorObj;
@@ -28,10 +28,9 @@ import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
-import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordObj;
+import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordReqBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordResBody;
-import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 
 import java.io.IOException;
@@ -195,7 +194,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         TakeoutRecordReqBody takeoutRecordReqBody = new TakeoutRecordReqBody();
         takeoutRecordReqBody.deviceId = "123";
 
-        TakeoutRecordObj takeoutRecordObj = new TakeoutRecordObj();
+        /*TakeoutRecordObj takeoutRecordObj = new TakeoutRecordObj();
         takeoutRecordObj.passage = "11";
         takeoutRecordObj.card = "987";
         takeoutRecordObj.time = "2016-12-3 19:10:17";
@@ -206,7 +205,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         takeoutRecordObj2.passage = "12";
         takeoutRecordObj2.card = "986";
         takeoutRecordObj2.time = "2016-12-3 19:11:17";
-        takeoutRecordReqBody.record.add(takeoutRecordObj2);
+        takeoutRecordReqBody.record.add(takeoutRecordObj2);*/
 
         Gson gson = new Gson();
         String josn = gson.toJson(takeoutRecordReqBody);
@@ -217,7 +216,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<TakeoutRecordResBody> call, Response<TakeoutRecordResBody> response) {
                 if (response != null && response.body() != null) {
-                    textView.setText(textView.getText() +" \n"+"takeout error: " + response.body().data + "");
+                    textView.setText(textView.getText() + " \n" + "takeout error: " + response.body().data + "");
                 } else {
                     Log.e("request", "takeout error:  Failure");
                 }
@@ -269,7 +268,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<SupplyRecordResBody> call, Response<SupplyRecordResBody> response) {
                 if (response != null && response.body() != null) {
-                    textView.setText(textView.getText() +" \n"+"supply Record: " + response.body().data + "");
+                    textView.setText(textView.getText() + " \n" + "supply Record: " + response.body().data + "");
                 } else {
                     Log.e("request", "supply Record: Failure");
                 }
@@ -297,7 +296,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         BorrowRecordReqBody borrowRecordReqBody = new BorrowRecordReqBody();
         borrowRecordReqBody.deviceId = "123";
 
-        BorrowRecordObj borrowRecordObj = new BorrowRecordObj();
+        /*BorrowRecordObj borrowRecordObj = new BorrowRecordObj();
         borrowRecordObj.passage = "11";
         borrowRecordObj.card = "987";
         borrowRecordObj.borrow = true;
@@ -310,7 +309,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         borrowRecordObj2.card = "986";
         borrowRecordObj2.borrow = true;
         borrowRecordObj2.time = "2016-12-3 19:11:17";
-        borrowRecordReqBody.record.add(borrowRecordObj2);
+        borrowRecordReqBody.record.add(borrowRecordObj2);*/
 
         Gson gson = new Gson();
         String josn = gson.toJson(borrowRecordReqBody);
@@ -321,7 +320,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<BorrowRecordResBody> call, Response<BorrowRecordResBody> response) {
                 if (response != null && response.body() != null) {
-                    textView.setText(textView.getText() +" \n"+"borrow Record: " + response.body().data + "");
+                    textView.setText(textView.getText() + " \n" + "borrow Record: " + response.body().data + "");
                 } else {
                     Log.e("request", "borrow Record: Failure");
                 }
@@ -365,7 +364,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<ErrorResBody> call, Response<ErrorResBody> response) {
                 if (response != null && response.body() != null) {
-                    textView.setText(textView.getText() +" \n"+"error : " + response.body().data + "");
+                    textView.setText(textView.getText() + " \n" + "error : " + response.body().data + "");
                 } else {
                     Log.e("request", "error : Failure");
                 }
@@ -511,5 +510,68 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         return httpClient;
     }
 
+    /**
+     * （接口）出货成功的通知接口
+     */
+    private void takeOutSuccess(String takeOutObjectId) {
+        // 加载前
+        // do something
 
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<TakeOutSuccessResBody> updateAction = service.takeOutSuccess(takeOutObjectId);
+        updateAction.enqueue(new Callback<TakeOutSuccessResBody>() {
+            @Override
+            public void onResponse(Call<TakeOutSuccessResBody> call, Response<TakeOutSuccessResBody> response) {
+                if (response != null && response.body() != null && response.body().data) {
+                    Toast.makeText(TestNetworkActivity.this, "出货成功标识提交服务端成功,true", Toast.LENGTH_LONG).show();
+                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 true
+
+                } else {
+                    // TODO DO Nothing
+                    Toast.makeText(TestNetworkActivity.this, "提交失败,false", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TakeOutSuccessResBody> call, Throwable throwable) {
+                // TODO DO Nothing
+                Toast.makeText(TestNetworkActivity.this, "网络问题", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /**
+     * （接口）借成功的通知接口
+     */
+    private void borrowSuccess(String borrowObjectId) {
+        // 加载前
+        // do something
+
+        // 异步加载(get)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<BorrowSuccessResBody> updateAction = service.borrowSuccess(borrowObjectId);
+        updateAction.enqueue(new Callback<BorrowSuccessResBody>() {
+            @Override
+            public void onResponse(Call<BorrowSuccessResBody> call, Response<BorrowSuccessResBody> response) {
+                if (response != null && response.body() != null && response.body().data) {
+                    Toast.makeText(TestNetworkActivity.this, "出货成功标识提交服务端成功,true", Toast.LENGTH_LONG).show();
+                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 true
+
+
+                } else {
+                    // TODO DO Nothing
+                    Toast.makeText(TestNetworkActivity.this, "提交失败,false", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BorrowSuccessResBody> call, Throwable throwable) {
+                // TODO DO Nothing
+                Toast.makeText(TestNetworkActivity.this, "网络问题", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

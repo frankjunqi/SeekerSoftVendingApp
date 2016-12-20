@@ -5,8 +5,6 @@ import android.app.Application;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.seekersoftvendingapp.database.table.DaoMaster;
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.util.DeviceInfoTool;
-import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import org.greenrobot.greendao.database.Database;
 

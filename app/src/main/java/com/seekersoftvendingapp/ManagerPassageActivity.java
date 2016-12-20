@@ -4,21 +4,35 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.DataFormat;
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.EmptyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by kjh08490 on 2016/12/15.
@@ -89,34 +103,76 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         int capacity = passage.getCapacity();
         // 当前库存
         int currentStock = passage.getStock();
+        // 可以补货的数量
+        int canSupply = capacity - currentStock;
 
         // 数据做校验
-        if (capacity <= 0 || currentStock > capacity) {
-            Toast.makeText(ManagerPassageActivity.this, "最大库存和当前库存可能存在脏数据.", Toast.LENGTH_SHORT).show();
+        if (canSupply <= 0) {
+            Toast.makeText(ManagerPassageActivity.this, "已经是最大库存数量", Toast.LENGTH_SHORT).show();
             return;
         }
-        final String[] intlist = new String[capacity];
-        for (int i = 0; i < capacity; i++) {
+        final String[] intlist = new String[canSupply];
+        for (int i = 0; i < canSupply; i++) {
             intlist[i] = String.valueOf(i + 1);
         }
         new AlertDialog.Builder(ManagerPassageActivity.this)
-                .setTitle("设置库存")
+                .setTitle("货道补货")
                 .setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 当前设置的库存 ,更新本地库存
-                        int selecteStock = which + 1;
-                        passage.setStock(selecteStock);
                     }
                 })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        passageDao.insertOrReplace(passage);
+                        asyncSupplyRecordRequest(passage, which + 1);
                         updatePassageList();
                     }
                 }).setNegativeButton("取消", null).show();
     }
+
+    /**
+     * 提交补货记录 POST
+     */
+    private void asyncSupplyRecordRequest(final Passage passage, final int selecteStock) {
+        // 异步加载(post)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        SupplyRecordReqBody supplyRecordReqBody = new SupplyRecordReqBody();
+        supplyRecordReqBody.deviceId = SeekerSoftConstant.DEVICEID;
+        // 处理补货记录
+        SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
+        supplyRecordObj.passage = passage.getSeqNo();
+        supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
+        supplyRecordObj.count = selecteStock;
+        supplyRecordObj.time = DataFormat.getNowTime();
+        supplyRecordReqBody.record.add(supplyRecordObj);
+
+        Gson gson = new Gson();
+        String josn = gson.toJson(supplyRecordReqBody);
+        Log.e("json", josn);
+
+        Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
+        postAction.enqueue(new Callback<SupplyRecordResBody>() {
+            @Override
+            public void onResponse(Call<SupplyRecordResBody> call, Response<SupplyRecordResBody> response) {
+                if (response != null && response.body() != null) {
+                    passage.setStock(passage.getStock() + selecteStock);
+                    passageDao.insertOrReplaceInTx(passage);
+                    Toast.makeText(ManagerPassageActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
+                    Log.e("request", "supply Record: Failure");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                Toast.makeText(ManagerPassageActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     /**
      * 读取最新数据库数据
@@ -146,8 +202,8 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                         break;
                 }
             }
-
         }
+
     }
 
     @Override
@@ -166,5 +222,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 managerPassageAdapter.setPassageList(passageListC);
                 break;
         }
+        managerPassageAdapter.notifyDataSetChanged();
     }
 }

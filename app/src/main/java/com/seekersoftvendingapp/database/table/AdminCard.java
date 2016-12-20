@@ -1,6 +1,9 @@
 package com.seekersoftvendingapp.database.table;
 
-import org.greenrobot.greendao.annotation.*;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.NotNull;
 
 import java.io.Serializable;
 

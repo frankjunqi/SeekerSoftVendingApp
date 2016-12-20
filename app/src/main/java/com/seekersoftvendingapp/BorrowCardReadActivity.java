@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,10 +22,10 @@ import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.borrow.BorrowResBody;
-import com.seekersoftvendingapp.network.entity.borrow.BorrowSuccessResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.serialport.StoreSerialPort;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
 
@@ -180,13 +179,9 @@ public class BorrowCardReadActivity extends BaseActivity {
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
         if (open) {
-            // TODO 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端
-            // 本地数据库进行库存的消耗
+            // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, pasageId, SeekerSoftConstant.CARDID, true, new Date());
-            borrowRecordDao.insertOrReplaceInTx(borrowRecord);
-            // TODO 提交成功接口
-            //borrowSuccess(response.body().data.objectId);
-
+            Track.getInstance(BorrowCardReadActivity.this).setBorrowReturnRecordCommand(borrowRecord);
             // 串口打开柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
@@ -276,37 +271,5 @@ public class BorrowCardReadActivity extends BaseActivity {
         });
     }
 
-    /**
-     * （接口）借成功的通知接口
-     */
-    private void borrowSuccess(String borrowObjectId) {
-        // 加载前
-        // do something
-
-        // 异步加载(get)
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<BorrowSuccessResBody> updateAction = service.borrowSuccess(borrowObjectId);
-        updateAction.enqueue(new Callback<BorrowSuccessResBody>() {
-            @Override
-            public void onResponse(Call<BorrowSuccessResBody> call, Response<BorrowSuccessResBody> response) {
-                if (response != null && response.body() != null && response.body().data) {
-                    Toast.makeText(BorrowCardReadActivity.this, "出货成功标识提交服务端成功,true", Toast.LENGTH_LONG).show();
-                    // TODO 本地数据库消费记录 默认提交到服务端的falg为 true
-
-
-                } else {
-                    // TODO DO Nothing
-                    Toast.makeText(BorrowCardReadActivity.this, "提交失败,false", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BorrowSuccessResBody> call, Throwable throwable) {
-                // TODO DO Nothing
-                Toast.makeText(BorrowCardReadActivity.this, "网络问题", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
 }

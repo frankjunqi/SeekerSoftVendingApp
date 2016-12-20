@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.database.table.Note;
 import com.seekersoftvendingapp.database.table.Passage;
 
 import java.util.ArrayList;

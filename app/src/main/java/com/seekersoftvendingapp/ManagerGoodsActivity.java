@@ -5,18 +5,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
+import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * 4. 管理员 管理页面
@@ -110,11 +123,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 一键补货,补货到最大库存
-                        List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
-                        for (Passage passage : passageList) {
-                            passage.setStock(passage.getCapacity());
-                        }
-                        passageDao.insertOrReplaceInTx(passageList);
+                        asyncSupplyRecordRequest();
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -124,4 +133,51 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                     }
                 }).setCancelable(false).show();
     }
+
+    /**
+     * 提交补货记录 POST
+     */
+    private void asyncSupplyRecordRequest() {
+        final List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
+        // 异步加载(post)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        SupplyRecordReqBody supplyRecordReqBody = new SupplyRecordReqBody();
+        supplyRecordReqBody.deviceId = SeekerSoftConstant.DEVICEID;
+        // 处理补货记录
+        for (Passage passage : passageList) {
+            SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
+            supplyRecordObj.passage = passage.getSeqNo();
+            supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
+            supplyRecordObj.count = passage.getCapacity()-passage.getStock();
+            supplyRecordObj.time = DataFormat.getNowTime();
+            supplyRecordReqBody.record.add(supplyRecordObj);
+        }
+        Gson gson = new Gson();
+        String josn = gson.toJson(supplyRecordReqBody);
+        Log.e("json", josn);
+
+        Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
+        postAction.enqueue(new Callback<SupplyRecordResBody>() {
+            @Override
+            public void onResponse(Call<SupplyRecordResBody> call, Response<SupplyRecordResBody> response) {
+                if (response != null && response.body() != null) {
+                    for (Passage passage : passageList) {
+                        passage.setStock(passage.getCapacity());
+                    }
+                    passageDao.insertOrReplaceInTx(passageList);
+                    Toast.makeText(ManagerGoodsActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ManagerGoodsActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
+                    Log.e("request", "supply Record: Failure");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                Toast.makeText(ManagerGoodsActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }

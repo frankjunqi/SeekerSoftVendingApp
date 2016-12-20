@@ -1,5 +1,7 @@
 package com.seekersoftvendingapp.network.entity.takeoutrecord;
 
+import com.seekersoftvendingapp.database.table.TakeoutRecord;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,6 @@ public class TakeoutRecordReqBody implements Serializable {
 
     public String deviceId;
 
-    public List<TakeoutRecordObj> record = new ArrayList<TakeoutRecordObj>();
+    public List<TakeoutRecord> record = new ArrayList<TakeoutRecord>();
 
 }
