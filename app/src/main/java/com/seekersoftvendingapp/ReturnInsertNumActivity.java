@@ -82,7 +82,7 @@ public class ReturnInsertNumActivity extends BaseActivity {
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
-            // TODO 检查是否有该硬件货道??
+            // 检查是否有该硬件货道
 
             // 判断此货道是否可以借出去: true是借出,false是归还
             if (!passage.getBorrowState()) {
@@ -92,8 +92,13 @@ public class ReturnInsertNumActivity extends BaseActivity {
 
             Intent intent = new Intent(ReturnInsertNumActivity.this, ReturnCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());
-            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
+            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage.replace("A", "").replace("B", "").replace("C", ""));
+            String x = keyPassage.substring(0, 1);
+            if (x.equals("A") || x.equals("B") || x.equals("C")) {
+                intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, x);
+            }
             startActivity(intent);
+            this.finish();
         } else {
             Toast.makeText(ReturnInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
             return;

@@ -31,6 +31,7 @@ public class EventController {
         this.mContext = mContext;
         DaoSession daoSession = ((SeekersoftApp) mContext.getApplicationContext()).getDaoSession();
         takeoutRecordDao = daoSession.getTakeoutRecordDao();
+        borrowRecordDao = daoSession.getBorrowRecordDao();
     }
 
     // 往数据库中更新这条记录 + 等待提交的出货记录list插入这条数据

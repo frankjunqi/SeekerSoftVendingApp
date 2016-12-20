@@ -184,7 +184,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         String cmd = VendingSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
         VendingSerialPort.getInstance().closeSerialPort();
-        if (open) {
+        if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(takeoutRecord);

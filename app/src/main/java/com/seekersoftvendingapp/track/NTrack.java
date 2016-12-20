@@ -105,7 +105,7 @@ public class NTrack {
     }
 
     private void deliverTakeOutRecordCommonEvent(int size) {
-        if (this.eventController.getTakeOutRecordSize() >= size) {
+        if (this.eventController.getBorrowReturnRecordSize() >= size) {
             takeoutRecordRequest();
         }
     }

@@ -51,6 +51,7 @@ public class ReturnCardReadActivity extends BaseActivity {
     // 货道的产品
     private String productId = "";
     private String pasageId = "";
+    private String passageFlag = "";
 
     private PassageDao passageDao;
     private EmpPowerDao empPowerDao;
@@ -90,6 +91,8 @@ public class ReturnCardReadActivity extends BaseActivity {
 
         productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
         pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
+        passageFlag = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEFLAG);
+
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
         btn_return_goods.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,13 +181,16 @@ public class ReturnCardReadActivity extends BaseActivity {
         String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
-        if (open) {
+        if (true) {
             // 货道的借还标记进行重置
-            List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.SeqNo.eq(pasageId)).list();
+            List<Passage> passageList = passageDao.queryBuilder()
+                    .where(PassageDao.Properties.SeqNo.eq(pasageId))
+                    .where(PassageDao.Properties.Flag.eq(passageFlag))
+                    .list();
             if (passageList != null && passageList.size() > 0) {
                 Passage passage = passageList.get(0);
                 passage.setBorrowState(false);
-                passageDao.update(passage);
+                passageDao.insertOrReplaceInTx(passage);
             }
 
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
@@ -206,6 +212,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
         intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
         startActivity(intent);
+        this.finish();
     }
 
 
@@ -258,7 +265,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<ReturnProResBody> updateAction = service.returnPro(SeekerSoftConstant.DEVICEID, cardId, pasageId);
+        Call<ReturnProResBody> updateAction = service.returnPro(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
         updateAction.enqueue(new Callback<ReturnProResBody>() {
             @Override
             public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {
