@@ -182,7 +182,7 @@ public class DaoUtil {
     private static void addTakeoutRecord(Schema schema) {
         Entity takeoutRecord = schema.addEntity("TakeoutRecord");
         takeoutRecord.addIdProperty().primaryKey();
-        takeoutRecord.addBooleanProperty("isDel");
+        takeoutRecord.addBooleanProperty("isDel");// true : 已经同步； false：未同步
         takeoutRecord.addStringProperty("passage");
         takeoutRecord.addStringProperty("card");
         takeoutRecord.addStringProperty("productId");

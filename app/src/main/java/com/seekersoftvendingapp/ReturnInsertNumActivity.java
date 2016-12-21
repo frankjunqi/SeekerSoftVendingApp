@@ -97,6 +97,7 @@ public class ReturnInsertNumActivity extends BaseActivity {
             if (x.equals("A") || x.equals("B") || x.equals("C")) {
                 intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, x);
             }
+            intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();
         } else {

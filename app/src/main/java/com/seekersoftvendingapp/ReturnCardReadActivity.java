@@ -56,7 +56,9 @@ public class ReturnCardReadActivity extends BaseActivity {
     private PassageDao passageDao;
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
-    private BorrowRecordDao borrowRecordDao;
+
+    private Passage passage;
+
 
     private Handler mHandle = new Handler() {
         @Override
@@ -87,11 +89,11 @@ public class ReturnCardReadActivity extends BaseActivity {
         passageDao = daoSession.getPassageDao();
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
-        borrowRecordDao = daoSession.getBorrowRecordDao();
 
         productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
         pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
         passageFlag = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEFLAG);
+        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
         btn_return_goods.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +167,7 @@ public class ReturnCardReadActivity extends BaseActivity {
     private void outProResult(TakeOutError takeOutError) {
         if (takeOutError.isSuccess()) {
             // 串口柜子passageID操作
-            cmdBufferStoreSerial();
+            cmdBufferStoreSerial("");
         } else {
             // 不可以出货
             handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
@@ -177,7 +179,7 @@ public class ReturnCardReadActivity extends BaseActivity {
      *
      * @return
      */
-    private void cmdBufferStoreSerial() {
+    private void cmdBufferStoreSerial(String objectId) {
         String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
@@ -195,11 +197,15 @@ public class ReturnCardReadActivity extends BaseActivity {
 
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, pasageId, SeekerSoftConstant.CARDID, false, new Date());
-            Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(borrowRecord);
+            Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord);
 
             // 串口打开柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
+            //  调用失败接口 如果接口错误，则加入到同步队列里面去
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
+
             // 串口打开柜子失败
             handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
         }
@@ -271,7 +277,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
                     Toast.makeText(ReturnCardReadActivity.this, "可以还货,true", Toast.LENGTH_LONG).show();
-                    cmdBufferStoreSerial();
+                    cmdBufferStoreSerial(response.body().data.objectId);
                 } else {
                     Toast.makeText(ReturnCardReadActivity.this, "不可以还货,false", Toast.LENGTH_LONG).show();
                 }
