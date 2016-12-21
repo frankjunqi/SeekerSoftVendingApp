@@ -53,7 +53,7 @@ public class TakeOutNTrack implements InterfaceTrack {
      * @param takeOutRecord
      */
 
-    public void setTakeOutRecord(final Passage passage, final TakeoutRecord takeOutRecord, final String objectId) {
+    public void setTakeOutRecord(final TakeoutRecord takeOutRecord, final String objectId) {
         Runnable command = new Runnable() {
             @Override
             public void run() {
@@ -66,7 +66,7 @@ public class TakeOutNTrack implements InterfaceTrack {
                 } else if (!takeOutRecord.getIsDel() && !TextUtils.isEmpty(objectId)) {
                     // // IsDel: true标识未同步；串口失败出货，进行失败提交接口
                     takeoutRecordDao.insertOrReplaceInTx(takeOutRecord);
-                    takeOutFailed(passage, takeOutRecord, objectId);
+                    takeOutFailed(takeOutRecord, objectId);
                 } else {
                     // no network or fail need to send to server:(往数据库中更新这条记录 + 等待提交的出货记录list插入这条数据)
                     takeoutRecordDao.insertOrReplaceInTx(takeOutRecord);
@@ -123,7 +123,7 @@ public class TakeOutNTrack implements InterfaceTrack {
     /**
      * （接口）出货失败的通知接口 同步
      */
-    private void takeOutFailed(Passage passage, TakeoutRecord takeOutRecord, String takeOutObjectId) {
+    private void takeOutFailed(TakeoutRecord takeOutRecord, String takeOutObjectId) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<TakeOutSuccessResBody> updateAction = service.takeOutFail(takeOutObjectId);
@@ -135,11 +135,11 @@ public class TakeOutNTrack implements InterfaceTrack {
                 takeoutRecordDao.insertOrReplaceInTx(takeOutRecord);
             } else {
                 // 失败
-                setTakeOutRecord(passage, takeOutRecord, "");
+                setTakeOutRecord(takeOutRecord, "");
             }
         } catch (IOException e) {
             // 失败
-            setTakeOutRecord(passage, takeOutRecord, "");
+            setTakeOutRecord(takeOutRecord, "");
         }
     }
 }

@@ -2,8 +2,11 @@ package com.seekersoftvendingapp.track;
 
 import android.content.Context;
 
+import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.table.BorrowRecord;
+import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
 
 /**
@@ -15,10 +18,13 @@ public class Track {
     private static Track sTrack;
     private TakeOutNTrack mTakeOutNTrack;
     private BorrowReturnNTrack mBorrowReturnNTrack;
+    private PassageDao passageDao;
 
     private Track(Context context) {
         this.mTakeOutNTrack = new TakeOutNTrack(context.getApplicationContext());
         this.mBorrowReturnNTrack = new BorrowReturnNTrack(context.getApplicationContext());
+        DaoSession daoSession = ((SeekersoftApp) context.getApplicationContext()).getDaoSession();
+        passageDao = daoSession.getPassageDao();
     }
 
     public static Track getInstance(Context context) {
@@ -34,7 +40,7 @@ public class Track {
      * @param takeOutRecord
      */
     public void setTakeOutRecordCommand(Passage passage, TakeoutRecord takeOutRecord) {
-        this.setTakeOutRecordCommand(passage, takeOutRecord, "");
+        setTakeOutRecordCommand(passage, takeOutRecord, "");
     }
 
     /**
@@ -44,7 +50,8 @@ public class Track {
      * @param objectId
      */
     public void setTakeOutRecordCommand(Passage passage, TakeoutRecord takeOutRecord, String objectId) {
-        this.mTakeOutNTrack.setTakeOutRecord(passage, takeOutRecord, objectId);
+        passageDao.insertOrReplaceInTx(passage);
+        mTakeOutNTrack.setTakeOutRecord(takeOutRecord, objectId);
     }
 
     /**
@@ -57,6 +64,7 @@ public class Track {
     }
 
     public void setBorrowReturnRecordCommand(Passage passage, BorrowRecord borrowRecord, String objectId) {
-        this.mBorrowReturnNTrack.setBorrrowReturnRecordCommand(passage, borrowRecord, objectId);
+        passageDao.insertOrReplaceInTx(passage);
+        mBorrowReturnNTrack.setBorrrowReturnRecordCommand(borrowRecord, objectId);
     }
 }

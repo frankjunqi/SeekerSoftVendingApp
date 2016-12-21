@@ -38,13 +38,11 @@ public class BorrowReturnNTrack implements InterfaceTrack {
     // 借还记录接口
     private List<BorrowRecord> borrowRecordList = new ArrayList<>();
     private BorrowRecordDao borrowRecordDao;
-    private PassageDao passageDao;
 
     public BorrowReturnNTrack(Context ctx) {
         this.mContext = ctx;
         DaoSession daoSession = ((SeekersoftApp) mContext.getApplicationContext()).getDaoSession();
         borrowRecordDao = daoSession.getBorrowRecordDao();
-        passageDao = daoSession.getPassageDao();
     }
 
     /**
@@ -53,7 +51,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
      *
      * @param borrowRecord
      */
-    public void setBorrrowReturnRecordCommand(final Passage passage, final BorrowRecord borrowRecord, final String objectId) {
+    public void setBorrrowReturnRecordCommand(final BorrowRecord borrowRecord, final String objectId) {
         Runnable command = new Runnable() {
             @Override
             public void run() {
@@ -67,9 +65,9 @@ public class BorrowReturnNTrack implements InterfaceTrack {
                     // // IsDel: true标识未同步；串口失败出货，进行失败提交接口
                     borrowRecordDao.insertOrReplaceInTx(borrowRecord);
                     if (borrowRecord.getBorrow()) {
-                        borrowFail(passage, borrowRecord, objectId);
+                        borrowFail(borrowRecord, objectId);
                     } else {
-                        returnFail(passage, borrowRecord, objectId);
+                        returnFail(borrowRecord, objectId);
                     }
                 } else {
                     // no network or fail need to send to server:(往数据库中更新这条记录 + 等待提交的出货记录list插入这条数据)
@@ -120,7 +118,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
     /**
      * （接口）借 失败 的通知接口
      */
-    private void borrowFail(Passage passage, BorrowRecord borrowRecord, String borrowObjectId) {
+    private void borrowFail(BorrowRecord borrowRecord, String borrowObjectId) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowSuccessResBody> updateAction = service.borrowFail(borrowObjectId);
@@ -132,18 +130,18 @@ public class BorrowReturnNTrack implements InterfaceTrack {
                 borrowRecordDao.insertOrReplaceInTx(borrowRecord);
             } else {
                 // 失败
-                setBorrrowReturnRecordCommand(passage, borrowRecord, "");
+                setBorrrowReturnRecordCommand(borrowRecord, "");
             }
         } catch (IOException e) {
             // 失败
-            setBorrrowReturnRecordCommand(passage, borrowRecord, "");
+            setBorrrowReturnRecordCommand(borrowRecord, "");
         }
     }
 
     /**
      * （接口）还 失败 的通知接口
      */
-    private void returnFail(Passage passage, BorrowRecord borrowRecord, String returnObjectId) {
+    private void returnFail(BorrowRecord borrowRecord, String returnObjectId) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnSuccessResBody> updateAction = service.returnFail(returnObjectId);
@@ -155,11 +153,11 @@ public class BorrowReturnNTrack implements InterfaceTrack {
                 borrowRecordDao.insertOrReplaceInTx(borrowRecord);
             } else {
                 // 失败
-                setBorrrowReturnRecordCommand(passage, borrowRecord, "");
+                setBorrrowReturnRecordCommand(borrowRecord, "");
             }
         } catch (IOException e) {
             // 失败
-            setBorrrowReturnRecordCommand(passage, borrowRecord, "");
+            setBorrrowReturnRecordCommand(borrowRecord, "");
         }
     }
 

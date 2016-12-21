@@ -147,9 +147,9 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         // 处理补货记录
         for (Passage passage : passageList) {
             SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
-            supplyRecordObj.passage = passage.getSeqNo();
+            supplyRecordObj.passage = passage.getFlag() + passage.getSeqNo();
             supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
-            supplyRecordObj.count = passage.getCapacity()-passage.getStock();
+            supplyRecordObj.count = passage.getCapacity() - passage.getStock();
             supplyRecordObj.time = DataFormat.getNowTime();
             supplyRecordReqBody.record.add(supplyRecordObj);
         }
