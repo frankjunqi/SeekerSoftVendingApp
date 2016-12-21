@@ -31,6 +31,7 @@ public class SeekerSoftConstant {
     public final static int BASEDATALOOPER = 3000;
 
     public final static String PRODUCTID = "productId";
+    public final static String PASSAGE = "PASSAGE";// new Passga()
     public final static String PASSAGEFLAG = "passageFlag";// A B C
     public final static String PASSAGEID = "passageId";// 两位数字 12
     public final static String TAKEOUTERROR = "TAKEOUTERROR";

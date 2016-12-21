@@ -13,6 +13,7 @@ import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorReqBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
 import com.seekersoftvendingapp.network.entity.returnpro.ReturnProResBody;
+import com.seekersoftvendingapp.network.entity.returnpro.ReturnSuccessResBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
@@ -98,7 +99,7 @@ public interface SeekerSoftService {
 
     /*
     http://smartbox.leanapp.cn/api/takeout/success/[objectId]
-    设备成功出货后回调此接口上传交易成功记录
+    设备失败出货后回调此接口上传交易成功记录
     参数：objectId(取货记录ID)
     返回值：data:{result:true/false}
     true:成功
@@ -108,8 +109,8 @@ public interface SeekerSoftService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @GET("api/takeout/success/{objectId}")
-    Call<TakeOutSuccessResBody> takeOutSuccess(
+    @GET("api/takeout/fail/{objectId}")
+    Call<TakeOutSuccessResBody> takeOutFail(
             @Path("objectId") String objectId
     );
 
@@ -144,8 +145,8 @@ public interface SeekerSoftService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @GET("api/borrow/success/{objectId}")
-    Call<BorrowSuccessResBody> borrowSuccess(
+    @GET("api/borrow/fail/{objectId}")
+    Call<BorrowSuccessResBody> borrowFail(
             @Path("objectId") String objectId
     );
 
@@ -161,6 +162,22 @@ public interface SeekerSoftService {
             @Path("deviceid") String deviceid,
             @Path("card") String crad,
             @Path("passage") String passage
+    );
+
+    /*
+   http://smartbox.leanapp.cn/api/return/fail/[objectId]
+   设备出货失败后回调此接口上传交易失败记录
+    参数：objectId(取货记录ID)
+    返回值：data:{result:true/false}
+    true:成功
+    false:失败*/
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @GET("api//fail/{objectId}")
+    Call<ReturnSuccessResBody> returnFail(
+            @Path("objectId") String objectId
     );
 
     /*

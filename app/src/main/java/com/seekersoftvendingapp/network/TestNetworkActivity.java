@@ -520,7 +520,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutSuccessResBody> updateAction = service.takeOutSuccess(takeOutObjectId);
+        Call<TakeOutSuccessResBody> updateAction = service.takeOutFail(takeOutObjectId);
         updateAction.enqueue(new Callback<TakeOutSuccessResBody>() {
             @Override
             public void onResponse(Call<TakeOutSuccessResBody> call, Response<TakeOutSuccessResBody> response) {
@@ -552,7 +552,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<BorrowSuccessResBody> updateAction = service.borrowSuccess(borrowObjectId);
+        Call<BorrowSuccessResBody> updateAction = service.borrowFail(borrowObjectId);
         updateAction.enqueue(new Callback<BorrowSuccessResBody>() {
             @Override
             public void onResponse(Call<BorrowSuccessResBody> call, Response<BorrowSuccessResBody> response) {

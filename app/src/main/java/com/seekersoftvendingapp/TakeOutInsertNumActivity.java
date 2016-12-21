@@ -89,6 +89,7 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());// 说明货道可以进行消费产品
             intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
+            intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();
         } else {
