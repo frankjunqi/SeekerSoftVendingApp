@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -14,6 +15,7 @@ import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -21,6 +23,8 @@ import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -83,7 +87,6 @@ public class StartAppActivity extends BaseActivity {
         passageDao = daoSession.getPassageDao();
         productDao = daoSession.getProductDao();
 
-
         asyncGetBaseDataRequest();
 
         btn_tryagain.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +116,7 @@ public class StartAppActivity extends BaseActivity {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
                     empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
+                    // 第一次请求，直接全部更新
                     passageDao.insertOrReplaceInTx(response.body().getPassageList());
                     productDao.insertOrReplaceInTx(response.body().getProductList());
                     // 成功初始化基础数据

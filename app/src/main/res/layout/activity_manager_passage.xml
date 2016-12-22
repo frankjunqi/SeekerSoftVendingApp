@@ -66,6 +66,13 @@
 
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/btn_return_mainpage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="返回首页" />
+
     <com.seekersoftvendingapp.view.EmptyRecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"

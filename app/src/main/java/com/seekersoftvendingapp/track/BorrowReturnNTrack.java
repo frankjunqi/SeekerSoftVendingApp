@@ -122,6 +122,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowSuccessResBody> updateAction = service.borrowFail(borrowObjectId);
+        Log.e("json", "borrowFail" + updateAction.request().body().toString());
         try {
             Response<BorrowSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {
@@ -145,6 +146,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnSuccessResBody> updateAction = service.returnFail(returnObjectId);
+        Log.e("json", "returnFail" + updateAction.request().url().toString());
         try {
             Response<ReturnSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {

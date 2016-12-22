@@ -81,7 +81,7 @@ public class BorrowCardReadActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardread);
+        setContentView(R.layout.activity_borrow_cardread);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
@@ -215,10 +215,14 @@ public class BorrowCardReadActivity extends BaseActivity {
      * 处理本地消费结果（到结果页面）
      */
     private void handleResult(TakeOutError takeOutError) {
-        Intent intent = new Intent(BorrowCardReadActivity.this, HandleResultActivity.class);
-        intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
-        startActivity(intent);
-        this.finish();
+        if (takeOutError.isSuccess()) {
+            Intent intent = new Intent(BorrowCardReadActivity.this, HandleResultActivity.class);
+            intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
+            startActivity(intent);
+            this.finish();
+        } else {
+            Toast.makeText(BorrowCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 

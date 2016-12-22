@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -147,7 +149,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         // 处理补货记录
         for (Passage passage : passageList) {
             SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
-            supplyRecordObj.passage = passage.getFlag() + passage.getSeqNo();
+            supplyRecordObj.passage = (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo();
             supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
             supplyRecordObj.count = passage.getCapacity() - passage.getStock();
             supplyRecordObj.time = DataFormat.getNowTime();

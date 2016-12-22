@@ -18,11 +18,13 @@ public class Track {
     private static Track sTrack;
     private TakeOutNTrack mTakeOutNTrack;
     private BorrowReturnNTrack mBorrowReturnNTrack;
+    private BaseDateNTrack mBaseDataNTrack;
     private PassageDao passageDao;
 
     private Track(Context context) {
         this.mTakeOutNTrack = new TakeOutNTrack(context.getApplicationContext());
         this.mBorrowReturnNTrack = new BorrowReturnNTrack(context.getApplicationContext());
+        this.mBaseDataNTrack = new BaseDateNTrack(context.getApplicationContext());
         DaoSession daoSession = ((SeekersoftApp) context.getApplicationContext()).getDaoSession();
         passageDao = daoSession.getPassageDao();
     }
@@ -67,4 +69,19 @@ public class Track {
         passageDao.insertOrReplaceInTx(passage);
         mBorrowReturnNTrack.setBorrrowReturnRecordCommand(borrowRecord, objectId);
     }
+
+    /**
+     * 基础数据的同步
+     */
+    public void setBaseDataNTrackCommand() {
+        mBaseDataNTrack.asyncBaseData();
+    }
+
+    /**
+     * 基础数据更新的message移出
+     */
+    public void removeBaseDataUpdateMessage() {
+        mBaseDataNTrack.removeMessage();
+    }
+
 }

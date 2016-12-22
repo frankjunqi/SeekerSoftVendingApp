@@ -28,40 +28,50 @@ public class SynchroBaseDataResBody implements Serializable {
 
     public List<AdminCard> getAdminCardList() {
         ArrayList<AdminCard> adminCards = new ArrayList<AdminCard>();
-        for (AdminCardEntity adminCardEntity : data.AdminCard) {
-            adminCards.add(adminCardEntity.getAdminCard());
+        if (data.AdminCard != null) {
+            for (AdminCardEntity adminCardEntity : data.AdminCard) {
+                adminCards.add(adminCardEntity.getAdminCard());
+            }
         }
         return adminCards;
     }
 
     public List<Product> getProductList() {
         ArrayList<Product> products = new ArrayList<Product>();
-        for (ProductEntity productEntity : data.Product) {
-            products.add(productEntity.getProduct());
+        if (data.Product != null) {
+            for (ProductEntity productEntity : data.Product) {
+                products.add(productEntity.getProduct());
+            }
         }
         return products;
     }
 
     public List<Employee> getEmployeeList() {
         List<Employee> employees = new ArrayList<Employee>();
-        for (EmployeeEntity employeeEntity : data.Employee) {
-            employees.add(employeeEntity.getEmployee());
+        if (data.Employee != null) {
+            for (EmployeeEntity employeeEntity : data.Employee) {
+                employees.add(employeeEntity.getEmployee());
+            }
         }
         return employees;
     }
 
     public List<EmpPower> getEmpPowerList() {
         List<EmpPower> emppowers = new ArrayList<EmpPower>();
-        for (EmpPowerEntity emppowerEntity : data.EmpPower) {
-            emppowers.add(emppowerEntity.getEmpPower());
+        if (data.EmpPower != null) {
+            for (EmpPowerEntity emppowerEntity : data.EmpPower) {
+                emppowers.add(emppowerEntity.getEmpPower());
+            }
         }
         return emppowers;
     }
 
     public List<Passage> getPassageList() {
         List<Passage> passages = new ArrayList<Passage>();
-        for (PassageEntity passageEntity : data.Passage) {
-            passages.add(passageEntity.getPassage());
+        if (data.Passage != null) {
+            for (PassageEntity passageEntity : data.Passage) {
+                passages.add(passageEntity.getPassage());
+            }
         }
         return passages;
     }

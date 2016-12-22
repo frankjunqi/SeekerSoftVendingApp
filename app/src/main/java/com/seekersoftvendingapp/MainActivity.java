@@ -3,11 +3,32 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.seekersoftvendingapp.database.table.AdminCardDao;
+import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpPowerDao;
+import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.database.table.ProductDao;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by kjh08490 on 2016/11/25.
@@ -31,6 +52,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn_borrow.setOnClickListener(this);
         btn_back.setOnClickListener(this);
         btn_manage.setOnClickListener(this);
+
+        // 开启更新
+        Track.getInstance(MainActivity.this).setBaseDataNTrackCommand();
     }
 
     @Override
@@ -39,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         int exitFlag = intent.getIntExtra(SeekerSoftConstant.EXITAPP, 0);
         if (exitFlag == 1) {
             // 退出程序
+            Track.getInstance(MainActivity.this).removeBaseDataUpdateMessage();
             this.finish();
         }
     }
@@ -86,7 +111,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 管理货物
      */
     private void manageProduct() {
-        Toast.makeText(MainActivity.this, "管理货物", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(MainActivity.this, ManagerCardReadActivity.class));
     }
+
 }
