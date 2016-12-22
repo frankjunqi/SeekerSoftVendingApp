@@ -91,6 +91,5 @@ public class Track {
     public void synchroDataToServer() {
         mBorrowReturnNTrack.synchroAllDataToServer();
         mBorrowReturnNTrack.synchroAllDataToServer();
-        mBaseDataNTrack.synchroAllDataToServer();
     }
 }
