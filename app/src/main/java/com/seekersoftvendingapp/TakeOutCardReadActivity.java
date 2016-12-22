@@ -55,6 +55,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
     // 货道的产品
     private String productId = "";
     private String pasageId = "";
+    private String passageFlag = "";
 
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
@@ -95,6 +96,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
         productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
         pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        if (passage != null && !TextUtils.isEmpty(passage.getFlag())) {
+            passageFlag = passage.getFlag();
+        }
 
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
@@ -193,7 +197,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         VendingSerialPort.getInstance().closeSerialPort();
         if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date());
             passage.setStock(passage.getStock() - 1);
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
@@ -208,7 +212,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date());
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
 
             // 串口打开螺纹柜子失败

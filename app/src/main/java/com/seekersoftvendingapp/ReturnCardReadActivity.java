@@ -185,7 +185,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         StoreSerialPort.getInstance().closeSerialPort();
         if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
             passage.setStock(passage.getStock() + 1);
             passage.setBorrowState(false);
             if (TextUtils.isEmpty(objectId)) {
@@ -201,7 +201,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
             Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败
