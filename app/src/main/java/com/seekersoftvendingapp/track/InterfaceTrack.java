@@ -1,8 +1,5 @@
 package com.seekersoftvendingapp.track;
 
-import android.os.Handler;
-import android.os.Message;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,4 +11,9 @@ import java.util.concurrent.Executors;
 public interface InterfaceTrack {
 
     ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+
+    /**
+     * 同步所有消费记录到服务端
+     */
+    void synchroAllDataToServer();
 }

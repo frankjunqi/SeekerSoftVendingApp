@@ -183,20 +183,17 @@ public class BorrowCardReadActivity extends BaseActivity {
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
         if (true) {
-            // 货道的借还标记进行重置
-            List<Passage> passageList = passageDao.queryBuilder()
-                    .where(PassageDao.Properties.SeqNo.eq(pasageId))
-                    .where(PassageDao.Properties.Flag.eq(passageFlag))
-                    .list();
-            if (passageList != null && passageList.size() > 0) {
-                Passage passage = passageList.get(0);
-                passage.setBorrowState(true);
-                passageDao.insertOrReplaceInTx(passage);
-            }
-
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, pasageId, SeekerSoftConstant.CARDID, true, new Date());
             passage.setStock(passage.getStock() - 1);
+            passage.setBorrowState(true);
+            if (TextUtils.isEmpty(objectId)) {
+                // 本地消费
+                borrowRecord.setIsFlag(false);
+            } else {
+                // 网络消费
+                borrowRecord.setIsFlag(true);
+            }
             Track.getInstance(BorrowCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord);
 
             // 串口打开柜子成功
@@ -245,7 +242,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<Employee> employeeList = employeeDao.queryBuilder()
                 .where(EmployeeDao.Properties.IsDel.eq(false))
-                .where(EmployeeDao.Properties.Card.in(cardId))
+                .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
                 .list();
 
         if (employeeList != null && employeeList.size() > 0) {
@@ -283,13 +280,13 @@ public class BorrowCardReadActivity extends BaseActivity {
                     Toast.makeText(BorrowCardReadActivity.this, "可以借,true", Toast.LENGTH_LONG).show();
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(BorrowCardReadActivity.this, "不可以借,false", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BorrowCardReadActivity.this, "不可以借,false" + response.body().message, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<BorrowResBody> call, Throwable throwable) {
-                Toast.makeText(BorrowCardReadActivity.this, "basedate :  Failure", Toast.LENGTH_LONG).show();
+                Toast.makeText(BorrowCardReadActivity.this, "网络链接问题，本地进行借货操作", Toast.LENGTH_LONG).show();
                 TakeOutError takeOutError = localBorrowPro(productId, SeekerSoftConstant.CARDID);
                 outProResult(takeOutError);
             }

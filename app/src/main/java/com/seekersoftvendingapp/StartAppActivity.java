@@ -22,6 +22,7 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.util.List;
@@ -79,6 +80,8 @@ public class StartAppActivity extends BaseActivity {
         btn_tryagain = (Button) findViewById(R.id.btn_tryagain);
         tv_resultdata = (TextView) findViewById(R.id.tv_resultdata);
 
+        // 初始化网络状态
+        DeviceInfoTool.handleConnect(getApplicationContext());
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
@@ -129,8 +132,12 @@ public class StartAppActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
-                mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
+                if (passageDao.queryBuilder().list().size() > 0) {
+                    successInit();
+                } else {
+                    mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
+                    Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

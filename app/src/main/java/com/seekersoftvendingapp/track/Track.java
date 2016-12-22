@@ -84,4 +84,13 @@ public class Track {
         mBaseDataNTrack.removeMessage();
     }
 
+
+    /**
+     * 同步所有本地数据到服务端（1. 由断网到联网；2. 补货之前必须同步）
+     */
+    public void synchroDataToServer() {
+        mBorrowReturnNTrack.synchroAllDataToServer();
+        mBorrowReturnNTrack.synchroAllDataToServer();
+        mBaseDataNTrack.synchroAllDataToServer();
+    }
 }

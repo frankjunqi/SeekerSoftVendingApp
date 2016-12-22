@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +22,7 @@ import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -68,19 +68,33 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_exit.setOnClickListener(this);
         btn_backtomain.setOnClickListener(this);
 
+        // 同步基础数据
+        Track.getInstance(getApplicationContext()).synchroDataToServer();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_onekeyinsert:
-                plainDialogDemo();
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    plainDialogDemo();
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_onebyoneinsert:
-                startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_exit:
-                exitDialog();
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    exitDialog();
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_backtomain:
                 Intent intent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
@@ -180,6 +194,20 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 Toast.makeText(ManagerGoodsActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void needNetwork() {
+        if (!SeekerSoftConstant.NETWORKCONNECT) {
+            new AlertDialog.Builder(ManagerGoodsActivity.this)
+                    .setTitle("需要联网")
+                    .setMessage("确定已经连上网络，此页面操作需要在联网状态下进行？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    }).setCancelable(false).show();
+        }
     }
 
 }

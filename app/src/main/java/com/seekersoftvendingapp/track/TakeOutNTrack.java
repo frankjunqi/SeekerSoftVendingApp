@@ -83,6 +83,9 @@ public class TakeOutNTrack implements InterfaceTrack {
      * 提交取货记录 同步加载 POST
      */
     private void takeoutRecordRequest() {
+        if (takeOutRecordList == null || takeOutRecordList.size() == 0) {
+            return;
+        }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         TakeoutRecordReqBody takeoutRecordReqBody = new TakeoutRecordReqBody();
@@ -142,5 +145,19 @@ public class TakeOutNTrack implements InterfaceTrack {
             // 失败
             setTakeOutRecord(takeOutRecord, "");
         }
+    }
+
+    @Override
+    public void synchroAllDataToServer() {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                if (takeOutRecordList == null || takeOutRecordList.size() == 0) {
+                    takeOutRecordList = takeoutRecordDao.queryBuilder().where(TakeoutRecordDao.Properties.IsDel.eq(false)).list();
+                }
+                takeoutRecordRequest();
+            }
+        };
+        this.mExecutor.execute(command);
     }
 }

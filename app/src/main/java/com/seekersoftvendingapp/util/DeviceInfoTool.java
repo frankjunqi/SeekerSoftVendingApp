@@ -1,6 +1,8 @@
 package com.seekersoftvendingapp.util;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -36,6 +38,16 @@ public class DeviceInfoTool {
             deviceId = deviceId.replaceAll("-", "");
         } finally {
             return deviceId;
+        }
+    }
+
+    public static void handleConnect(Context mContext) {
+        ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeInfo = manager.getActiveNetworkInfo();
+        if (activeInfo != null && activeInfo.isAvailable()) {
+            SeekerSoftConstant.NETWORKCONNECT = true;
+        } else {
+            SeekerSoftConstant.NETWORKCONNECT = false;
         }
     }
 }

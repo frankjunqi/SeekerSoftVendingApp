@@ -195,6 +195,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, pasageId, SeekerSoftConstant.CARDID, productId, new Date());
             passage.setStock(passage.getStock() - 1);
+            if (TextUtils.isEmpty(objectId)) {
+                // 本地消费
+                takeoutRecord.setIsDel(false);
+            } else {
+                // 网络消费
+                takeoutRecord.setIsDel(true);
+            }
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord);
 
             // 串口打开螺纹柜子成功
@@ -213,10 +220,14 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * 处理本地消费结果（到结果页面）
      */
     private void handleResult(TakeOutError takeOutError) {
-        Intent intent = new Intent(TakeOutCardReadActivity.this, HandleResultActivity.class);
-        intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
-        startActivity(intent);
-        this.finish();
+        if (takeOutError.isSuccess()) {
+            Intent intent = new Intent(TakeOutCardReadActivity.this, HandleResultActivity.class);
+            intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
+            startActivity(intent);
+            this.finish();
+        } else {
+            Toast.makeText(TakeOutCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -239,7 +250,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<Employee> employeeList = employeeDao.queryBuilder()
                 .where(EmployeeDao.Properties.IsDel.eq(false))
-                .where(EmployeeDao.Properties.Card.in(cardId))
+                .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
                 .list();
 
         if (employeeList != null && employeeList.size() > 0) {
@@ -292,7 +303,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     Toast.makeText(TakeOutCardReadActivity.this, "可以出货,true", Toast.LENGTH_LONG).show();
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(TakeOutCardReadActivity.this, "不可以出货,false", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TakeOutCardReadActivity.this, "不可以出货,false" + response.body().message, Toast.LENGTH_LONG).show();
                     // 不可以出货
                     handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
                 }
