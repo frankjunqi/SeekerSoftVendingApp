@@ -154,6 +154,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
      * 提交补货记录 POST
      */
     private void asyncSupplyRecordRequest() {
+        showProgress();
         final List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
         // 异步加载(post)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
@@ -187,10 +188,12 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(ManagerGoodsActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
                     Log.e("request", "supply Record: Failure");
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(ManagerGoodsActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
             }
         });

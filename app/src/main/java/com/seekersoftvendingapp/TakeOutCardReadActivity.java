@@ -288,10 +288,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * （接口）判断是否能出货
      */
     private void isTakeOutPro(final String cardId) {
-        // 加载前
-        // do something
-        Toast.makeText(this, "（接口）判断是否能出货", Toast.LENGTH_SHORT).show();
-
+        showProgress();
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -307,10 +304,12 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     // 不可以出货
                     handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<TakeOutResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(TakeOutCardReadActivity.this, "网络链接问题，本地进行出货操作", Toast.LENGTH_LONG).show();
                 TakeOutError takeOutError = localTakeOutPro(productId, SeekerSoftConstant.CARDID);
                 outProResult(takeOutError);

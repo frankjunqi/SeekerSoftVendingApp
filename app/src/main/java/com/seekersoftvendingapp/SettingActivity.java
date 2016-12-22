@@ -3,6 +3,7 @@ package com.seekersoftvendingapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,6 +27,9 @@ import com.seekersoftvendingapp.test.TestVendingActivity;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
+ * http://blog.csdn.net/liu1164316159/article/details/38039841
+ * http://blog.sina.com.cn/s/blog_accab4a90101deyv.html
+ * http://blog.csdn.net/qq_29716061/article/details/51602173
  * A login screen that offers login via email/password.
  */
 public class SettingActivity extends BaseActivity {
@@ -57,7 +61,10 @@ public class SettingActivity extends BaseActivity {
     private Button btn_vending;
     private Button btn_store;
     private Button btn_db_admincard_dao;
+    private Button btn_show_progress;
+    private Button btn_hide_progress;
 
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +156,20 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
+            }
+        });
+
+        btn_show_progress = (Button) findViewById(R.id.btn_show_progress);
+        btn_show_progress.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        btn_hide_progress = (Button) findViewById(R.id.btn_hide_progress);
+        btn_hide_progress.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
 

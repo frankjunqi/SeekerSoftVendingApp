@@ -265,10 +265,7 @@ public class BorrowCardReadActivity extends BaseActivity {
      * （接口）判断是否能借
      */
     private void isBorrowPro(String cardId) {
-        // 加载前
-        // do something
-        Toast.makeText(this, "（接口）判断是否能借出", Toast.LENGTH_SHORT).show();
-
+        showProgress();
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -282,10 +279,12 @@ public class BorrowCardReadActivity extends BaseActivity {
                 } else {
                     Toast.makeText(BorrowCardReadActivity.this, "不可以借,false" + response.body().message, Toast.LENGTH_LONG).show();
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<BorrowResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(BorrowCardReadActivity.this, "网络链接问题，本地进行借货操作", Toast.LENGTH_LONG).show();
                 TakeOutError takeOutError = localBorrowPro(productId, SeekerSoftConstant.CARDID);
                 outProResult(takeOutError);

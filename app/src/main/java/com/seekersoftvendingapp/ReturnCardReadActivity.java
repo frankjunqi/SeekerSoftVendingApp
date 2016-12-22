@@ -267,9 +267,7 @@ public class ReturnCardReadActivity extends BaseActivity {
      * （接口）判断是否能出货
      */
     private void isReturnPro(String cardId) {
-        // 加载前
-        // do something
-
+        showProgress();
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -283,10 +281,12 @@ public class ReturnCardReadActivity extends BaseActivity {
                 } else {
                     Toast.makeText(ReturnCardReadActivity.this, "不可以还货,false" + response.body().message, Toast.LENGTH_LONG).show();
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<ReturnProResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(ReturnCardReadActivity.this, "网络链接问题，本地进行还货操作", Toast.LENGTH_LONG).show();
                 localReturnPro(productId, SeekerSoftConstant.CARDID);
             }

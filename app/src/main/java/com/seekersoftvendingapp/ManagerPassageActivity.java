@@ -138,6 +138,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
      * 提交补货记录 POST
      */
     private void asyncSupplyRecordRequest(final Passage passage, final int selecteStock) {
+        showProgress();
         // 异步加载(post)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -167,10 +168,12 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
                     Log.e("request", "supply Record: Failure");
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(ManagerPassageActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
             }
         });
