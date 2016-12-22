@@ -18,11 +18,13 @@ public class Track {
     private static Track sTrack;
     private TakeOutNTrack mTakeOutNTrack;
     private BorrowReturnNTrack mBorrowReturnNTrack;
+    private BaseDateNTrack mBaseDataNTrack;
     private PassageDao passageDao;
 
     private Track(Context context) {
         this.mTakeOutNTrack = new TakeOutNTrack(context.getApplicationContext());
         this.mBorrowReturnNTrack = new BorrowReturnNTrack(context.getApplicationContext());
+        this.mBaseDataNTrack = new BaseDateNTrack(context.getApplicationContext());
         DaoSession daoSession = ((SeekersoftApp) context.getApplicationContext()).getDaoSession();
         passageDao = daoSession.getPassageDao();
     }
@@ -66,5 +68,28 @@ public class Track {
     public void setBorrowReturnRecordCommand(Passage passage, BorrowRecord borrowRecord, String objectId) {
         passageDao.insertOrReplaceInTx(passage);
         mBorrowReturnNTrack.setBorrrowReturnRecordCommand(borrowRecord, objectId);
+    }
+
+    /**
+     * 基础数据的同步
+     */
+    public void setBaseDataNTrackCommand() {
+        mBaseDataNTrack.asyncBaseData();
+    }
+
+    /**
+     * 基础数据更新的message移出
+     */
+    public void removeBaseDataUpdateMessage() {
+        mBaseDataNTrack.removeMessage();
+    }
+
+
+    /**
+     * 同步所有本地数据到服务端（1. 由断网到联网；2. 补货之前必须同步）
+     */
+    public void synchroDataToServer() {
+        mBorrowReturnNTrack.synchroAllDataToServer();
+        mBorrowReturnNTrack.synchroAllDataToServer();
     }
 }

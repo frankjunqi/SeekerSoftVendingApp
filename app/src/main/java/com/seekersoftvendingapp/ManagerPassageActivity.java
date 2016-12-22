@@ -40,7 +40,7 @@ import retrofit2.Retrofit;
 
 public class ManagerPassageActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button btn_main, btn_a, btn_b, btn_c;
+    private Button btn_main, btn_a, btn_b, btn_c, btn_return_mainpage;
     private EmptyRecyclerView recyclerView;
     private RelativeLayout rl_empty;
 
@@ -66,6 +66,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         btn_b.setOnClickListener(this);
         btn_c = (Button) findViewById(R.id.btn_c);
         btn_c.setOnClickListener(this);
+
+        btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
+        btn_return_mainpage.setOnClickListener(this);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
@@ -135,6 +138,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
      * 提交补货记录 POST
      */
     private void asyncSupplyRecordRequest(final Passage passage, final int selecteStock) {
+        showProgress();
         // 异步加载(post)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -142,7 +146,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         supplyRecordReqBody.deviceId = SeekerSoftConstant.DEVICEID;
         // 处理补货记录
         SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
-        supplyRecordObj.passage = passage.getSeqNo();
+        supplyRecordObj.passage = (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo();
         supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
         supplyRecordObj.count = selecteStock;
         supplyRecordObj.time = DataFormat.getNowTime();
@@ -164,10 +168,12 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
                     Log.e("request", "supply Record: Failure");
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(ManagerPassageActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
             }
         });
@@ -221,6 +227,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             case R.id.btn_c:
                 managerPassageAdapter.setPassageList(passageListC);
                 break;
+            case R.id.btn_return_mainpage:
+                this.finish();
+                return;
         }
         managerPassageAdapter.notifyDataSetChanged();
     }

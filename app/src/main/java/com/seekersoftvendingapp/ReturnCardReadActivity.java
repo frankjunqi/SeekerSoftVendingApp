@@ -83,7 +83,7 @@ public class ReturnCardReadActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cardread);
+        setContentView(R.layout.activity_return_cardread);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
@@ -184,27 +184,24 @@ public class ReturnCardReadActivity extends BaseActivity {
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
         if (true) {
-            // 货道的借还标记进行重置
-            List<Passage> passageList = passageDao.queryBuilder()
-                    .where(PassageDao.Properties.SeqNo.eq(pasageId))
-                    .where(PassageDao.Properties.Flag.eq(passageFlag))
-                    .list();
-            if (passageList != null && passageList.size() > 0) {
-                Passage passage = passageList.get(0);
-                passage.setBorrowState(false);
-                passageDao.insertOrReplaceInTx(passage);
-            }
-
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
             passage.setStock(passage.getStock() + 1);
+            passage.setBorrowState(false);
+            if (TextUtils.isEmpty(objectId)) {
+                // 本地消费
+                borrowRecord.setIsFlag(false);
+            } else {
+                // 网络消费
+                borrowRecord.setIsFlag(true);
+            }
             Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord);
 
             // 串口打开柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
             Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败
@@ -216,10 +213,14 @@ public class ReturnCardReadActivity extends BaseActivity {
      * 处理本地消费结果（到结果页面）
      */
     private void handleResult(TakeOutError takeOutError) {
-        Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
-        intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
-        startActivity(intent);
-        this.finish();
+        if (takeOutError.isSuccess()) {
+            Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
+            intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
+            startActivity(intent);
+            this.finish();
+        } else {
+            Toast.makeText(ReturnCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -231,8 +232,8 @@ public class ReturnCardReadActivity extends BaseActivity {
     private TakeOutError localReturnPro(String productId, String cardId) {
         // 同一个商品 权限详细信息list 消费频次 周期消费次数
         List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.Product.eq(productId)).list();
+                .where(EmpPowerDao.Properties.IsDel.eq(false))
+                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
 
         if (listEmpPowers == null || listEmpPowers.size() == 0) {
             // 此商品暂时没有赋予出货权限
@@ -242,7 +243,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<Employee> employeeList = employeeDao.queryBuilder()
                 .where(EmployeeDao.Properties.IsDel.eq(false))
-                .where(EmployeeDao.Properties.Card.in(cardId))
+                .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
                 .list();
 
         if (employeeList != null && employeeList.size() > 0) {
@@ -266,9 +267,7 @@ public class ReturnCardReadActivity extends BaseActivity {
      * （接口）判断是否能出货
      */
     private void isReturnPro(String cardId) {
-        // 加载前
-        // do something
-
+        showProgress();
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
@@ -280,13 +279,15 @@ public class ReturnCardReadActivity extends BaseActivity {
                     Toast.makeText(ReturnCardReadActivity.this, "可以还货,true", Toast.LENGTH_LONG).show();
                     cmdBufferStoreSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(ReturnCardReadActivity.this, "不可以还货,false", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ReturnCardReadActivity.this, "不可以还货,false" + response.body().message, Toast.LENGTH_LONG).show();
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<ReturnProResBody> call, Throwable throwable) {
-                Toast.makeText(ReturnCardReadActivity.this, "basedate :  Failure", Toast.LENGTH_LONG).show();
+                hideProgress();
+                Toast.makeText(ReturnCardReadActivity.this, "网络链接问题，本地进行还货操作", Toast.LENGTH_LONG).show();
                 localReturnPro(productId, SeekerSoftConstant.CARDID);
             }
         });

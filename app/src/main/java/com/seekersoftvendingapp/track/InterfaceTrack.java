@@ -11,4 +11,9 @@ import java.util.concurrent.Executors;
 public interface InterfaceTrack {
 
     ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+
+    /**
+     * 同步所有消费记录到服务端
+     */
+    void synchroAllDataToServer();
 }

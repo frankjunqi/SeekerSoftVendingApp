@@ -11,6 +11,7 @@ import com.seekersoftvendingapp.database.table.BorrowRecordDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.borrow.BorrowSuccessResBody;
@@ -83,7 +84,10 @@ public class BorrowReturnNTrack implements InterfaceTrack {
     /**
      * 借还记录接口 同步加载 POST
      */
-    public void borrowReturnRecordRequest() {
+    private void borrowReturnRecordRequest() {
+        if (borrowRecordList == null || borrowRecordList.size() == 0) {
+            return;
+        }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         BorrowRecordReqBody borrowRecordReqBody = new BorrowRecordReqBody();
@@ -122,6 +126,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowSuccessResBody> updateAction = service.borrowFail(borrowObjectId);
+        Log.e("json", "borrowFail" + updateAction.request().body().toString());
         try {
             Response<BorrowSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {
@@ -145,6 +150,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnSuccessResBody> updateAction = service.returnFail(returnObjectId);
+        Log.e("json", "returnFail" + updateAction.request().url().toString());
         try {
             Response<ReturnSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {
@@ -161,4 +167,17 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         }
     }
 
+    @Override
+    public void synchroAllDataToServer() {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                if (borrowRecordList == null || borrowRecordList.size() == 0) {
+                    borrowRecordList = borrowRecordDao.queryBuilder().where(BorrowRecordDao.Properties.IsFlag.eq(false)).list();
+                }
+                borrowReturnRecordRequest();
+            }
+        };
+        this.mExecutor.execute(command);
+    }
 }

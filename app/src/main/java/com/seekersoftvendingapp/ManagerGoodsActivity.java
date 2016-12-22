@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -66,19 +68,33 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_exit.setOnClickListener(this);
         btn_backtomain.setOnClickListener(this);
 
+        // 同步基础数据
+        Track.getInstance(getApplicationContext()).synchroDataToServer();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_onekeyinsert:
-                plainDialogDemo();
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    plainDialogDemo();
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_onebyoneinsert:
-                startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_exit:
-                exitDialog();
+                if (SeekerSoftConstant.NETWORKCONNECT) {
+                    exitDialog();
+                } else {
+                    needNetwork();
+                }
                 break;
             case R.id.btn_backtomain:
                 Intent intent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
@@ -138,6 +154,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
      * 提交补货记录 POST
      */
     private void asyncSupplyRecordRequest() {
+        showProgress();
         final List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
         // 异步加载(post)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
@@ -147,7 +164,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         // 处理补货记录
         for (Passage passage : passageList) {
             SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
-            supplyRecordObj.passage = passage.getFlag() + passage.getSeqNo();
+            supplyRecordObj.passage = (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo();
             supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
             supplyRecordObj.count = passage.getCapacity() - passage.getStock();
             supplyRecordObj.time = DataFormat.getNowTime();
@@ -171,13 +188,29 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(ManagerGoodsActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
                     Log.e("request", "supply Record: Failure");
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+                hideProgress();
                 Toast.makeText(ManagerGoodsActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void needNetwork() {
+        if (!SeekerSoftConstant.NETWORKCONNECT) {
+            new AlertDialog.Builder(ManagerGoodsActivity.this)
+                    .setTitle("需要联网")
+                    .setMessage("确定已经连上网络，此页面操作需要在联网状态下进行？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    }).setCancelable(false).show();
+        }
     }
 
 }

@@ -10,16 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="管理员卡号: 12312"
+        android:text="读取卡号: 123456"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_return_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_cradnumber"
         android:layout_marginTop="40dp"
-        android:text="登录管理页面" />
+        android:text="还货..." />
 
     <Button
         android:id="@+id/btn_return_mainpage"

@@ -83,6 +83,9 @@ public class TakeOutNTrack implements InterfaceTrack {
      * 提交取货记录 同步加载 POST
      */
     private void takeoutRecordRequest() {
+        if (takeOutRecordList == null || takeOutRecordList.size() == 0) {
+            return;
+        }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         TakeoutRecordReqBody takeoutRecordReqBody = new TakeoutRecordReqBody();
@@ -90,7 +93,7 @@ public class TakeOutNTrack implements InterfaceTrack {
         takeoutRecordReqBody.record.addAll(takeOutRecordList);
         Gson gson = new Gson();
         String josn = gson.toJson(takeoutRecordReqBody);
-        Log.e("json", josn);
+        Log.e("json", "takeoutRecord = " + josn);
         Call<TakeoutRecordResBody> postAction = service.takeoutRecord(takeoutRecordReqBody);
         try {
             Response<TakeoutRecordResBody> response = postAction.execute();
@@ -127,6 +130,7 @@ public class TakeOutNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<TakeOutSuccessResBody> updateAction = service.takeOutFail(takeOutObjectId);
+        Log.e("json", "takeOutFail = " + updateAction.request().url().toString());
         try {
             Response<TakeOutSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {
@@ -141,5 +145,19 @@ public class TakeOutNTrack implements InterfaceTrack {
             // 失败
             setTakeOutRecord(takeOutRecord, "");
         }
+    }
+
+    @Override
+    public void synchroAllDataToServer() {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                if (takeOutRecordList == null || takeOutRecordList.size() == 0) {
+                    takeOutRecordList = takeoutRecordDao.queryBuilder().where(TakeoutRecordDao.Properties.IsDel.eq(false)).list();
+                }
+                takeoutRecordRequest();
+            }
+        };
+        this.mExecutor.execute(command);
     }
 }

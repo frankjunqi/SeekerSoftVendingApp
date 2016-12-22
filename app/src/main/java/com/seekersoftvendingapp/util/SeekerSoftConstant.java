@@ -36,4 +36,7 @@ public class SeekerSoftConstant {
     public final static String PASSAGEID = "passageId";// 两位数字 12
     public final static String TAKEOUTERROR = "TAKEOUTERROR";
 
+
+    public final static int TIMELOGN = 1000 * 5;// 基础数据的同步时间长
+
 }
