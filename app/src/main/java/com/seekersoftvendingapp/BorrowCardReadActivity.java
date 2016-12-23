@@ -185,13 +185,13 @@ public class BorrowCardReadActivity extends BaseActivity {
         String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
-        if (open) {
+        if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, true, true, new Date());
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             // 更新此人已经借走货物
-            passage.setBorrowUser(employee.getEmpNo());
+            passage.setBorrowUser(employee != null ? employee.getEmpNo() : "");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);
