@@ -274,6 +274,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Log.e("json", "borrow = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<BorrowResBody>() {
             @Override
             public void onResponse(Call<BorrowResBody> call, Response<BorrowResBody> response) {

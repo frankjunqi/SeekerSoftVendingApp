@@ -302,6 +302,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Log.e("json", "takeOut = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<TakeOutResBody>() {
             @Override
             public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {

@@ -276,6 +276,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnProResBody> updateAction = service.returnPro(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Log.e("json", "returnPro = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<ReturnProResBody>() {
             @Override
             public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {

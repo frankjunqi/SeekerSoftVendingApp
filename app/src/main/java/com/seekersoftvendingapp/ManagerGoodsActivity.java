@@ -172,7 +172,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         }
         Gson gson = new Gson();
         String josn = gson.toJson(supplyRecordReqBody);
-        Log.e("json", josn);
+        Log.e("json", "supplyRecord = " + josn);
 
         Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
         postAction.enqueue(new Callback<SupplyRecordResBody>() {

@@ -75,7 +75,7 @@ public class ErrorNTrack implements InterfaceTrack {
         errorRecordReqBody.error.addAll(errorRecordList);
         Gson gson = new Gson();
         String josn = gson.toJson(errorRecordReqBody);
-        Log.e("json", "error" + josn);
+        Log.e("json", "error = " + josn);
         Call<ErrorResBody> postAction = service.error(errorRecordReqBody);
         try {
             Response<ErrorResBody> response = postAction.execute();
