@@ -146,6 +146,7 @@ public class DaoUtil {
         passage.addStringProperty("product");
         passage.addStringProperty("seqNo");
         passage.addBooleanProperty("borrowState");
+        passage.addStringProperty("borrowUser");
         passage.addIntProperty("stock");
         passage.addIntProperty("whorlSize");
         passage.addBooleanProperty("isSend");

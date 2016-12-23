@@ -58,6 +58,7 @@ public class BorrowCardReadActivity extends BaseActivity {
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
     private Passage passage;
+    private Employee employee;// 当前扫描的卡是属于哪个员工
 
     private Handler mHandle = new Handler() {
         @Override
@@ -189,6 +190,8 @@ public class BorrowCardReadActivity extends BaseActivity {
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, true, true, new Date());
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
+            // 更新此人已经借走货物
+            passage.setBorrowUser(employee.getEmpNo());
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);
@@ -250,7 +253,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                 .list();
 
         if (employeeList != null && employeeList.size() > 0) {
-            Employee employee = employeeList.get(0);
+            employee = employeeList.get(0);
             for (EmpPower empPower : listEmpPowers) {
                 if (employee.getPower().contains(empPower.getObjectId())) {
                     // 此人有权限进行借此物品
@@ -268,7 +271,7 @@ public class BorrowCardReadActivity extends BaseActivity {
     /**
      * （接口）判断是否能借
      */
-    private void isBorrowPro(String cardId) {
+    private void isBorrowPro(final String cardId) {
         showProgress();
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();

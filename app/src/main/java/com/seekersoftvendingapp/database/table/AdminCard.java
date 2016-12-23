@@ -1,9 +1,6 @@
 package com.seekersoftvendingapp.database.table;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.*;
 
 import java.io.Serializable;
 
@@ -13,7 +10,7 @@ import java.io.Serializable;
  * Entity mapped to table "ADMIN_CARD".
  */
 @Entity
-public class AdminCard implements Serializable {
+public class AdminCard implements Serializable{
     private Boolean isDel;
 
     @NotNull
@@ -54,9 +51,7 @@ public class AdminCard implements Serializable {
         return card;
     }
 
-    /**
-     * Not-null value; ensure this value is available before it is saved to the database.
-     */
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setCard(@NotNull String card) {
         this.card = card;
     }

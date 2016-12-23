@@ -75,33 +75,40 @@ public class ReturnInsertNumActivity extends BaseActivity {
 
         // 检查数据库是否有该货道的资源数据
         // isDel = false & Stock > 0 & seqNo == keyPassage
-        List<Passage> list = passageDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.IsSend.eq(false))
-                .where(PassageDao.Properties.Stock.gt(0))
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
+        List<Passage> list = null;
+        String x = keyPassage.substring(0, 1);
+        if (x.equals("A") || x.equals("B") || x.equals("C")) {
+            list = passageDao.queryBuilder()
+                    .where(PassageDao.Properties.IsDel.eq(false))
+                    .where(PassageDao.Properties.IsSend.eq(false))
+                    .where(PassageDao.Properties.Flag.eq(x))
+                    .where(PassageDao.Properties.BorrowUser.isNotNull())// 已经有被人借了，待还状态
+                    .where(PassageDao.Properties.BorrowState.eq(true))// 判断此货道是否可以借出去: true是借出,false是归还
+                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
+                    .list();
+        } else {
+            list = passageDao.queryBuilder()
+                    .where(PassageDao.Properties.IsDel.eq(false))
+                    .where(PassageDao.Properties.IsSend.eq(false))
+                    .where(PassageDao.Properties.BorrowUser.isNotNull())// 已经有被人借了，待还状态
+                    .where(PassageDao.Properties.BorrowState.eq(true))// 判断此货道是否可以借出去: true是借出,false是归还
+                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
+        }
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
             // 检查是否有该硬件货道
-
-            // 判断此货道是否可以借出去: true是借出,false是归还
-            if (!passage.getBorrowState()) {
-                Toast.makeText(ReturnInsertNumActivity.this, "此货道货品已经归还。", Toast.LENGTH_LONG).show();
-                return;
-            }
-
             Intent intent = new Intent(ReturnInsertNumActivity.this, ReturnCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());
             intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage.replace("A", "").replace("B", "").replace("C", ""));
-            String x = keyPassage.substring(0, 1);
-            if (x.equals("A") || x.equals("B") || x.equals("C")) {
-                intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, x);
+            String firstChar = keyPassage.substring(0, 1);
+            if (firstChar.equals("A") || firstChar.equals("B") || firstChar.equals("C")) {
+                intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, firstChar);
             }
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();
         } else {
-            Toast.makeText(ReturnInsertNumActivity.this, "货道暂不能进行消费，请联系管理员。", Toast.LENGTH_LONG).show();
+            Toast.makeText(ReturnInsertNumActivity.this, "货道暂不能进行还物，请联系管理员。", Toast.LENGTH_LONG).show();
             return;
         }
 

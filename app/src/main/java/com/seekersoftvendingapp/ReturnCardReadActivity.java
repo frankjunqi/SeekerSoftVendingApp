@@ -190,6 +190,8 @@ public class ReturnCardReadActivity extends BaseActivity {
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, true, new Date());
             passage.setStock(passage.getStock() + 1);
             passage.setBorrowState(false);
+            // 更新此人已经还货物
+            passage.setBorrowUser("");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);
@@ -252,10 +254,13 @@ public class ReturnCardReadActivity extends BaseActivity {
 
         if (employeeList != null && employeeList.size() > 0) {
             Employee employee = employeeList.get(0);
-            for (EmpPower empPower : listEmpPowers) {
-                if (employee.getPower().contains(empPower.getObjectId())) {
-                    // 此人有权限进行归还物品
-                    return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+            // 必须是同一个人进行还货
+            if (employee.getEmpNo().equals(passage.getBorrowUser())) {
+                for (EmpPower empPower : listEmpPowers) {
+                    if (employee.getPower().contains(empPower.getObjectId())) {
+                        // 此人有权限进行归还物品
+                        return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+                    }
                 }
             }
             // 此人无权限
