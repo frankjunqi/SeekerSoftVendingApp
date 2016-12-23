@@ -73,7 +73,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                         Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-                        // TODO 处理业务
+                        // 处理业务
                         handleReadCardAfterBusniess();
                     }
                     break;
@@ -114,7 +114,6 @@ public class BorrowCardReadActivity extends BaseActivity {
         });
 
         // TODO 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
-        // Open Serial Port Codeing Here
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -151,7 +150,7 @@ public class BorrowCardReadActivity extends BaseActivity {
      * 处理读到卡之后的业务
      */
     private void handleReadCardAfterBusniess() {
-        // TODO 网络判断是否可以出货(网络优先)
+        // 网络判断是否可以出货(网络优先)
         if (SeekerSoftConstant.NETWORKCONNECT) {
             isBorrowPro(SeekerSoftConstant.CARDID);
         } else {
@@ -185,7 +184,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
-        if (true) {
+        if (open) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, true, true, new Date());
             passage.setStock(passage.getStock() - 1);
@@ -222,6 +221,8 @@ public class BorrowCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(BorrowCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime());
+            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
 
@@ -277,10 +278,10 @@ public class BorrowCardReadActivity extends BaseActivity {
             @Override
             public void onResponse(Call<BorrowResBody> call, Response<BorrowResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
-                    Toast.makeText(BorrowCardReadActivity.this, "可以借,true", Toast.LENGTH_LONG).show();
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(BorrowCardReadActivity.this, "不可以借,false" + response.body().message, Toast.LENGTH_LONG).show();
+                    TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
+                    handleResult(takeOutError);
                 }
                 hideProgress();
             }

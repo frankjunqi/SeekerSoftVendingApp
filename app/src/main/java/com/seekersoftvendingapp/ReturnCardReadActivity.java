@@ -115,8 +115,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             }
         });
 
-        // TODO 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
-        // Open Serial Port Codeing Here
+        // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -152,7 +151,7 @@ public class ReturnCardReadActivity extends BaseActivity {
      * 处理读到卡之后的业务
      */
     private void handleReadCardAfterBusniess() {
-        // TODO 网络判断是否可以出货(网络优先)
+        // 网络判断是否可以出货(网络优先)
         if (SeekerSoftConstant.NETWORKCONNECT) {
             isReturnPro(SeekerSoftConstant.CARDID);
         } else {
@@ -186,7 +185,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
-        if (true) {
+        if (open) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, true, new Date());
             passage.setStock(passage.getStock() + 1);
@@ -223,6 +222,8 @@ public class ReturnCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(ReturnCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime());
+            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
 
@@ -279,10 +280,10 @@ public class ReturnCardReadActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
-                    Toast.makeText(ReturnCardReadActivity.this, "可以还货,true", Toast.LENGTH_LONG).show();
                     cmdBufferStoreSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(ReturnCardReadActivity.this, "不可以还货,false" + response.body().message, Toast.LENGTH_LONG).show();
+                    TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
+                    handleResult(takeOutError);
                 }
                 hideProgress();
             }
@@ -291,7 +292,8 @@ public class ReturnCardReadActivity extends BaseActivity {
             public void onFailure(Call<ReturnProResBody> call, Throwable throwable) {
                 hideProgress();
                 Toast.makeText(ReturnCardReadActivity.this, "网络链接问题，本地进行还货操作", Toast.LENGTH_LONG).show();
-                localReturnPro(productId, SeekerSoftConstant.CARDID);
+                TakeOutError takeOutError = localReturnPro(productId, SeekerSoftConstant.CARDID);
+                handleResult(takeOutError);
             }
         });
     }

@@ -65,6 +65,9 @@ public class ErrorNTrack implements InterfaceTrack {
      * 提交异常记录 POST
      */
     private void asyncErrorRequest() {
+        if (errorRecordList == null || errorRecordList.size() == 0) {
+            return;
+        }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         ErrorReqBody errorRecordReqBody = new ErrorReqBody();

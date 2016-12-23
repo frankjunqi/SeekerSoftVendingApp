@@ -178,7 +178,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(ManagerPassageActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
-                    Log.e("request", "supply Record: Failure");
                 }
                 hideProgress();
             }
