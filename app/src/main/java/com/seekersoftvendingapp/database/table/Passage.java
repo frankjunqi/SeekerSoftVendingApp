@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Entity mapped to table "PASSAGE".
  */
 @Entity
-public class Passage implements Serializable {
+public class Passage implements Serializable{
     private String flag;
     private Boolean isDel;
     private Integer capacity;

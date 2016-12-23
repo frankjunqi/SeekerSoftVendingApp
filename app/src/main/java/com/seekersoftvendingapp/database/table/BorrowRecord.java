@@ -20,6 +20,7 @@ public class BorrowRecord implements Serializable{
     private String passage;
     private String card;
     private Boolean borrow;
+    private Boolean result;
     private java.util.Date time;
 
     @Generated
@@ -31,12 +32,13 @@ public class BorrowRecord implements Serializable{
     }
 
     @Generated
-    public BorrowRecord(Long id, Boolean isFlag, String passage, String card, Boolean borrow, java.util.Date time) {
+    public BorrowRecord(Long id, Boolean isFlag, String passage, String card, Boolean borrow, Boolean result, java.util.Date time) {
         this.id = id;
         this.isFlag = isFlag;
         this.passage = passage;
         this.card = card;
         this.borrow = borrow;
+        this.result = result;
         this.time = time;
     }
 
@@ -78,6 +80,14 @@ public class BorrowRecord implements Serializable{
 
     public void setBorrow(Boolean borrow) {
         this.borrow = borrow;
+    }
+
+    public Boolean getResult() {
+        return result;
+    }
+
+    public void setResult(Boolean result) {
+        this.result = result;
     }
 
     public java.util.Date getTime() {

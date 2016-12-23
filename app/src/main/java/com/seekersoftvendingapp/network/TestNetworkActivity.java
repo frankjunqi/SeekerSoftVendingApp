@@ -22,7 +22,6 @@ import com.seekersoftvendingapp.network.entity.UpdaeResBody;
 import com.seekersoftvendingapp.network.entity.borrow.BorrowSuccessResBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordReqBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
-import com.seekersoftvendingapp.network.entity.error.ErrorObj;
 import com.seekersoftvendingapp.network.entity.error.ErrorReqBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
@@ -347,13 +346,13 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         ErrorReqBody errorRecordReqBody = new ErrorReqBody();
         errorRecordReqBody.deviceId = "123";
 
-        ErrorObj errorRecordObj = new ErrorObj();
+        /*ErrorObj errorRecordObj = new ErrorObj();
         errorRecordObj.passage = "11";
         errorRecordObj.card = "987";
         errorRecordObj.node = "出货";
         errorRecordObj.info = "出货失败";
         errorRecordObj.time = "2016-12-3 19:10:17";
-        errorRecordReqBody.error.add(errorRecordObj);
+        errorRecordReqBody.error.add(errorRecordObj);*/
 
         Gson gson = new Gson();
         String josn = gson.toJson(errorRecordReqBody);

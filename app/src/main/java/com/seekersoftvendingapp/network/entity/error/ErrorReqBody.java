@@ -1,5 +1,7 @@
 package com.seekersoftvendingapp.network.entity.error;
 
+import com.seekersoftvendingapp.database.table.ErrorRecord;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,5 @@ import java.util.List;
 
 public class ErrorReqBody implements Serializable {
     public String deviceId;
-
-    public List<ErrorObj> error = new ArrayList<ErrorObj>();
+    public List<ErrorRecord> error = new ArrayList<ErrorRecord>();
 }

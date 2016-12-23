@@ -12,12 +12,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
-import com.seekersoftvendingapp.database.table.BorrowRecordDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -27,6 +27,7 @@ import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.serialport.StoreSerialPort;
 import com.seekersoftvendingapp.track.Track;
+import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
 
@@ -68,11 +69,13 @@ public class ReturnCardReadActivity extends BaseActivity {
                 case SeekerSoftConstant.CARDRECEIVECODE:
                     SeekerSoftConstant.CARDID = msg.obj.toString();
                     if (TextUtils.isEmpty(SeekerSoftConstant.CARDID)) {
-                        // TODO 读到的卡号为null or ""
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "还货", "读到的卡号为空.", DataFormat.getNowTime());
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(ReturnCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-                        // TODO 处理业务
+                        // 处理业务
                         handleReadCardAfterBusniess();
                     }
                     break;
@@ -185,7 +188,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         StoreSerialPort.getInstance().closeSerialPort();
         if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, true, new Date());
             passage.setStock(passage.getStock() + 1);
             passage.setBorrowState(false);
             if (TextUtils.isEmpty(objectId)) {
@@ -201,7 +204,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, new Date());
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, false, new Date());
             Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败

@@ -214,6 +214,7 @@ public class DaoUtil {
         borrowRecord.addStringProperty("passage");
         borrowRecord.addStringProperty("card");
         borrowRecord.addBooleanProperty("borrow");
+        borrowRecord.addBooleanProperty("result");//示这条取货记录是成功有效的
         borrowRecord.addDateProperty("time");
     }
 

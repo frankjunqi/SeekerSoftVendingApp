@@ -22,6 +22,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
@@ -58,4 +61,5 @@ public class BaseActivity extends AppCompatActivity {
             progressDialog.hide();
         }
     }
+
 }

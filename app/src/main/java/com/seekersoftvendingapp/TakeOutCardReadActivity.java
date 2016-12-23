@@ -16,8 +16,8 @@ import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
 import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -71,11 +71,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 case SeekerSoftConstant.CARDRECEIVECODE:
                     SeekerSoftConstant.CARDID = msg.obj.toString();
                     if (TextUtils.isEmpty(SeekerSoftConstant.CARDID)) {
-                        // TODO 读到的卡号为null or ""
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "出货", "读到的卡号为空.", DataFormat.getNowTime());
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-                        // TODO 处理业务
+                        // 处理业务
                         handleReadCardAfterBusniess();
                     }
                     break;
@@ -155,7 +157,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * 处理读到卡之后的业务
      */
     private void handleReadCardAfterBusniess() {
-        // TODO 网络判断是否可以出货(网络优先)
+        // 网络判断是否可以出货(网络优先)
         if (SeekerSoftConstant.NETWORKCONNECT) {
             isTakeOutPro(SeekerSoftConstant.CARDID);
         } else {
