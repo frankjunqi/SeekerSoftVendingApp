@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +17,8 @@ import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
+import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
 import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -71,11 +72,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 case SeekerSoftConstant.CARDRECEIVECODE:
                     SeekerSoftConstant.CARDID = msg.obj.toString();
                     if (TextUtils.isEmpty(SeekerSoftConstant.CARDID)) {
-                        // TODO 读到的卡号为null or ""
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "出货", "读到的卡号为空.", DataFormat.getNowTime());
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-                        // TODO 处理业务
+                        // 处理业务
                         handleReadCardAfterBusniess();
                     }
                     break;
@@ -118,7 +121,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             }
         });
 
-        // TODO 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行取货接口
+        // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行取货接口
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -135,7 +138,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             }
         });
 
-        // TODO 打开串口螺纹  ---  发送指令出货
+        // 打开串口螺纹  ---  发送指令出货
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -155,7 +158,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * 处理读到卡之后的业务
      */
     private void handleReadCardAfterBusniess() {
-        // TODO 网络判断是否可以出货(网络优先)
+        // 网络判断是否可以出货(网络优先)
         if (SeekerSoftConstant.NETWORKCONNECT) {
             isTakeOutPro(SeekerSoftConstant.CARDID);
         } else {
@@ -195,7 +198,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         String cmd = VendingSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
         boolean open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
         VendingSerialPort.getInstance().closeSerialPort();
-        if (true) {
+        if (open) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date());
             passage.setStock(passage.getStock() - 1);
@@ -231,6 +234,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(TakeOutCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime());
+            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
 
@@ -296,15 +301,14 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, pasageId);
+        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Log.e("json", "takeOut = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<TakeOutResBody>() {
             @Override
             public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
-                    Toast.makeText(TakeOutCardReadActivity.this, "可以出货,true", Toast.LENGTH_LONG).show();
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
-                    Toast.makeText(TakeOutCardReadActivity.this, "不可以出货,false" + response.body().message, Toast.LENGTH_LONG).show();
                     // 不可以出货
                     handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
                 }

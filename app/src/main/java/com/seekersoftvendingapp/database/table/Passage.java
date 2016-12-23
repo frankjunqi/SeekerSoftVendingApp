@@ -1,8 +1,6 @@
 package com.seekersoftvendingapp.database.table;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.*;
 
 import java.io.Serializable;
 
@@ -19,6 +17,7 @@ public class Passage implements Serializable {
     private String product;
     private String seqNo;
     private Boolean borrowState;
+    private String borrowUser;
     private Integer stock;
     private Integer whorlSize;
     private Boolean isSend;
@@ -37,13 +36,14 @@ public class Passage implements Serializable {
     }
 
     @Generated
-    public Passage(String flag, Boolean isDel, Integer capacity, String product, String seqNo, Boolean borrowState, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
+    public Passage(String flag, Boolean isDel, Integer capacity, String product, String seqNo, Boolean borrowState, String borrowUser, Integer stock, Integer whorlSize, Boolean isSend, String objectId, java.util.Date createdAt, java.util.Date updatedAt) {
         this.flag = flag;
         this.isDel = isDel;
         this.capacity = capacity;
         this.product = product;
         this.seqNo = seqNo;
         this.borrowState = borrowState;
+        this.borrowUser = borrowUser;
         this.stock = stock;
         this.whorlSize = whorlSize;
         this.isSend = isSend;
@@ -98,6 +98,14 @@ public class Passage implements Serializable {
 
     public void setBorrowState(Boolean borrowState) {
         this.borrowState = borrowState;
+    }
+
+    public String getBorrowUser() {
+        return borrowUser;
+    }
+
+    public void setBorrowUser(String borrowUser) {
+        this.borrowUser = borrowUser;
     }
 
     public Integer getStock() {

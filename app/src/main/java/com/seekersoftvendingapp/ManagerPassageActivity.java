@@ -52,6 +52,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     private List<Passage> passageListB = new ArrayList<>();
     private List<Passage> passageListC = new ArrayList<>();
 
+    // 单货道补货数量
+    int selecteStock = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,18 +121,27 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         for (int i = 0; i < canSupply; i++) {
             intlist[i] = String.valueOf(i + 1);
         }
+
+
         new AlertDialog.Builder(ManagerPassageActivity.this)
                 .setTitle("货道补货")
                 .setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        selecteStock = which + 1;
                     }
                 })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        asyncSupplyRecordRequest(passage, which + 1);
+                        if (selecteStock == 0) {
+                            Toast.makeText(ManagerPassageActivity.this, "请选择补货数量.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        asyncSupplyRecordRequest(passage, selecteStock);
                         updatePassageList();
+                        // 重置
+                        selecteStock = 0;
                     }
                 }).setNegativeButton("取消", null).show();
     }
@@ -154,7 +166,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
 
         Gson gson = new Gson();
         String josn = gson.toJson(supplyRecordReqBody);
-        Log.e("json", josn);
+        Log.e("json", "supplyRecord = " + josn);
 
         Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
         postAction.enqueue(new Callback<SupplyRecordResBody>() {
@@ -166,7 +178,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(ManagerPassageActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
-                    Log.e("request", "supply Record: Failure");
                 }
                 hideProgress();
             }

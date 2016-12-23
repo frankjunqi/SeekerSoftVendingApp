@@ -146,6 +146,7 @@ public class DaoUtil {
         passage.addStringProperty("product");
         passage.addStringProperty("seqNo");
         passage.addBooleanProperty("borrowState");
+        passage.addStringProperty("borrowUser");
         passage.addIntProperty("stock");
         passage.addIntProperty("whorlSize");
         passage.addBooleanProperty("isSend");
@@ -214,6 +215,7 @@ public class DaoUtil {
         borrowRecord.addStringProperty("passage");
         borrowRecord.addStringProperty("card");
         borrowRecord.addBooleanProperty("borrow");
+        borrowRecord.addBooleanProperty("result");//示这条取货记录是成功有效的
         borrowRecord.addDateProperty("time");
     }
 

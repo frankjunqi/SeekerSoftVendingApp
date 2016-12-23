@@ -1,8 +1,6 @@
 package com.seekersoftvendingapp.database.table;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.*;
 
 import java.io.Serializable;
 
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * Entity mapped to table "TAKEOUT_RECORD".
  */
 @Entity
-public class TakeoutRecord implements Serializable{
+public class TakeoutRecord implements Serializable {
 
     @Id
     private Long id;

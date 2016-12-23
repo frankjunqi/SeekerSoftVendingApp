@@ -5,6 +5,7 @@ import android.content.Context;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.table.BorrowRecord;
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
@@ -19,12 +20,15 @@ public class Track {
     private TakeOutNTrack mTakeOutNTrack;
     private BorrowReturnNTrack mBorrowReturnNTrack;
     private BaseDateNTrack mBaseDataNTrack;
+    private ErrorNTrack mErrorNTrack;
+
     private PassageDao passageDao;
 
     private Track(Context context) {
         this.mTakeOutNTrack = new TakeOutNTrack(context.getApplicationContext());
         this.mBorrowReturnNTrack = new BorrowReturnNTrack(context.getApplicationContext());
         this.mBaseDataNTrack = new BaseDateNTrack(context.getApplicationContext());
+        this.mErrorNTrack = new ErrorNTrack(context.getApplicationContext());
         DaoSession daoSession = ((SeekersoftApp) context.getApplicationContext()).getDaoSession();
         passageDao = daoSession.getPassageDao();
     }
@@ -71,6 +75,15 @@ public class Track {
     }
 
     /**
+     * 异常日志提交
+     *
+     * @param errorRecord
+     */
+    public void setErrorCommand(ErrorRecord errorRecord) {
+        mErrorNTrack.setTakeOutRecord(errorRecord);
+    }
+
+    /**
      * 基础数据的同步
      */
     public void setBaseDataNTrackCommand() {
@@ -89,7 +102,8 @@ public class Track {
      * 同步所有本地数据到服务端（1. 由断网到联网；2. 补货之前必须同步）
      */
     public void synchroDataToServer() {
+        mTakeOutNTrack.synchroAllDataToServer();
         mBorrowReturnNTrack.synchroAllDataToServer();
-        mBorrowReturnNTrack.synchroAllDataToServer();
+        mErrorNTrack.synchroAllDataToServer();
     }
 }
