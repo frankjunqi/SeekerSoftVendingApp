@@ -33,6 +33,7 @@ along with greenDAO Generator.  If not, see <http://www.gnu.org/licenses/>.
 package ${entity.javaPackage};
 
 import org.greenrobot.greendao.annotation.*;
+import java.io.Serializable;
 
 <#if entity.toManyRelations?has_content>
 import java.util.List;
@@ -77,7 +78,7 @@ ${entity.codeBeforeClass}
 </#if>
 <#if entity.skipCreationInDb><#assign entityAttrs = entityAttrs + ["createInDb = false"]></#if>
 @Entity<#if (entityAttrs?size > 0)>(${entityAttrs?join(", ")})</#if>
-public class ${entity.className}<#if
+public class ${entity.className} implements Serializable<#if
 entity.superclass?has_content> extends ${entity.superclass} </#if><#if
 entity.interfacesToImplement?has_content> implements <#list entity.interfacesToImplement
 as ifc>${ifc}<#if ifc_has_next>, </#if></#list></#if> {

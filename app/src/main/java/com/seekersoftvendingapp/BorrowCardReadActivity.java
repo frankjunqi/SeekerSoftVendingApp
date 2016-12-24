@@ -191,7 +191,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             // 更新此人已经借走货物
-            passage.setBorrowUser(employee != null ? employee.getEmpNo() : "");
+            passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);

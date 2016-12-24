@@ -1,5 +1,7 @@
 package com.seekersoftvendingapp.network.entity.basedata;
 
+import android.text.TextUtils;
+
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.util.DataFormat;
 
@@ -18,6 +20,7 @@ public class PassageEntity implements Serializable {
     public String seqNo;// 货道序号
     public boolean borrowState;// 借还状态 当是借还柜子时候，这个借还的标记位置
     public int stock;// 货道库存数量
+    public String used;// 借还最后者是谁
     public int whorlSize;// 螺纹尺寸
     public boolean isSend;// 销售/借还 true:销售  false:借还
     public String objectId;
@@ -26,7 +29,7 @@ public class PassageEntity implements Serializable {
 
 
     public Passage getPassage() {
-        return new Passage(flag, isDel, capacity, product, seqNo, borrowState, "", stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Passage(flag, isDel, capacity, product, seqNo, borrowState, TextUtils.isEmpty(used) ? "" : used, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
     }
 
     @Override

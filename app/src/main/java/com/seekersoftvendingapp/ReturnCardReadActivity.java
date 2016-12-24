@@ -255,7 +255,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         if (employeeList != null && employeeList.size() > 0) {
             Employee employee = employeeList.get(0);
             // 必须是同一个人进行还货
-            if (employee.getEmpNo().equals(passage.getBorrowUser())) {
+            if (employee.getObjectId().equals(passage.getBorrowUser())) {
                 for (EmpPower empPower : listEmpPowers) {
                     if (employee.getPower().contains(empPower.getObjectId())) {
                         // 此人有权限进行归还物品
