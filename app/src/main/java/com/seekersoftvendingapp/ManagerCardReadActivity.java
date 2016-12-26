@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -30,10 +31,7 @@ import java.util.List;
 public class ManagerCardReadActivity extends BaseActivity {
 
     private Button btn_login;
-    private Button btn_return_mainpage;
-
     private AdminCardDao adminCardDao;
-
     private Handler mHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -106,6 +104,9 @@ public class ManagerCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        countDownTimer.start();
+
     }
 
     /**
@@ -129,5 +130,4 @@ public class ManagerCardReadActivity extends BaseActivity {
             }
         });
     }
-
 }

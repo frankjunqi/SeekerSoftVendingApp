@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,14 +25,11 @@ import java.util.List;
 
 public class TakeOutInsertNumActivity extends BaseActivity {
 
-    private Button btn_return_mainpage;
-
     private LinearLayout ll_keyboard;
 
     private KeyBordView keyBordView;
 
     private PassageDao passageDao;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +58,8 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             }
         });
         ll_keyboard.addView(keyBordView);
+
+        countDownTimer.start();
     }
 
     /**
@@ -96,5 +96,4 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，可能无库存，请联系管理员。", Toast.LENGTH_LONG).show();
         }
     }
-
 }

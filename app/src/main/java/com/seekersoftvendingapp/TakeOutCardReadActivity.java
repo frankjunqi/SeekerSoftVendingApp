@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -51,7 +52,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private String TAG = TakeOutCardReadActivity.class.getSimpleName();
 
     private Button btn_return_goods;
-    private Button btn_return_mainpage;
 
     // 货道的产品
     private String productId = "";
@@ -150,8 +150,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
-
-
+        countDownTimer.start();
     }
 
     /**

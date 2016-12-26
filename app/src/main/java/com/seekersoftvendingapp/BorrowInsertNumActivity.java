@@ -1,7 +1,9 @@
 package com.seekersoftvendingapp;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,12 +27,8 @@ import java.util.List;
 
 public class BorrowInsertNumActivity extends BaseActivity {
 
-    private Button btn_return_mainpage;
-
     private LinearLayout ll_keyboard;
-
     private KeyBordView keyBordView;
-
     private PassageDao passageDao;
 
     @Override
@@ -60,6 +58,9 @@ public class BorrowInsertNumActivity extends BaseActivity {
             }
         });
         ll_keyboard.addView(keyBordView);
+
+        countDownTimer.start();
+
     }
 
     /**
@@ -113,8 +114,5 @@ public class BorrowInsertNumActivity extends BaseActivity {
             Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_LONG).show();
             return;
         }
-
-
     }
-
 }

@@ -4,10 +4,16 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 /**
  * Created by kjh08490 on 2016/12/16.
@@ -15,6 +21,21 @@ import android.widget.TextView;
 
 public class BaseActivity extends AppCompatActivity {
     private Dialog progressDialog;
+    protected Button btn_return_mainpage;
+
+    protected CountDownTimer countDownTimer = new CountDownTimer(SeekerSoftConstant.ENDTIEMLONG * 1000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            if (btn_return_mainpage != null) {
+                btn_return_mainpage.setText("倒计时(" + millisUntilFinished / 1000 + "s)");
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            BaseActivity.this.finish();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +49,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         if (progressDialog != null) {
             progressDialog.dismiss();
+        }
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
     }
 
@@ -65,5 +89,4 @@ public class BaseActivity extends AppCompatActivity {
             progressDialog.hide();
         }
     }
-
 }

@@ -39,4 +39,8 @@ public class SeekerSoftConstant {
 
     public final static int TIMELOGN = 1000 * 5;// 基础数据的同步时间长
 
+
+    public final static int ENDTIEMLONG = 15;
+    public final static int ENDTIEMSHORT = 10;
+
 }

@@ -47,20 +47,14 @@ import retrofit2.Retrofit;
 public class ReturnCardReadActivity extends BaseActivity {
 
     private Button btn_return_goods;
-    private Button btn_return_mainpage;
-
     // 货道的产品
     private String productId = "";
     private String pasageId = "";
     private String passageFlag = "";
-
     private PassageDao passageDao;
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
-
     private Passage passage;
-
-
     private Handler mHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -142,6 +136,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
             }
         });
+        countDownTimer.start();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -47,7 +48,6 @@ import retrofit2.Retrofit;
 public class BorrowCardReadActivity extends BaseActivity {
 
     private Button btn_return_goods;
-    private Button btn_return_mainpage;
 
     // 货道的产品
     private String productId = "";
@@ -59,7 +59,6 @@ public class BorrowCardReadActivity extends BaseActivity {
     private EmployeeDao employeeDao;
     private Passage passage;
     private Employee employee;// 当前扫描的卡是属于哪个员工
-
     private Handler mHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -141,6 +140,9 @@ public class BorrowCardReadActivity extends BaseActivity {
 
             }
         });
+
+        countDownTimer.start();
+
     }
 
 
@@ -299,6 +301,4 @@ public class BorrowCardReadActivity extends BaseActivity {
             }
         });
     }
-
-
 }

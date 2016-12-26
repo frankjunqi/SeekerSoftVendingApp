@@ -2,6 +2,7 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -17,9 +18,9 @@ import com.seekersoftvendingapp.util.TakeOutError;
 
 public class HandleResultActivity extends BaseActivity {
 
-    private Button btn_return_mainpage;
 
     private TextView tv_handle_result;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,5 +41,7 @@ public class HandleResultActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        countDownTimer.start();
     }
 }

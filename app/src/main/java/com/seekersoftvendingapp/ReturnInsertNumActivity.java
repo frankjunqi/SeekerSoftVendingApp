@@ -24,8 +24,6 @@ import java.util.List;
 
 public class ReturnInsertNumActivity extends BaseActivity {
 
-    private Button btn_return_mainpage;
-
     private LinearLayout ll_keyboard;
 
     private KeyBordView keyBordView;
@@ -59,6 +57,8 @@ public class ReturnInsertNumActivity extends BaseActivity {
             }
         });
         ll_keyboard.addView(keyBordView);
+
+        countDownTimer.start();
     }
 
     /**
@@ -111,8 +111,5 @@ public class ReturnInsertNumActivity extends BaseActivity {
             Toast.makeText(ReturnInsertNumActivity.this, "货道暂不能进行还物，请联系管理员。", Toast.LENGTH_LONG).show();
             return;
         }
-
-
     }
-
 }

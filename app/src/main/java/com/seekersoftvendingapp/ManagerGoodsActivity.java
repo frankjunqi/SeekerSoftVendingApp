@@ -53,7 +53,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_onekeyinsert;
     private Button btn_onebyoneinsert;
     private Button btn_exit;
-    private Button btn_backtomain;
+    private Button btn_return_mainpage;
     private Button btn_update;
 
     private AdminCard adminCard;
@@ -72,17 +72,19 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_onekeyinsert = (Button) findViewById(R.id.btn_onekeyinsert);
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
-        btn_backtomain = (Button) findViewById(R.id.btn_backtomain);
+        btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);
         btn_update = (Button) findViewById(R.id.btn_update);
 
         btn_onekeyinsert.setOnClickListener(this);
         btn_onebyoneinsert.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
-        btn_backtomain.setOnClickListener(this);
+        btn_return_mainpage.setOnClickListener(this);
         btn_update.setOnClickListener(this);
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
+
+
     }
 
     @Override
