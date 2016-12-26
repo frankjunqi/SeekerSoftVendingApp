@@ -239,6 +239,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
     public void updateAPP() {
         if (isDownloading) {
+            Toast.makeText(ManagerGoodsActivity.this, "最新版本正在下载....", Toast.LENGTH_SHORT).show();
             return;
         }
         showProgress();
@@ -250,14 +251,13 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<UpdateResBody> call, Response<UpdateResBody> response) {
                 hideProgress();
-                response.body().data.result = true;
                 if (response != null && response.body() != null && response.body().data.result) {
                     // 下载apk
                     Toast.makeText(ManagerGoodsActivity.this, "Downloding VendingAPP.apk ... ", Toast.LENGTH_SHORT).show();
                     if (isDownloading) {
                         return;
                     }
-                    downloadApk(Host.UpdateHost + response.body().data.url);
+                    downloadApk(response.body().data.url);
                 } else {
                     Toast.makeText(ManagerGoodsActivity.this, "当前版本已经是最新版本。", Toast.LENGTH_SHORT).show();
                 }
