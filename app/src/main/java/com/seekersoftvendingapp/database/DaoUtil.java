@@ -69,6 +69,9 @@ public class DaoUtil {
         adminCard.addStringProperty("objectId").primaryKey();
         adminCard.addDateProperty("createdAt");
         adminCard.addDateProperty("updatedAt");
+        adminCard.addStringProperty("keepone");
+        adminCard.addStringProperty("keeptwo");
+        adminCard.addStringProperty("keepthree");
     }
 
 
@@ -92,6 +95,9 @@ public class DaoUtil {
         employee.addStringProperty("objectId").primaryKey();
         employee.addDateProperty("createdAt");
         employee.addDateProperty("updatedAt");
+        employee.addStringProperty("keepone");
+        employee.addStringProperty("keeptwo");
+        employee.addStringProperty("keepthree");
 
     }
 
@@ -119,6 +125,9 @@ public class DaoUtil {
         empPower.addStringProperty("objectId").primaryKey();
         empPower.addDateProperty("createdAt");
         empPower.addDateProperty("updatedAt");
+        empPower.addStringProperty("keepone");
+        empPower.addStringProperty("keeptwo");
+        empPower.addStringProperty("keepthree");
 
     }
 
@@ -153,6 +162,9 @@ public class DaoUtil {
         passage.addStringProperty("objectId").primaryKey();
         passage.addDateProperty("createdAt");
         passage.addDateProperty("updatedAt");
+        passage.addStringProperty("keepone");
+        passage.addStringProperty("keeptwo");
+        passage.addStringProperty("keepthree");
     }
 
 
@@ -174,6 +186,9 @@ public class DaoUtil {
         product.addStringProperty("objectId").primaryKey();
         product.addDateProperty("createdAt");
         product.addDateProperty("updatedAt");
+        product.addStringProperty("keepone");
+        product.addStringProperty("keeptwo");
+        product.addStringProperty("keepthree");
     }
 
 
@@ -188,6 +203,9 @@ public class DaoUtil {
         takeoutRecord.addStringProperty("card");
         takeoutRecord.addStringProperty("productId");
         takeoutRecord.addDateProperty("time");
+        takeoutRecord.addStringProperty("keepone");
+        takeoutRecord.addStringProperty("keeptwo");
+        takeoutRecord.addStringProperty("keepthree");
     }
 
 
@@ -202,6 +220,9 @@ public class DaoUtil {
         supplyRecord.addStringProperty("card");
         supplyRecord.addIntProperty("count");
         supplyRecord.addStringProperty("time");
+        supplyRecord.addStringProperty("keepone");
+        supplyRecord.addStringProperty("keeptwo");
+        supplyRecord.addStringProperty("keepthree");
     }
 
 
@@ -217,6 +238,9 @@ public class DaoUtil {
         borrowRecord.addBooleanProperty("borrow");
         borrowRecord.addBooleanProperty("result");//示这条取货记录是成功有效的
         borrowRecord.addDateProperty("time");
+        borrowRecord.addStringProperty("keepone");
+        borrowRecord.addStringProperty("keeptwo");
+        borrowRecord.addStringProperty("keepthree");
     }
 
 
@@ -234,6 +258,9 @@ public class DaoUtil {
         errorRecord.addStringProperty("node");
         errorRecord.addStringProperty("info");
         errorRecord.addStringProperty("time");
+        errorRecord.addStringProperty("keepone");
+        errorRecord.addStringProperty("keeptwo");
+        errorRecord.addStringProperty("keepthree");
     }
 
     private static void addCustomerOrder(Schema schema) {

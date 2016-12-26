@@ -35,6 +35,9 @@ public class PassageDao extends AbstractDao<Passage, String> {
         public final static Property ObjectId = new Property(10, String.class, "objectId", true, "OBJECT_ID");
         public final static Property CreatedAt = new Property(11, java.util.Date.class, "createdAt", false, "CREATED_AT");
         public final static Property UpdatedAt = new Property(12, java.util.Date.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property Keepone = new Property(13, String.class, "keepone", false, "KEEPONE");
+        public final static Property Keeptwo = new Property(14, String.class, "keeptwo", false, "KEEPTWO");
+        public final static Property Keepthree = new Property(15, String.class, "keepthree", false, "KEEPTHREE");
     }
 
 
@@ -62,7 +65,10 @@ public class PassageDao extends AbstractDao<Passage, String> {
                 "\"IS_SEND\" INTEGER," + // 9: isSend
                 "\"OBJECT_ID\" TEXT PRIMARY KEY NOT NULL ," + // 10: objectId
                 "\"CREATED_AT\" INTEGER," + // 11: createdAt
-                "\"UPDATED_AT\" INTEGER);"); // 12: updatedAt
+                "\"UPDATED_AT\" INTEGER," + // 12: updatedAt
+                "\"KEEPONE\" TEXT," + // 13: keepone
+                "\"KEEPTWO\" TEXT," + // 14: keeptwo
+                "\"KEEPTHREE\" TEXT);"); // 15: keepthree
     }
 
     /** Drops the underlying database table. */
@@ -139,6 +145,21 @@ public class PassageDao extends AbstractDao<Passage, String> {
         if (updatedAt != null) {
             stmt.bindLong(13, updatedAt.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(14, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(15, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(16, keepthree);
+        }
     }
 
     @Override
@@ -209,6 +230,21 @@ public class PassageDao extends AbstractDao<Passage, String> {
         if (updatedAt != null) {
             stmt.bindLong(13, updatedAt.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(14, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(15, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(16, keepthree);
+        }
     }
 
     @Override
@@ -231,7 +267,10 @@ public class PassageDao extends AbstractDao<Passage, String> {
             cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // isSend
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // objectId
             cursor.isNull(offset + 11) ? null : new java.util.Date(cursor.getLong(offset + 11)), // createdAt
-            cursor.isNull(offset + 12) ? null : new java.util.Date(cursor.getLong(offset + 12)) // updatedAt
+            cursor.isNull(offset + 12) ? null : new java.util.Date(cursor.getLong(offset + 12)), // updatedAt
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // keepone
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // keeptwo
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15) // keepthree
         );
         return entity;
     }
@@ -251,6 +290,9 @@ public class PassageDao extends AbstractDao<Passage, String> {
         entity.setObjectId(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setCreatedAt(cursor.isNull(offset + 11) ? null : new java.util.Date(cursor.getLong(offset + 11)));
         entity.setUpdatedAt(cursor.isNull(offset + 12) ? null : new java.util.Date(cursor.getLong(offset + 12)));
+        entity.setKeepone(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setKeeptwo(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setKeepthree(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
      }
     
     @Override

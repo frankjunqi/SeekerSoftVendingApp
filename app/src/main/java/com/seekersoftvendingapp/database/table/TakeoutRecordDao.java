@@ -28,6 +28,9 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
         public final static Property Card = new Property(3, String.class, "card", false, "CARD");
         public final static Property ProductId = new Property(4, String.class, "productId", false, "PRODUCT_ID");
         public final static Property Time = new Property(5, java.util.Date.class, "time", false, "TIME");
+        public final static Property Keepone = new Property(6, String.class, "keepone", false, "KEEPONE");
+        public final static Property Keeptwo = new Property(7, String.class, "keeptwo", false, "KEEPTWO");
+        public final static Property Keepthree = new Property(8, String.class, "keepthree", false, "KEEPTHREE");
     }
 
 
@@ -48,7 +51,10 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
                 "\"PASSAGE\" TEXT," + // 2: passage
                 "\"CARD\" TEXT," + // 3: card
                 "\"PRODUCT_ID\" TEXT," + // 4: productId
-                "\"TIME\" INTEGER);"); // 5: time
+                "\"TIME\" INTEGER," + // 5: time
+                "\"KEEPONE\" TEXT," + // 6: keepone
+                "\"KEEPTWO\" TEXT," + // 7: keeptwo
+                "\"KEEPTHREE\" TEXT);"); // 8: keepthree
     }
 
     /** Drops the underlying database table. */
@@ -90,6 +96,21 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
         if (time != null) {
             stmt.bindLong(6, time.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(7, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(8, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(9, keepthree);
+        }
     }
 
     @Override
@@ -125,6 +146,21 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
         if (time != null) {
             stmt.bindLong(6, time.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(7, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(8, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(9, keepthree);
+        }
     }
 
     @Override
@@ -140,7 +176,10 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // passage
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // productId
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)) // time
+            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // time
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // keepone
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // keeptwo
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // keepthree
         );
         return entity;
     }
@@ -153,6 +192,9 @@ public class TakeoutRecordDao extends AbstractDao<TakeoutRecord, Long> {
         entity.setCard(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setProductId(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setTime(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setKeepone(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setKeeptwo(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setKeepthree(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

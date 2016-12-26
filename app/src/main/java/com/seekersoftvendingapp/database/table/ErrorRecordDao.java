@@ -29,6 +29,9 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
         public final static Property Node = new Property(4, String.class, "node", false, "NODE");
         public final static Property Info = new Property(5, String.class, "info", false, "INFO");
         public final static Property Time = new Property(6, String.class, "time", false, "TIME");
+        public final static Property Keepone = new Property(7, String.class, "keepone", false, "KEEPONE");
+        public final static Property Keeptwo = new Property(8, String.class, "keeptwo", false, "KEEPTWO");
+        public final static Property Keepthree = new Property(9, String.class, "keepthree", false, "KEEPTHREE");
     }
 
 
@@ -50,7 +53,10 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
                 "\"CARD\" TEXT," + // 3: card
                 "\"NODE\" TEXT," + // 4: node
                 "\"INFO\" TEXT," + // 5: info
-                "\"TIME\" TEXT);"); // 6: time
+                "\"TIME\" TEXT," + // 6: time
+                "\"KEEPONE\" TEXT," + // 7: keepone
+                "\"KEEPTWO\" TEXT," + // 8: keeptwo
+                "\"KEEPTHREE\" TEXT);"); // 9: keepthree
     }
 
     /** Drops the underlying database table. */
@@ -97,6 +103,21 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
         if (time != null) {
             stmt.bindString(7, time);
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(8, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(9, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(10, keepthree);
+        }
     }
 
     @Override
@@ -137,6 +158,21 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
         if (time != null) {
             stmt.bindString(7, time);
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(8, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(9, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(10, keepthree);
+        }
     }
 
     @Override
@@ -153,7 +189,10 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // node
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // info
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // time
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // time
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // keepone
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // keeptwo
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // keepthree
         );
         return entity;
     }
@@ -167,6 +206,9 @@ public class ErrorRecordDao extends AbstractDao<ErrorRecord, Long> {
         entity.setNode(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setInfo(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setKeepone(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setKeeptwo(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setKeepthree(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override

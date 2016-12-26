@@ -42,7 +42,7 @@ public class ManagerCardReadActivity extends BaseActivity {
                     String adminCardNum = msg.obj.toString();
                     if (TextUtils.isEmpty(adminCardNum)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime());
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(),"","","");
                         Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(ManagerCardReadActivity.this, "卡号为空，请重新读卡.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -72,7 +72,7 @@ public class ManagerCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             // 此人不是管理员则提示他不是管理员，并且重新打开串口
-            ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡不是管理卡.", DataFormat.getNowTime());
+            ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡不是管理卡.", DataFormat.getNowTime(),"","","");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
             Toast.makeText(ManagerCardReadActivity.this, "此卡不是管理卡.", Toast.LENGTH_SHORT).show();
             openAndsetLinsten();

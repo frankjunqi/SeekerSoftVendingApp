@@ -29,6 +29,9 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         public final static Property Borrow = new Property(4, Boolean.class, "borrow", false, "BORROW");
         public final static Property Result = new Property(5, Boolean.class, "result", false, "RESULT");
         public final static Property Time = new Property(6, java.util.Date.class, "time", false, "TIME");
+        public final static Property Keepone = new Property(7, String.class, "keepone", false, "KEEPONE");
+        public final static Property Keeptwo = new Property(8, String.class, "keeptwo", false, "KEEPTWO");
+        public final static Property Keepthree = new Property(9, String.class, "keepthree", false, "KEEPTHREE");
     }
 
 
@@ -50,7 +53,10 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
                 "\"CARD\" TEXT," + // 3: card
                 "\"BORROW\" INTEGER," + // 4: borrow
                 "\"RESULT\" INTEGER," + // 5: result
-                "\"TIME\" INTEGER);"); // 6: time
+                "\"TIME\" INTEGER," + // 6: time
+                "\"KEEPONE\" TEXT," + // 7: keepone
+                "\"KEEPTWO\" TEXT," + // 8: keeptwo
+                "\"KEEPTHREE\" TEXT);"); // 9: keepthree
     }
 
     /** Drops the underlying database table. */
@@ -97,6 +103,21 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         if (time != null) {
             stmt.bindLong(7, time.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(8, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(9, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(10, keepthree);
+        }
     }
 
     @Override
@@ -137,6 +158,21 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         if (time != null) {
             stmt.bindLong(7, time.getTime());
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(8, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(9, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(10, keepthree);
+        }
     }
 
     @Override
@@ -153,7 +189,10 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // borrow
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // result
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // time
+            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // time
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // keepone
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // keeptwo
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // keepthree
         );
         return entity;
     }
@@ -167,6 +206,9 @@ public class BorrowRecordDao extends AbstractDao<BorrowRecord, Long> {
         entity.setBorrow(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setResult(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setTime(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setKeepone(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setKeeptwo(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setKeepthree(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override

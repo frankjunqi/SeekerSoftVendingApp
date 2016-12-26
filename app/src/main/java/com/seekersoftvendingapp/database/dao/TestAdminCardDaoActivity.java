@@ -116,7 +116,7 @@ public class TestAdminCardDaoActivity extends BaseActivity {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         String comment = "Added on " + df.format(new Date());
 
-        AdminCard adminCard = new AdminCard( false, noteText.toString(), "1212", new Date(), new Date());
+        AdminCard adminCard = new AdminCard( false, noteText.toString(), "1212", new Date(), new Date(),"","","");
         adminCardDao.insert(adminCard);
         Log.d("DaoExample", "Inserted new note, ID: " + adminCard.getObjectId());
 

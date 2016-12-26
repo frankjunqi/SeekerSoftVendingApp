@@ -21,7 +21,7 @@ public class EmpPowerEntity implements Serializable {
     public String updatedAt;
 
     public EmpPower getEmpPower() {
-        return new EmpPower(isDel, unit, DataFormat.fromISODate(begin), product, count, period, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new EmpPower(isDel, unit, DataFormat.fromISODate(begin), product, count, period, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt),"","","");
     }
 
     @Override

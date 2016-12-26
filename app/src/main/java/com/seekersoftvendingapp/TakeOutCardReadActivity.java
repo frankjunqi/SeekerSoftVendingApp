@@ -73,7 +73,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     SeekerSoftConstant.CARDID = msg.obj.toString();
                     if (TextUtils.isEmpty(SeekerSoftConstant.CARDID)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "出货", "读到的卡号为空.", DataFormat.getNowTime());
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "出货", "读到的卡号为空.", DataFormat.getNowTime(),"","","");
                         Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
@@ -199,7 +199,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         VendingSerialPort.getInstance().closeSerialPort();
         if (true) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(),"","","");
             passage.setStock(passage.getStock() - 1);
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
@@ -214,7 +214,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date());
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(),"","","");
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
 
             // 串口打开螺纹柜子失败
@@ -233,7 +233,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(TakeOutCardReadActivity.this, takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
-            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime());
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime(),"","","");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }

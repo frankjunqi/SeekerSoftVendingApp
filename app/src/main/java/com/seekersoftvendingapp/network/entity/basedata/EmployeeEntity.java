@@ -29,7 +29,7 @@ public class EmployeeEntity implements Serializable {
     }
 
     public Employee getEmployee() {
-        return new Employee(isDel, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt));
+        return new Employee(isDel, empNo, card.toString(), power.toString(), objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt),"","","");
     }
 
     @Override

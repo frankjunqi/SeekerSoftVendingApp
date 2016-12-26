@@ -28,6 +28,9 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
         public final static Property Card = new Property(3, String.class, "card", false, "CARD");
         public final static Property Count = new Property(4, Integer.class, "count", false, "COUNT");
         public final static Property Time = new Property(5, String.class, "time", false, "TIME");
+        public final static Property Keepone = new Property(6, String.class, "keepone", false, "KEEPONE");
+        public final static Property Keeptwo = new Property(7, String.class, "keeptwo", false, "KEEPTWO");
+        public final static Property Keepthree = new Property(8, String.class, "keepthree", false, "KEEPTHREE");
     }
 
 
@@ -48,7 +51,10 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
                 "\"PASSAGE\" TEXT," + // 2: passage
                 "\"CARD\" TEXT," + // 3: card
                 "\"COUNT\" INTEGER," + // 4: count
-                "\"TIME\" TEXT);"); // 5: time
+                "\"TIME\" TEXT," + // 5: time
+                "\"KEEPONE\" TEXT," + // 6: keepone
+                "\"KEEPTWO\" TEXT," + // 7: keeptwo
+                "\"KEEPTHREE\" TEXT);"); // 8: keepthree
     }
 
     /** Drops the underlying database table. */
@@ -90,6 +96,21 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
         if (time != null) {
             stmt.bindString(6, time);
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(7, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(8, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(9, keepthree);
+        }
     }
 
     @Override
@@ -125,6 +146,21 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
         if (time != null) {
             stmt.bindString(6, time);
         }
+ 
+        String keepone = entity.getKeepone();
+        if (keepone != null) {
+            stmt.bindString(7, keepone);
+        }
+ 
+        String keeptwo = entity.getKeeptwo();
+        if (keeptwo != null) {
+            stmt.bindString(8, keeptwo);
+        }
+ 
+        String keepthree = entity.getKeepthree();
+        if (keepthree != null) {
+            stmt.bindString(9, keepthree);
+        }
     }
 
     @Override
@@ -140,7 +176,10 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // passage
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // card
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // count
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // time
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // time
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // keepone
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // keeptwo
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // keepthree
         );
         return entity;
     }
@@ -153,6 +192,9 @@ public class SupplyRecordDao extends AbstractDao<SupplyRecord, Long> {
         entity.setCard(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCount(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setTime(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setKeepone(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setKeeptwo(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setKeepthree(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override
