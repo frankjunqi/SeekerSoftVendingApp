@@ -17,16 +17,22 @@
         android:text="货道补货" />
 
     <Button
+        android:id="@+id/btn_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="软件升级" />
+
+    <Button
         android:id="@+id/btn_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="退出程序" />
 
     <Button
-        android:text="返回首页"
+        android:id="@+id/btn_backtomain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_backtomain" />
+        android:text="返回首页" />
 
 
 </LinearLayout>

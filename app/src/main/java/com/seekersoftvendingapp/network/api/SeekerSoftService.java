@@ -20,6 +20,7 @@ import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordReqBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordResBody;
+import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 
 import java.util.Map;
 
@@ -157,6 +158,10 @@ public interface SeekerSoftService {
     返回值：data:{result:true/false}
     true:成功
     false:失败*/
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
     @GET("api/return/{deviceid}/{card}/{passage}")
     Call<ReturnProResBody> returnPro(
             @Path("deviceid") String deviceid,
@@ -238,4 +243,23 @@ public interface SeekerSoftService {
     })
     @POST("/api/error")
     Call<ErrorResBody> error(@Body ErrorReqBody postStr);
+
+
+    /**
+     * http://smartbox.leanapp.cn/api/update/[deviceid]/[version]
+     * 根据设备号、版本号返回app更新信息
+     * 参数：deviceid(设备ID)，version(现版本号，例：1.2.3为1230；1.1为1100)
+     * 返回值：data:{deviceId:设备号,url:apk下载地址,version:版本号}
+     * false:无此设备更新信息
+     */
+    @Headers({
+            "Accept: application/json",
+            "Content-type: application/json"
+    })
+    @GET("api/update/{deviceid}/{version}")
+    Call<UpdateResBody> updateApp(
+            @Path("deviceid") String deviceid,
+            @Path("version") String version
+    );
+
 }

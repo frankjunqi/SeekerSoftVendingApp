@@ -66,6 +66,21 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+
+        <receiver
+            android:name=".updateapk.TCTInsatllActionBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.seekersoftvendingapp.install" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".updateapk.UpdateVersionBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

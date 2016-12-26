@@ -1,8 +1,16 @@
 package com.seekersoftvendingapp;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -21,8 +29,10 @@ import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
+import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.track.Track;
+import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -44,6 +54,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_onebyoneinsert;
     private Button btn_exit;
     private Button btn_backtomain;
+    private Button btn_update;
 
     private AdminCard adminCard;
     private PassageDao passageDao;
@@ -62,11 +73,13 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_backtomain = (Button) findViewById(R.id.btn_backtomain);
+        btn_update = (Button) findViewById(R.id.btn_update);
 
         btn_onekeyinsert.setOnClickListener(this);
         btn_onebyoneinsert.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
         btn_backtomain.setOnClickListener(this);
+        btn_update.setOnClickListener(this);
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
@@ -88,6 +101,10 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     needNetwork();
                 }
+                break;
+            case R.id.btn_update:
+                // 软件升级
+                updateAPP();
                 break;
             case R.id.btn_exit:
                 if (SeekerSoftConstant.NETWORKCONNECT) {
@@ -210,6 +227,136 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                             // do nothing
                         }
                     }).setCancelable(false).show();
+        }
+    }
+
+
+    /**
+     * 更新app接口
+     */
+    private boolean isDownloading = false;
+    private ContentObserver contentObserver;
+
+    public void updateAPP() {
+        if (isDownloading) {
+            return;
+        }
+        showProgress();
+        // 异步加载(post)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
+        Call<UpdateResBody> postAction = service.updateApp(SeekerSoftConstant.DEVICEID, String.valueOf(getVersionCode(ManagerGoodsActivity.this)));
+        postAction.enqueue(new Callback<UpdateResBody>() {
+            @Override
+            public void onResponse(Call<UpdateResBody> call, Response<UpdateResBody> response) {
+                hideProgress();
+                response.body().data.result = true;
+                if (response != null && response.body() != null && response.body().data.result) {
+                    // 下载apk
+                    Toast.makeText(ManagerGoodsActivity.this, "Downloding VendingAPP.apk ... ", Toast.LENGTH_SHORT).show();
+                    if (isDownloading) {
+                        return;
+                    }
+                    downloadApk(Host.UpdateHost + response.body().data.url);
+                } else {
+                    Toast.makeText(ManagerGoodsActivity.this, "当前版本已经是最新版本。", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateResBody> call, Throwable throwable) {
+                hideProgress();
+                Toast.makeText(ManagerGoodsActivity.this, "网络链接异常。", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void downloadApk(String apkUrl) {
+        isDownloading = true;
+        // 下载
+        try {
+            final DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            clearDownLoadApk(downloadManager);
+            Uri uri = Uri.parse(apkUrl);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setTitle("VendingAPP");
+            // 指定文件保存在应用的私有目录
+            request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, TCTInsatllActionBroadcastReceiver.APK_FILE_NAME);
+            long reference = 0;
+            try {
+                reference = downloadManager.enqueue(request);// 下载id
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            final long id = reference;
+            // 注册数据库监听
+            getContentResolver().registerContentObserver(
+                    Uri.parse("content://downloads/my_downloads"),
+                    true,
+                    contentObserver = new ContentObserver(null) {
+                        @Override
+                        public void onChange(boolean selfChange) {
+                            DownloadManager.Query query = new DownloadManager.Query();
+                            query.setFilterById(id);
+                            Cursor my = downloadManager.query(query);
+                            if (my != null) {
+                                if (my.moveToFirst()) {
+                                    int fileSize = my.getInt(my
+                                            .getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                                    int bytesDL = my.getInt(my
+                                            .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                                    int percent = bytesDL * 100 / fileSize;
+
+                                    if (percent == 100) {
+                                        isDownloading = false;
+                                    }
+                                }
+                                my.close();
+                            } else {
+                                isDownloading = false;
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            isDownloading = false;
+        }
+    }
+
+    /**
+     * 删除之前下载的apk文件
+     */
+    private void clearDownLoadApk(final DownloadManager manager) {
+        // 删除失败和成功状态的数据
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int delete[] = {DownloadManager.STATUS_FAILED, DownloadManager.STATUS_SUCCESSFUL};
+                DownloadManager.Query query = new DownloadManager.Query();
+                for (int element : delete) {
+                    query.setFilterByStatus(element);
+                    Cursor cursor = manager.query(query);
+                    if (cursor != null) {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                manager.remove(cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID)));
+                            } while (cursor.moveToNext());
+                        }
+                        cursor.close();
+                    }
+                }
+            }
+        }).start();
+    }
+
+
+    public int getVersionCode(Context context)//获取版本号(内部识别号)
+    {
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 
