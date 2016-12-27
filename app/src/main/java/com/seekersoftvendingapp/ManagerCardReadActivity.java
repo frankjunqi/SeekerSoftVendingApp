@@ -2,7 +2,6 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
@@ -78,11 +76,12 @@ public class ManagerCardReadActivity extends BaseActivity {
         } else {
             // 此人不是管理员则提示他不是管理员，并且重新打开串口
             if (tv_errordesc != null) {
-                tv_errordesc.setText("此卡不是管理卡.");
+                tv_errordesc.setText("此卡不是管理卡,请您换管理卡，重新刷卡...");
             }
+            openCardSerialPort();
+
             ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡不是管理卡.", DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-            openAndsetLinsten();
         }
     }
 
@@ -92,8 +91,6 @@ public class ManagerCardReadActivity extends BaseActivity {
         setContentView(R.layout.activity_manager_cardread);
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
-
-        openAndsetLinsten();
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -111,17 +108,17 @@ public class ManagerCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
         tv_errordesc = (TextView) findViewById(R.id.tv_errordesc);
 
-        countDownTimer.start();
+        openCardSerialPort();
 
+        countDownTimer.start();
     }
 
     /**
      * 打开串口以及监听串口
      */
-    private void openAndsetLinsten() {
+    private void openCardSerialPort() {
         // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行登录管理页面
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override

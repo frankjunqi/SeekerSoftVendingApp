@@ -2,7 +2,6 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -87,8 +86,6 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             // 货道实体
             Passage passage = list.get(0);
             Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());// 说明货道可以进行消费产品
-            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage);
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();

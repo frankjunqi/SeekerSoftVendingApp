@@ -2,7 +2,6 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -94,10 +93,12 @@ public class BorrowCardReadActivity extends BaseActivity {
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
 
-        productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
-        pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
-        passageFlag = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEFLAG);
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        if (passage != null) {
+            productId = passage.getProduct();
+            pasageId = passage.getSeqNo();
+            passageFlag = passage.getFlag();
+        }
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
         btn_return_goods.setOnClickListener(new View.OnClickListener() {
@@ -115,10 +116,18 @@ public class BorrowCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
         tv_errordesc = (TextView) findViewById(R.id.tv_errordesc);
 
-        // TODO 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
+        openCardSerialPort();
+        openStoreSerialPort();
+
+        countDownTimer.start();
+    }
+
+    /**
+     * 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
+     */
+    private void openCardSerialPort() {
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -134,6 +143,12 @@ public class BorrowCardReadActivity extends BaseActivity {
                 Log.e("TAG", "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
+    }
+
+    /**
+     * 打开柜子串口
+     */
+    private void openStoreSerialPort() {
         StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -145,9 +160,6 @@ public class BorrowCardReadActivity extends BaseActivity {
 
             }
         });
-
-        countDownTimer.start();
-
     }
 
 
@@ -270,6 +282,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                 }
             }
             // 此人无权限
+            openCardSerialPort();
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {
             // 无此员工
