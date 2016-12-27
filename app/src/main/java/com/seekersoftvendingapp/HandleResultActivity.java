@@ -43,4 +43,9 @@ public class HandleResultActivity extends BaseActivity {
 
         countDownTimer.start();
     }
+
+    @Override
+    public int setEndTime() {
+        return SeekerSoftConstant.ENDTIEMSHORT;
+    }
 }

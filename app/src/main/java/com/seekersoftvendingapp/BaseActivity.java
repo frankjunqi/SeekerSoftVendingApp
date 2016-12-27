@@ -21,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
     private Dialog progressDialog;
     protected Button btn_return_mainpage;
 
-    protected CountDownTimer countDownTimer = new CountDownTimer(SeekerSoftConstant.ENDTIEMLONG * 1000, 1000) {
+    protected CountDownTimer countDownTimer = new CountDownTimer(setEndTime() * 1000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
             if (btn_return_mainpage != null) {
@@ -34,6 +34,15 @@ public class BaseActivity extends AppCompatActivity {
             BaseActivity.this.finish();
         }
     };
+
+    /**
+     * 设置倒计时初始时间
+     *
+     * @return
+     */
+    public int setEndTime() {
+        return SeekerSoftConstant.ENDTIEMLONG;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
