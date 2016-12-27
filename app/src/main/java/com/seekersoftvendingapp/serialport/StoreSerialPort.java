@@ -222,4 +222,28 @@ public class StoreSerialPort {
         return bcc;
     }
 
+    public static String getStoreCommand(String cmd) {
+        return (cmd.replaceAll("\\s*", "") + String.format("%04x", new Object[]{Integer.valueOf(getSum(cmd))})).toUpperCase();
+    }
+
+    public static String cmdOpenStoreDoor(int type, int number, int door) {
+        return getStoreCommand(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 01 00 01").toString())).append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());
+    }
+
+    public static String cmdCheckStoreDoor(int type, int number) {
+        return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 02 00 01 00").toString());
+    }
+
+    public static String cmdCheckStoreStatus(int type, int number) {
+        return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 E0 00 01 00").toString());
+    }
+    public static int getSum(String cmd) {
+        int sum = 0;
+        String inHex = cmd.replaceAll("\\s*", "");
+        for (int i = 1; i <= cmd.length() / 2; i++) {
+            sum += Integer.parseInt(inHex.substring((i * 2) - 2, i * 2), 16);
+        }
+        return sum;
+    }
+
 }

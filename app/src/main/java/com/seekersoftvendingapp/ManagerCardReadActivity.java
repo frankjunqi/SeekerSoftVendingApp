@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
@@ -41,6 +42,7 @@ public class ManagerCardReadActivity extends BaseActivity {
                 case SeekerSoftConstant.ADMINCARDRECECIVECODE:
                     // 管理员卡号
                     String adminCardNum = msg.obj.toString();
+                    SeekerSoftConstant.ADMINCARD = adminCardNum;
                     if (TextUtils.isEmpty(adminCardNum)) {
                         // 读到的卡号为null or ""
                         ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
@@ -51,7 +53,7 @@ public class ManagerCardReadActivity extends BaseActivity {
                     } else {
                         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
                         // 处理业务
-                        handleReadCardAfterBusniess(adminCardNum);
+                        handleReadCardAfterBusniess(SeekerSoftConstant.ADMINCARD);
                     }
                     break;
             }
@@ -64,8 +66,13 @@ public class ManagerCardReadActivity extends BaseActivity {
      * @param adminCardNum 管理员卡号
      */
     private void handleReadCardAfterBusniess(String adminCardNum) {
-        List<AdminCard> adminList = adminCardDao.queryBuilder().where(AdminCardDao.Properties.IsDel.eq(false))
-                .where(AdminCardDao.Properties.Card.eq(adminCardNum)).list();
+        Toast.makeText(ManagerCardReadActivity.this, adminCardNum.length() + "", Toast.LENGTH_SHORT).show();
+        adminCardNum = adminCardNum.substring(1);
+        List<AdminCard> adminList = adminCardDao.queryBuilder()
+                .where(AdminCardDao.Properties.IsDel.eq(false))
+                .where(AdminCardDao.Properties.Card.like("%" + adminCardNum + "%"))
+                .list();
+        // .where(AdminCardDao.Properties.Card.like("%" + adminCardNum + "%"))
         if (adminList != null && adminList.size() > 0) {
             // 此人是管理员
             AdminCard adminCard = adminList.get(0);
@@ -73,10 +80,11 @@ public class ManagerCardReadActivity extends BaseActivity {
             intent.putExtra(SeekerSoftConstant.ADMINCARD, adminCard);
             startActivity(intent);
             this.finish();
+
         } else {
             // 此人不是管理员则提示他不是管理员，并且重新打开串口
             if (tv_errordesc != null) {
-                tv_errordesc.setText("此卡不是管理卡,请您换管理卡，重新刷卡...");
+                tv_errordesc.setText(adminCardNum + "此卡不是管理卡,请您换管理卡，重新刷卡...");
             }
             openCardSerialPort();
 

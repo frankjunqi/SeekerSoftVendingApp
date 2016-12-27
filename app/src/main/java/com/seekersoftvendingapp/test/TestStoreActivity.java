@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
+import com.seekersoftvendingapp.serialport.StoreSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
@@ -37,9 +38,9 @@ public class TestStoreActivity extends BaseActivity implements View.OnClickListe
         btn_out.setOnClickListener(this);
         btn_check = (Button) findViewById(R.id.btn_check);
         btn_check.setOnClickListener(this);
-        //StoreSerialPort.getInstance();
 
-        /*StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
+        StoreSerialPort.getInstance();
+        StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
 
@@ -49,7 +50,7 @@ public class TestStoreActivity extends BaseActivity implements View.OnClickListe
             public void onDataReceiveBuffer(byte[] buffer, int size) {
                 Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
-        });*/
+        });
 
     }
 
@@ -68,14 +69,15 @@ public class TestStoreActivity extends BaseActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_out:
                 // 柜子
-                //StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmdOpenStoreDoor(0, 0, 16)));
                 String storeCmd = cmdOpenStoreDoor(line, column, height);
+                StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmdOpenStoreDoor(line, column, height)));
                 tv_showdata.setText("打开 {line=" + line + "}{column=" + column + "}{height=" + height + "} CMD：" + storeCmd);
                 Log.e("TestStoreActivity", "打开 {line=" + line + "}{column=" + column + "}{height=" + height + "} CMD：" + storeCmd);
                 break;
 
             case R.id.btn_check:
                 String checkCmd = cmdCheckStoreDoor(line, column);
+                StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmdCheckStoreDoor(line, column)));
                 tv_showdata.setText("Check {type=" + line + "}{number=" + column + "} CMD：" + checkCmd);
                 Log.e("TestStoreActivity", "Check {type=" + line + "}{number=" + column + "} CMD：" + checkCmd);
                 break;
@@ -94,7 +96,8 @@ public class TestStoreActivity extends BaseActivity implements View.OnClickListe
         return getStoreCommand(
                 new StringBuilder(
                         String.valueOf(
-                                new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
+                                new StringBuilder(
+                                        String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
                                         .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
                                         .append("00010001").toString()))
                         .append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());

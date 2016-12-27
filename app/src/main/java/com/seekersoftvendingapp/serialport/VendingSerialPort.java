@@ -200,6 +200,8 @@ public class VendingSerialPort {
         }
         if (mSerialPort != null) {
             mSerialPort.close();
+            mSerialPort = null;
+            portUtil = null;
         }
     }
 

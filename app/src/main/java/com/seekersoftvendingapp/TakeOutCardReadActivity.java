@@ -158,7 +158,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
-
+                Toast.makeText(TakeOutCardReadActivity.this, "vending return = " + IDNUM, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -220,8 +220,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
         } catch (Exception e) {
             open = false;
         }
-        VendingSerialPort.getInstance().closeSerialPort();
         if (open) {
+            VendingSerialPort.getInstance().closeSerialPort();
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);

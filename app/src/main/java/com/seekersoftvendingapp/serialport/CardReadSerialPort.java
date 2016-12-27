@@ -33,10 +33,10 @@ public class CardReadSerialPort {
 
     // serial port thread interrupt and close serial port:
     // true : close ; false : open
-    private boolean isStop = true;
+    private boolean isStop = false;
 
     // device & baudrate
-    private String devicePath = "/dev/ttymxc4";
+    private String devicePath = "/dev/ttyES0";
     // tty02--- ttymxc1   ; ttyo3---ttymxc2  ;  tty04---ttymxc3  ;  tty05---ttymxc4  ;
     //   ICCard is OK        ICCard is Ok       ICCrad is not BAD     ICCard is OK
     // tty06---ttyES0  ; tty07---ttyES1 ;
@@ -171,6 +171,10 @@ public class CardReadSerialPort {
                     // 默认以 "\r\n" 结束读取
                     if (IDNUM.endsWith("\r\n")) {
                         if (null != onDataReceiveListener) {
+                            IDNUM = IDNUM.replace("\r", "").replace("\n", "").replace(" ", "");
+                            if (IDNUM.length() > 10) {
+                                IDNUM = IDNUM.substring(IDNUM.length() - 10);
+                            }
                             onDataReceiveListener.onDataReceiveString(IDNUM);
                             IDNUM = "";
                         }

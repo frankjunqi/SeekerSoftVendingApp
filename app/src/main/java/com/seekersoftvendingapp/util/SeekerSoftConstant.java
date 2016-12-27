@@ -21,7 +21,7 @@ public class SeekerSoftConstant {
     // 管理员读取卡中的数据的消息
     public static final int ADMINCARDRECECIVECODE = 1102;
     // 管理员卡号key
-    public static final String ADMINCARD = "admincard";
+    public static String ADMINCARD = "admincard";
 
 
     // 退出程序key
