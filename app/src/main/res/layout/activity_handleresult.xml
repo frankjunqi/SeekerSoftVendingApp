@@ -4,14 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/vi_flag"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:src="@drawable/success" />
+
     <TextView
         android:id="@+id/tv_handle_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="处理出货结果：\n 1. 成功 \n 2. 失败 "
-        android:textSize="16sp" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/vi_flag"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="处理出货结果成功."
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_return_mainpage"

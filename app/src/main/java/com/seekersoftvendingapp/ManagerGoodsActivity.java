@@ -53,7 +53,6 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_onekeyinsert;
     private Button btn_onebyoneinsert;
     private Button btn_exit;
-    private Button btn_return_mainpage;
     private Button btn_update;
 
     private AdminCard adminCard;
@@ -83,8 +82,6 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
-
-
     }
 
     @Override

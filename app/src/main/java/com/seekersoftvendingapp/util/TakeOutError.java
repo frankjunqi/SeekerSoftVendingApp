@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class TakeOutError implements Serializable {
 
     // 此人消费次数未满，可以进行消费
-    private static final String CAN_TAKEOUT = "取货成功，谢谢.";
+    private static final String CAN_TAKEOUT = "操作成功，谢谢.";
     public static final int CAN_TAKEOUT_FLAG = 1;
 
     // 此人消费次数已满，不可以进行消费
