@@ -1,9 +1,7 @@
 package com.seekersoftvendingapp;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,7 +15,6 @@ import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,12 +98,6 @@ public class BorrowInsertNumActivity extends BaseActivity {
             Passage passage = list.get(0);
             // TODO 检查是否有该硬件货道??
             Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());// 说明货道可以进行消费产品
-            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage.replace("A", "").replace("B", "").replace("C", ""));
-            String firstChar = keyPassage.substring(0, 1);
-            if (firstChar.equals("A") || firstChar.equals("B") || firstChar.equals("C")) {
-                intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, firstChar);
-            }
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();

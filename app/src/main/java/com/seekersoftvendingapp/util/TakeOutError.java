@@ -10,22 +10,22 @@ import java.io.Serializable;
 public class TakeOutError implements Serializable {
 
     // 此人消费次数未满，可以进行消费
-    private static final String CAN_TAKEOUT = "此人消费次数未满，可以进行消费";
+    private static final String CAN_TAKEOUT = "操作成功，谢谢.";
     public static final int CAN_TAKEOUT_FLAG = 1;
 
     // 此人消费次数已满，不可以进行消费
-    private static final String FAILE_TAKEOUT = "此人消费次数已满，不可以进行消费";
+    private static final String FAILE_TAKEOUT = "此人消费次数已满，不可以进行消费.";
     public static final int FAILE_TAKEOUT_FLAG = 2;
     // 此商品暂时没有赋予出货权限
-    private static final String PRO_HAS_NOPOWER = "此商品暂时没有赋予出货权限";
+    private static final String PRO_HAS_NOPOWER = "此商品暂时没有赋予出货权限.";
     public static final int PRO_HAS_NOPOWER_FLAG = 3;
 
     // 无此员工 --- 失败页面
-    private static final String HAS_NOEMPLOYEE = "无此员工";
+    private static final String HAS_NOEMPLOYEE = "此卡没有对应员工编号，无法消费，联系管理员，然后再来重新刷卡.";
     public static final int HAS_NOEMPLOYEE_FLAG = 4;
 
     // 此人无权限
-    private static final String HAS_NOPOWER = "此人无权限";
+    private static final String HAS_NOPOWER = "此卡无权限,请换卡重新刷卡...";
     public static final int HAS_NOPOWER_FLAG = 5;
 
     // 串口打开螺纹柜子失败

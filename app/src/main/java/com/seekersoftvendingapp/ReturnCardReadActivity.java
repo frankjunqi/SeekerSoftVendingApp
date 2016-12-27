@@ -90,10 +90,12 @@ public class ReturnCardReadActivity extends BaseActivity {
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
 
-        productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
-        pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
-        passageFlag = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEFLAG);
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        if (passage != null) {
+            productId = passage.getProduct();
+            pasageId = passage.getSeqNo();
+            passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
+        }
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
         btn_return_goods.setOnClickListener(new View.OnClickListener() {
@@ -111,10 +113,18 @@ public class ReturnCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
         tv_errordesc = (TextView) findViewById(R.id.tv_errordesc);
 
-        // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
+        openCardSerialPort();
+        openStoreSerialPort();
+
+        countDownTimer.start();
+    }
+
+    /**
+     * 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
+     */
+    private void openCardSerialPort() {
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -130,6 +140,12 @@ public class ReturnCardReadActivity extends BaseActivity {
                 Log.e("TAG", "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
+    }
+
+    /**
+     * 打开柜子串口
+     */
+    private void openStoreSerialPort() {
         StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -141,7 +157,6 @@ public class ReturnCardReadActivity extends BaseActivity {
 
             }
         });
-        countDownTimer.start();
     }
 
     /**
@@ -266,6 +281,7 @@ public class ReturnCardReadActivity extends BaseActivity {
                 }
             }
             // 此人无权限
+            openCardSerialPort();
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {
             // 无此员工
@@ -290,6 +306,7 @@ public class ReturnCardReadActivity extends BaseActivity {
                 if (response != null && response.body() != null && response.body().data.result) {
                     cmdBufferStoreSerial(response.body().data.objectId);
                 } else {
+                    openCardSerialPort();
                     TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
                     handleResult(takeOutError);
                 }

@@ -98,12 +98,6 @@ public class ReturnInsertNumActivity extends BaseActivity {
             Passage passage = list.get(0);
             // 检查是否有该硬件货道
             Intent intent = new Intent(ReturnInsertNumActivity.this, ReturnCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PRODUCTID, passage.getProduct());
-            intent.putExtra(SeekerSoftConstant.PASSAGEID, keyPassage.replace("A", "").replace("B", "").replace("C", ""));
-            String firstChar = keyPassage.substring(0, 1);
-            if (firstChar.equals("A") || firstChar.equals("B") || firstChar.equals("C")) {
-                intent.putExtra(SeekerSoftConstant.PASSAGEFLAG, firstChar);
-            }
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);
             this.finish();

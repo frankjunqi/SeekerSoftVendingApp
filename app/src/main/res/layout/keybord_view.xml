@@ -10,12 +10,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="48dp"
         android:layout_marginTop="45dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:hint="输入货道号，如：A11 或者 32"
-        android:paddingLeft="16dp"
-        android:textSize="20sp" />
+        android:maxLines="1"
+        android:textSize="23sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,6 +24,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/tv_showstr"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
         android:orientation="vertical"
         android:weightSum="4">
 
@@ -39,28 +42,32 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="A" />
+                android:text="A"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_b"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="b" />
+                android:text="b"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_c"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="c" />
+                android:text="c"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_clear"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="清除" />
+                android:text="清除"
+                android:textSize="@dimen/keybord_text_size" />
 
         </LinearLayout>
 
@@ -76,28 +83,32 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="7" />
+                android:text="7"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_8"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="8" />
+                android:text="8"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_9"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="9" />
+                android:text="9"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_back"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="后退" />
+                android:text="后退"
+                android:textSize="@dimen/keybord_text_size" />
 
         </LinearLayout>
 
@@ -113,28 +124,32 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="4" />
+                android:text="4"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="5" />
+                android:text="5"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="6" />
+                android:text="6"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="0" />
+                android:text="0"
+                android:textSize="@dimen/keybord_text_size" />
 
         </LinearLayout>
 
@@ -150,28 +165,32 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="1" />
+                android:text="1"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="2" />
+                android:text="2"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="3" />
+                android:text="3"
+                android:textSize="@dimen/keybord_text_size" />
 
             <Button
                 android:id="@+id/btn_sure"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="确定" />
+                android:text="确定"
+                android:textSize="@dimen/keybord_text_size" />
 
         </LinearLayout>
 

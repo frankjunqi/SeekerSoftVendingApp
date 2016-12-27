@@ -2,7 +2,6 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -43,5 +42,10 @@ public class HandleResultActivity extends BaseActivity {
         });
 
         countDownTimer.start();
+    }
+
+    @Override
+    public int setEndTime() {
+        return SeekerSoftConstant.ENDTIEMSHORT;
     }
 }

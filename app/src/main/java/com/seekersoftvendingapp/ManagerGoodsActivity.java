@@ -53,7 +53,6 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_onekeyinsert;
     private Button btn_onebyoneinsert;
     private Button btn_exit;
-    private Button btn_return_mainpage;
     private Button btn_update;
 
     private AdminCard adminCard;
@@ -83,8 +82,6 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
-
-
     }
 
     @Override
@@ -106,7 +103,21 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.btn_update:
                 // 软件升级
-                updateAPP();
+                new AlertDialog.Builder(ManagerGoodsActivity.this)
+                        .setTitle("系统升级")
+                        .setMessage("你确定要进行系统升级吗？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                updateAPP();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).setCancelable(false).show();
                 break;
             case R.id.btn_exit:
                 if (SeekerSoftConstant.NETWORKCONNECT) {

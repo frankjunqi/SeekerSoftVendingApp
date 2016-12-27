@@ -97,11 +97,11 @@ public class TakeOutCardReadActivity extends BaseActivity {
         employeeDao = daoSession.getEmployeeDao();
         takeOutRecordDao = daoSession.getTakeoutRecordDao();
 
-        productId = getIntent().getStringExtra(SeekerSoftConstant.PRODUCTID);
-        pasageId = getIntent().getStringExtra(SeekerSoftConstant.PASSAGEID);
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
-        if (passage != null && !TextUtils.isEmpty(passage.getFlag())) {
-            passageFlag = passage.getFlag();
+        if (passage != null) {
+            passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
+            productId = passage.getProduct();
+            pasageId = passage.getSeqNo();
         }
 
 
@@ -121,9 +121,18 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
         tv_errordesc = (TextView) findViewById(R.id.tv_errordesc);
 
+        openCardSerialPort();
+        openVendingSerialPort();
+
+        countDownTimer.start();
+    }
+
+    /**
+     * 打开打卡串口
+     */
+    private void openCardSerialPort() {
         // 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行取货接口
         CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
             @Override
@@ -140,8 +149,12 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
+    }
 
-        // 打开串口螺纹  ---  发送指令出货
+    /**
+     * 打开串口螺纹  ---  发送指令出货
+     */
+    private void openVendingSerialPort() {
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -153,7 +166,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
             }
         });
-        countDownTimer.start();
     }
 
     /**
@@ -186,6 +198,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 cmdBufferVendingSerial("");
             }
         } else {
+            // 重新打开打卡串口
+            openCardSerialPort();
             // 不可以出货
             handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
         }
@@ -197,10 +211,17 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * @param objectId 出货的服务端的记录的objectid
      */
     private void cmdBufferVendingSerial(String objectId) {
-        String cmd = VendingSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
-        boolean open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
+        boolean open = false;
+        try {
+            int col = Integer.parseInt(pasageId.substring(0, 1));
+            int row = Integer.parseInt(pasageId.substring(1, 2));
+            String cmd = VendingSerialPort.cmdOpenVender(col, row);
+            open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
+        } catch (Exception e) {
+            open = false;
+        }
         VendingSerialPort.getInstance().closeSerialPort();
-        if (true) {
+        if (open) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
@@ -290,6 +311,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 }
             }
             // 此人无权限
+            openCardSerialPort();
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {
             // 无此员工
@@ -313,7 +335,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 if (response != null && response.body() != null && response.body().data.result) {
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
-                    // 不可以出货
+                    // 此人没有权限,不可以出货
+                    openCardSerialPort();
                     handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
                 }
                 hideProgress();
