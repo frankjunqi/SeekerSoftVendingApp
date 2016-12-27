@@ -94,7 +94,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         if (passage != null) {
             productId = passage.getProduct();
             pasageId = passage.getSeqNo();
-            passageFlag = passage.getFlag();
+            passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
         }
 
         btn_return_goods = (Button) findViewById(R.id.btn_return_goods);

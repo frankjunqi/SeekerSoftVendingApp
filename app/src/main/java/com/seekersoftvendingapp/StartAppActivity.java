@@ -93,7 +93,7 @@ public class StartAppActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 handleLoading();
-                mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
+                asyncGetBaseDataRequest();
             }
         });
     }
@@ -102,9 +102,6 @@ public class StartAppActivity extends BaseActivity {
      * 基础数据 GET
      */
     private void asyncGetBaseDataRequest() {
-        // 加载前
-        // do something
-
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);

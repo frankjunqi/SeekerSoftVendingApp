@@ -98,8 +98,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
         takeOutRecordDao = daoSession.getTakeoutRecordDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
-        if (passage != null && !TextUtils.isEmpty(passage.getFlag())) {
-            passageFlag = passage.getFlag();
+        if (passage != null) {
+            passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
             productId = passage.getProduct();
             pasageId = passage.getSeqNo();
         }
