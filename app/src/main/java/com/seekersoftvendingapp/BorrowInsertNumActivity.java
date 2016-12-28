@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.util.KeyChangeUtil;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
@@ -74,26 +75,16 @@ public class BorrowInsertNumActivity extends BaseActivity {
 
         // 检查数据库是否有该货道的资源数据
         // isDel = false & Stock > 0 & seqNo == keyPassage
-        List<Passage> list = null;
         String x = keyPassage.substring(0, 1);
-        if (x.equals("A") || x.equals("B") || x.equals("C")) {
-            list = passageDao.queryBuilder()
-                    .where(PassageDao.Properties.IsDel.eq(false))
-                    .where(PassageDao.Properties.IsSend.eq(false))
-                    .where(PassageDao.Properties.Stock.gt(0))
-                    .where(PassageDao.Properties.Flag.eq(x))
-                    .where(PassageDao.Properties.BorrowUser.eq(""))
-                    .where(PassageDao.Properties.BorrowState.eq(false))
-                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
-        } else {
-            list = passageDao.queryBuilder()
-                    .where(PassageDao.Properties.IsDel.eq(false))
-                    .where(PassageDao.Properties.IsSend.eq(false))
-                    .where(PassageDao.Properties.Stock.gt(0))
-                    .where(PassageDao.Properties.BorrowUser.eq(""))// 保证可以没有被人借走
-                    .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
-                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", ""))).list();
-        }
+        List<Passage> list = passageDao.queryBuilder()
+                .where(PassageDao.Properties.IsDel.eq(false))
+                .where(PassageDao.Properties.IsSend.eq(false))
+                .where(PassageDao.Properties.Stock.gt(0))
+                .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
+                .where(PassageDao.Properties.BorrowUser.eq(""))// 保证可以没有被人借走
+                .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
+                .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
+                .list();
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
             // TODO 检查是否有该硬件货道??

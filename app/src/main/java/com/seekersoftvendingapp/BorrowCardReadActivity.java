@@ -20,7 +20,6 @@ import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.borrow.BorrowResBody;
@@ -56,7 +55,6 @@ public class BorrowCardReadActivity extends BaseActivity {
     private String pasageId = "";
     private String passageFlag = "";
 
-    private PassageDao passageDao;
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
     private Passage passage;
@@ -89,7 +87,6 @@ public class BorrowCardReadActivity extends BaseActivity {
         setContentView(R.layout.activity_borrow_cardread);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        passageDao = daoSession.getPassageDao();
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
 
@@ -201,7 +198,7 @@ public class BorrowCardReadActivity extends BaseActivity {
      * @return
      */
     private void cmdBufferVendingSerial(String objectId) {
-        String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
+        String cmd = StoreSerialPort.getStoreCommand("");
         boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
         StoreSerialPort.getInstance().closeSerialPort();
         if (true) {
