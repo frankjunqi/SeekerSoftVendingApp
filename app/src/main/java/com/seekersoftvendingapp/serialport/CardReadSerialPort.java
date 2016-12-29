@@ -3,7 +3,6 @@ package com.seekersoftvendingapp.serialport;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -100,53 +99,6 @@ public class CardReadSerialPort {
         }
     }
 
-    /**
-     * 发送指令到串口
-     *
-     * @param cmd 　应该是原始指令的字符串
-     * @return
-     */
-    public boolean sendCmds(String cmd) {
-        boolean result = true;
-        byte[] mBuffer = (cmd + "\r\n").getBytes();
-        //注意：我得项目中需要在每次发送后面加\r\n，大家根据项目项目做修改，也可以去掉，直接发送mBuffer
-        try {
-            if (mOutputStream != null) {
-                mOutputStream.write(mBuffer);
-            } else {
-                result = false;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * 发送指令到串口
-     *
-     * @param mBuffer 原始命令的二进制流
-     * @return
-     */
-    public boolean sendBuffer(byte[] mBuffer) {
-        boolean result = true;
-        byte[] mBufferTemp = new byte[mBuffer.length];
-        System.arraycopy(mBuffer, 0, mBufferTemp, 0, mBuffer.length);
-        //注意：我得项目中需要在每次发送后面加\r\n，大家根据项目项目做修改，也可以去掉，直接发送mBuffer
-        try {
-            if (mOutputStream != null) {
-                mOutputStream.write(mBufferTemp);
-            } else {
-                result = false;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            result = false;
-        }
-        return result;
-    }
-
     private class ReadThread extends Thread {
 
         @Override
@@ -185,45 +137,6 @@ public class CardReadSerialPort {
                 }
             }
         }
-    }
-
-    public static int isOdd(int num) {
-        return num & 1;
-    }
-
-
-    /**
-     * 16进制转成byte
-     *
-     * @param inHex 原始数据
-     * @return
-     */
-    public static byte HexToByte(String inHex) {
-        return (byte) Integer.parseInt(inHex, 16);
-    }
-
-    /**
-     * 16进制转成byte[]
-     *
-     * @param inHex 原始数据字符串
-     * @return
-     */
-    public static byte[] HexToByteArr(String inHex) {
-        byte[] result;
-        int hexlen = inHex.length();
-        if (isOdd(hexlen) == 1) {
-            hexlen++;
-            result = new byte[(hexlen / 2)];
-            inHex = "0" + inHex;
-        } else {
-            result = new byte[(hexlen / 2)];
-        }
-        int j = 0;
-        for (int i = 0; i < hexlen; i += 2) {
-            result[j] = HexToByte(inHex.substring(i, i + 2));
-            j++;
-        }
-        return result;
     }
 
 }

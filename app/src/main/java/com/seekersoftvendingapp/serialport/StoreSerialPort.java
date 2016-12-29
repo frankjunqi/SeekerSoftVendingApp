@@ -188,15 +188,24 @@ public class StoreSerialPort {
         }
     }
 
-    public static String getStoreCommand(String cmd) {
-        return (cmd.replaceAll("\\s*", "") + String.format("%04x", new Object[]{Integer.valueOf(getSum(cmd))})).toUpperCase();
+
+    public static void main(String[] args) throws Exception {
+        String cmdOpenStoreDoor = cmdOpenStoreDoor(2, 1, 3);
+        System.out.print("cmdOpenStoreDoor = " + cmdOpenStoreDoor + "\n");
+
+        String cmdCheckStoreDoor = cmdCheckStoreDoor(2, 1);
+        System.out.print("cmdCheckStoreDoor = " + cmdCheckStoreDoor + "\n");
+
+        String cmdCheckStoreStatus = cmdCheckStoreStatus(1, 1);
+        System.out.print("cmdCheckStoreStatus = " + cmdCheckStoreStatus + "\n");
+
     }
 
     public static String cmdOpenStoreDoor(int type, int number, int door) {
         return getStoreCommand(new StringBuilder(
                 String.valueOf(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
                         .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
-                        .append("00 01 00 01").toString()))
+                        .append("00010001").toString()))
                 .append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());
     }
 
@@ -204,13 +213,17 @@ public class StoreSerialPort {
         return getStoreCommand(new StringBuilder(
                 String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
                 .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
-                .append("00 02 00 01 00").toString());
+                .append("0002000100").toString());
     }
 
     public static String cmdCheckStoreStatus(int type, int number) {
         return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
                 .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
-                .append("00 E0 00 01 00").toString());
+                .append("00E0000100").toString());
+    }
+
+    public static String getStoreCommand(String cmd) {
+        return (cmd.replaceAll("\\s*", "") + String.format("%04x", new Object[]{Integer.valueOf(getSum(cmd))})).toUpperCase();
     }
 
     public static int getSum(String cmd) {

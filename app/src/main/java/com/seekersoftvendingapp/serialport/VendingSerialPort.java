@@ -223,7 +223,7 @@ public class VendingSerialPort {
      * @param cmd
      * @return
      */
-    public static String getVenderCommand(String cmd) {
+    private static String getVenderCommand(String cmd) {
         String cmdString = cmd.replaceAll("\\s*", "");
         return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
     }
@@ -234,7 +234,7 @@ public class VendingSerialPort {
      * @param cmd 原始命令
      * @return
      */
-    public static int getBCC(String cmd) {
+    private static int getBCC(String cmd) {
         int bcc = 0;
         for (int i = 1; i <= cmd.length() / 2; i++) {
             bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
