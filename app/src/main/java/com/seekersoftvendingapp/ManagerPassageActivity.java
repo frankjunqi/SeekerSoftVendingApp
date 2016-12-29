@@ -205,13 +205,13 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 passageListMain.add(passage);
             } else {
                 switch (passage.getFlag()) {
-                    case "A":
+                    case "1":
                         passageListA.add(passage);
                         break;
-                    case "B":
+                    case "2":
                         passageListB.add(passage);
                         break;
-                    case "C":
+                    case "3":
                         passageListC.add(passage);
                         break;
                     default:

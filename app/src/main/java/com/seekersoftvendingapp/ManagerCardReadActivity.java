@@ -66,7 +66,6 @@ public class ManagerCardReadActivity extends BaseActivity {
      * @param adminCardNum 管理员卡号
      */
     private void handleReadCardAfterBusniess(String adminCardNum) {
-        Toast.makeText(ManagerCardReadActivity.this, adminCardNum.length() + "", Toast.LENGTH_SHORT).show();
         adminCardNum = adminCardNum.substring(1);
         List<AdminCard> adminList = adminCardDao.queryBuilder()
                 .where(AdminCardDao.Properties.IsDel.eq(false))

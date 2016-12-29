@@ -22,11 +22,19 @@
         android:layout_marginTop="40dp"
         android:text="还货..." />
 
+    <ImageView
+        android:id="@+id/iv_readcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_return_goods"
+        android:layout_centerInParent="true"
+        android:src="@drawable/read_card" />
+
     <TextView
         android:id="@+id/tv_errordesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_return_goods"
+        android:layout_below="@id/iv_readcard"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:textColor="@color/colorAccent"
