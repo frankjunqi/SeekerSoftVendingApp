@@ -2,10 +2,14 @@ package com.seekersoftvendingapp.serialport;
 
 import android.util.Log;
 
+import com.seekersoftvendingapp.util.KeyChangeUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Card Read Serial Port Util
@@ -126,11 +130,8 @@ public class StoreSerialPort {
                     byte[] buffer = new byte[1];
                     size = mInputStream.read(buffer);
                     IDNUM = IDNUM + new String(buffer, 0, size);
-
                     // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
                     onDataReceiveListener.onDataReceiveBuffer(buffer, size);
-                    //Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
-
                     // 默认以 "\n" 结束读取
                     if (IDNUM.endsWith("\n")) {
                         if (null != onDataReceiveListener) {
@@ -138,7 +139,6 @@ public class StoreSerialPort {
                             IDNUM = "";
                         }
                     }
-
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                     return;
@@ -198,7 +198,6 @@ public class StoreSerialPort {
 
         String cmdCheckStoreStatus = cmdCheckStoreStatus(1, 1);
         System.out.print("cmdCheckStoreStatus = " + cmdCheckStoreStatus + "\n");
-
     }
 
     public static String cmdOpenStoreDoor(int type, int number, int door) {
