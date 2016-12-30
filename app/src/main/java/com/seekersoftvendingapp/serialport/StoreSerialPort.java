@@ -2,10 +2,14 @@ package com.seekersoftvendingapp.serialport;
 
 import android.util.Log;
 
+import com.seekersoftvendingapp.util.KeyChangeUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Card Read Serial Port Util
@@ -126,11 +130,8 @@ public class StoreSerialPort {
                     byte[] buffer = new byte[1];
                     size = mInputStream.read(buffer);
                     IDNUM = IDNUM + new String(buffer, 0, size);
-
                     // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
                     onDataReceiveListener.onDataReceiveBuffer(buffer, size);
-                    //Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
-
                     // 默认以 "\n" 结束读取
                     if (IDNUM.endsWith("\n")) {
                         if (null != onDataReceiveListener) {
@@ -138,7 +139,6 @@ public class StoreSerialPort {
                             IDNUM = "";
                         }
                     }
-
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                     return;
@@ -183,60 +183,48 @@ public class StoreSerialPort {
         }
         if (mSerialPort != null) {
             mSerialPort.close();
+            mSerialPort = null;
+            portUtil = null;
         }
     }
 
-    /**
-     * 业务层面的参数拼接
-     *
-     * @param col 列号
-     * @param row 行号
-     * @return
-     */
-    public static String cmdOpenVender(int col, int row) {
-        return getVenderCommand("53" + String.format("%02x%02x000000", new Object[]{Integer.valueOf(col + 48), Integer.valueOf(row + 48)}));
+
+    public static void main(String[] args) throws Exception {
+        String cmdOpenStoreDoor = cmdOpenStoreDoor(2, 1, 3);
+        System.out.print("cmdOpenStoreDoor = " + cmdOpenStoreDoor + "\n");
+
+        String cmdCheckStoreDoor = cmdCheckStoreDoor(2, 1);
+        System.out.print("cmdCheckStoreDoor = " + cmdCheckStoreDoor + "\n");
+
+        String cmdCheckStoreStatus = cmdCheckStoreStatus(1, 1);
+        System.out.print("cmdCheckStoreStatus = " + cmdCheckStoreStatus + "\n");
     }
 
-    /**
-     * 获取打开螺纹柜的串口命令
-     *
-     * @param cmd
-     * @return
-     */
-    public static String getVenderCommand(String cmd) {
-        String cmdString = cmd.replaceAll("\\s*", "");
-        return ("AA" + cmdString + Integer.toHexString(getBCC(cmdString)) + "AC").toUpperCase();
+    public static String cmdOpenStoreDoor(int type, int number, int door) {
+        return getStoreCommand(new StringBuilder(
+                String.valueOf(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
+                        .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
+                        .append("00010001").toString()))
+                .append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());
     }
 
-    /**
-     * 获取校验位
-     *
-     * @param cmd 原始命令
-     * @return
-     */
-    public static int getBCC(String cmd) {
-        int bcc = 0;
-        for (int i = 1; i <= cmd.length() / 2; i++) {
-            bcc ^= Integer.parseInt(cmd.substring((i * 2) - 2, i * 2), 16);
-        }
-        return bcc;
+    public static String cmdCheckStoreDoor(int type, int number) {
+        return getStoreCommand(new StringBuilder(
+                String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
+                .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
+                .append("0002000100").toString());
+    }
+
+    public static String cmdCheckStoreStatus(int type, int number) {
+        return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)})))
+                .append(String.format("%04x", new Object[]{Integer.valueOf(number)}))
+                .append("00E0000100").toString());
     }
 
     public static String getStoreCommand(String cmd) {
         return (cmd.replaceAll("\\s*", "") + String.format("%04x", new Object[]{Integer.valueOf(getSum(cmd))})).toUpperCase();
     }
 
-    public static String cmdOpenStoreDoor(int type, int number, int door) {
-        return getStoreCommand(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 01 00 01").toString())).append(String.format("%02x", new Object[]{Integer.valueOf(door)})).toString());
-    }
-
-    public static String cmdCheckStoreDoor(int type, int number) {
-        return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 02 00 01 00").toString());
-    }
-
-    public static String cmdCheckStoreStatus(int type, int number) {
-        return getStoreCommand(new StringBuilder(String.valueOf(String.format("%04x", new Object[]{Integer.valueOf(type)}))).append(String.format("%04x", new Object[]{Integer.valueOf(number)})).append("00 E0 00 01 00").toString());
-    }
     public static int getSum(String cmd) {
         int sum = 0;
         String inHex = cmd.replaceAll("\\s*", "");

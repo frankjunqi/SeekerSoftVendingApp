@@ -20,7 +20,6 @@ import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.returnpro.ReturnProResBody;
@@ -54,10 +53,12 @@ public class ReturnCardReadActivity extends BaseActivity {
     private String productId = "";
     private String pasageId = "";
     private String passageFlag = "";
-    private PassageDao passageDao;
+
     private EmpPowerDao empPowerDao;
     private EmployeeDao employeeDao;
+
     private Passage passage;
+
     private Handler mHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -86,7 +87,6 @@ public class ReturnCardReadActivity extends BaseActivity {
         setContentView(R.layout.activity_return_cardread);
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        passageDao = daoSession.getPassageDao();
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
 
@@ -197,10 +197,17 @@ public class ReturnCardReadActivity extends BaseActivity {
      * @return
      */
     private void cmdBufferStoreSerial(String objectId) {
-        String cmd = StoreSerialPort.cmdOpenVender(pasageId.charAt(0), pasageId.charAt(1));
-        boolean open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
+        boolean open = false;
+        try {
+            String cmd = StoreSerialPort.cmdOpenStoreDoor(2,
+                    TextUtils.isEmpty(passage.getFlag()) ? 0 : Integer.parseInt(passage.getFlag()),
+                    Integer.parseInt(passage.getSeqNo()));
+            open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
+        } catch (Exception e) {
+            open = false;
+        }
         StoreSerialPort.getInstance().closeSerialPort();
-        if (true) {
+        if (open) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, false, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() + 1);
