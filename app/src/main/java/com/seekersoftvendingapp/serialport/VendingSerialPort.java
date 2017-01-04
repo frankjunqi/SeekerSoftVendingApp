@@ -131,10 +131,8 @@ public class VendingSerialPort {
                     byte[] buffer = new byte[1];
                     size = mInputStream.read(buffer);
                     IDNUM = IDNUM + new String(buffer, 0, size);
-
                     // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
                     onDataReceiveListener.onDataReceiveBuffer(buffer, size);
-                    //Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
 
                     // 默认以 "\n" 结束读取
                     if (IDNUM.endsWith("\n")) {
