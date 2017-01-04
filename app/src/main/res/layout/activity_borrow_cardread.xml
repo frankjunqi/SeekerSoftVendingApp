@@ -11,24 +11,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="读取卡号: 123456"
         android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/btn_return_goods"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_cradnumber"
-        android:layout_marginTop="40dp"
-        android:text="借货..." />
 
     <ImageView
         android:id="@+id/iv_readcard"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/btn_return_goods"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/read_card" />
 
     <TextView
@@ -48,6 +38,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="返回首页" />
+
+    <Button
+        android:id="@+id/btn_return_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_cradnumber"
+        android:layout_marginTop="43dp"
+        android:text="借货..."
+        android:visibility="gone" />
 
 
 </RelativeLayout>
