@@ -7,10 +7,10 @@ package com.seekersoftvendingapp.util;
 public class SeekerSoftConstant {
 
     // 设备号
-    public static String DEVICEID = "123";
-    public static String CARDID = "123456";// 585000b2128fe1006931525a   ||   98152
+    public static String DEVICEID = "";
+    public static String CARDID = "";// 585000b2128fe1006931525a   ||   98152
 
-    public static final String ADMINCARDNUM = "12312";
+    public static final String ADMINCARDNUM = "";
 
     // 网络是否链接
     public static boolean NETWORKCONNECT = true;

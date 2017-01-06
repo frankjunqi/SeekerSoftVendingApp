@@ -105,12 +105,17 @@ public class StartAppActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "");
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", SeekerSoftConstant.DEVICEID, "");
         Log.e("json", "getSynchroBaseData = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
-                if (response != null && response.body() != null) {
+                if (response != null && response.body() != null && response.body().data != null
+                        && response.body().data.AdminCard.size() > 0
+                        && response.body().data.Passage.size() > 0
+                        && response.body().data.EmpPower.size() > 0
+                        && response.body().data.Product.size() > 0
+                        && response.body().data.Employee.size() > 0) {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
                     empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
@@ -121,7 +126,7 @@ public class StartAppActivity extends BaseActivity {
                     successInit();
                 } else {
                     mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                    Toast.makeText(StartAppActivity.this, "基础数据获取失败. response == null or response.body() == null", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartAppActivity.this, "【" + response.body().msg + "】", Toast.LENGTH_SHORT).show();
                 }
             }
 
