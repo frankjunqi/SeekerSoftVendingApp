@@ -22,7 +22,7 @@ import java.util.List;
 public class SynchroBaseDataResBody implements Serializable {
 
     public int status;// 服务器返回的状态码
-    public String msg;// 服务器返回具体状态码描述信息
+    public String message;// 服务器返回具体状态码描述信息
     public SyncharBaseEntity data = new SyncharBaseEntity();
     public String server_time;// 返回服务器时间
 
@@ -117,6 +117,6 @@ public class SynchroBaseDataResBody implements Serializable {
 
     @Override
     public String toString() {
-        return "{ status = " + status + ",\nmsg = " + msg + ",\nserver_time = " + server_time + ",\ndata = " + data.toString() + "}";
+        return "{ status = " + status + ",\nmessage = " + message + ",\nserver_time = " + server_time + ",\ndata = " + data.toString() + "}";
     }
 }

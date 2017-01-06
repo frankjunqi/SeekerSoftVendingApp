@@ -111,10 +111,15 @@ public class StartAppActivity extends BaseActivity {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 if (response != null && response.body() != null && response.body().data != null
+                        && response.body().data.AdminCard != null
                         && response.body().data.AdminCard.size() > 0
+                        && response.body().data.Passage != null
                         && response.body().data.Passage.size() > 0
+                        && response.body().data.EmpPower != null
                         && response.body().data.EmpPower.size() > 0
+                        && response.body().data.Product != null
                         && response.body().data.Product.size() > 0
+                        && response.body().data.Employee != null
                         && response.body().data.Employee.size() > 0) {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
@@ -126,7 +131,7 @@ public class StartAppActivity extends BaseActivity {
                     successInit();
                 } else {
                     mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                    Toast.makeText(StartAppActivity.this, "【" + response.body().msg + "】", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartAppActivity.this, "【" + response.body().message + "】", Toast.LENGTH_SHORT).show();
                 }
             }
 

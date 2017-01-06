@@ -28,7 +28,7 @@ public class SeekerSoftConstant {
     public static final String EXITAPP = "exitapp";
     public static final int EXITAPPFALG = 1;
 
-    public final static int BASEDATALOOPER = 3000;
+    public final static int BASEDATALOOPER = 1500;
 
     public final static String PASSAGE = "PASSAGE";// new Passga()
     public final static String TAKEOUTERROR = "TAKEOUTERROR";
