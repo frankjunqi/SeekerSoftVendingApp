@@ -34,6 +34,9 @@ public class TakeOutError implements Serializable {
 
     private int takeOutFLag;
 
+    // 接口返回的错误信息
+    public String serverMsg = "";
+
     public TakeOutError(int takeOutFLag) {
         this.takeOutFLag = takeOutFLag;
     }

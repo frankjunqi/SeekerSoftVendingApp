@@ -247,9 +247,9 @@ public class BorrowCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             if (tv_errordesc != null) {
-                tv_errordesc.setText(takeOutError.getTakeOutMsg());
+                tv_errordesc.setText(takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg());
             }
-            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题", takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
@@ -311,6 +311,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
                     TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
+                    takeOutError.serverMsg = response.body().message;
                     handleResult(takeOutError);
                 }
                 hideProgress();

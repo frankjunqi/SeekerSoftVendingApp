@@ -111,8 +111,6 @@ public class StartAppActivity extends BaseActivity {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 if (response != null && response.body() != null && response.body().data != null
-                        && response.body().data.AdminCard != null
-                        && response.body().data.AdminCard.size() > 0
                         && response.body().data.Passage != null
                         && response.body().data.Passage.size() > 0
                         && response.body().data.EmpPower != null
