@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="@dimen/big_text_size"
             android:text="主柜" />
 
         <Button
@@ -24,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="@dimen/big_text_size"
             android:text="A" />
 
         <Button
@@ -31,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="@dimen/big_text_size"
             android:text="B" />
 
         <Button
@@ -38,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="@dimen/big_text_size"
             android:text="C" />
 
     </LinearLayout>
@@ -63,6 +67,7 @@
             android:layout_below="@id/iv_empty"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:textSize="@dimen/big_text_size"
             android:text="暂时还没有内容哦" />
 
 
@@ -73,6 +78,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:textSize="@dimen/big_text_size"
+        android:minHeight="@dimen/min_height"
         android:text="返回首页" />
 
     <com.seekersoftvendingapp.view.EmptyRecyclerView
