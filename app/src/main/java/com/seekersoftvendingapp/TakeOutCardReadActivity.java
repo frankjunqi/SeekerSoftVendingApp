@@ -172,12 +172,12 @@ public class TakeOutCardReadActivity extends BaseActivity {
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
-                Toast.makeText(TakeOutCardReadActivity.this, "vending return = " + IDNUM, Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onDataReceiveBuffer(byte[] buffer, int size) {
-                Log.e(TAG, "length is:" + size + ",data is:" + new String(buffer, 0, size));
+                Toast.makeText(TakeOutCardReadActivity.this, "Vending Serial = " + new String(buffer, 0, size), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -194,7 +194,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
 
             @Override
             public void onDataReceiveBuffer(byte[] buffer, int size) {
-
+                Toast.makeText(TakeOutCardReadActivity.this, "Store Serial = " + new String(buffer, 0, size), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -221,13 +221,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private void outProResult(TakeOutError takeOutError) {
         if (takeOutError.isSuccess()) {
             // 串口螺纹passageID操作 || 格子消费柜子的passageId操作
-            if (pasageId.length() >= 3) {
-                // TODO 串口副柜
-                pasageId.charAt(0);
-            } else {
-                // 串口螺纹
-                cmdBufferVendingSerial("");
-            }
+            cmdBufferVendingStoreSerial("");
         } else {
             // 重新打开打卡串口
             openCardSerialPort();
@@ -241,7 +235,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
      *
      * @param objectId 出货的服务端的记录的objectid
      */
-    private void cmdBufferVendingSerial(String objectId) {
+    private void cmdBufferVendingStoreSerial(String objectId) {
         boolean open = false;
 
         if (isStoreSend) {
@@ -266,8 +260,15 @@ public class TakeOutCardReadActivity extends BaseActivity {
             }
         }
 
+        // 成功
         if (open) {
-            VendingSerialPort.getInstance().closeSerialPort();
+            if (isStoreSend) {
+                // 关闭格子柜
+                StoreSerialPort.getInstance().closeSerialPort();
+            } else {
+                // 关闭螺纹柜
+                VendingSerialPort.getInstance().closeSerialPort();
+            }
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
@@ -282,7 +283,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
 
             // 串口打开螺纹柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
-        } else {
+        }
+        // 失败
+        else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(), "", "", "");
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
@@ -303,9 +306,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             if (tv_errordesc != null) {
-                tv_errordesc.setText(takeOutError.serverMsg + "---" + takeOutError.getTakeOutMsg());
+                tv_errordesc.setText(SeekerSoftConstant.CARDID + takeOutError.serverMsg + "---" + takeOutError.getTakeOutMsg());
             }
-            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题: " + SeekerSoftConstant.CARDID + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
@@ -379,7 +382,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             @Override
             public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {
                 if (response != null && response.body() != null && response.body().data.result) {
-                    cmdBufferVendingSerial(response.body().data.objectId);
+                    cmdBufferVendingStoreSerial(response.body().data.objectId);
                 } else {
                     // 此人没有权限,不可以出货
                     openCardSerialPort();

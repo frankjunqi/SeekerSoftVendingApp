@@ -154,7 +154,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
             @Override
             public void onDataReceiveBuffer(byte[] buffer, int size) {
-
+                Toast.makeText(ReturnCardReadActivity.this, "Return Store = " + new String(buffer, 0, size), Toast.LENGTH_SHORT).show();
             }
         });
     }

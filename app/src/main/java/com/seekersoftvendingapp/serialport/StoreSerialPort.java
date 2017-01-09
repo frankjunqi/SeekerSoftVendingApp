@@ -121,7 +121,7 @@ public class StoreSerialPort {
         @Override
         public void run() {
             super.run();
-            String IDNUM = "";
+            String IDNUMHEX = "";
             while (!isStop && !isInterrupted()) {
                 int size;
                 try {
@@ -129,16 +129,16 @@ public class StoreSerialPort {
                         return;
                     byte[] buffer = new byte[1];
                     size = mInputStream.read(buffer);
-                    IDNUM = IDNUM + new String(buffer, 0, size);
+                    String str = new String(buffer, 0, size);
                     // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
                     onDataReceiveListener.onDataReceiveBuffer(buffer, size);
                     // 默认以 "\n" 结束读取
-                    if (IDNUM.endsWith("\n")) {
+                    /*if (IDNUM.endsWith("\n")) {
                         if (null != onDataReceiveListener) {
                             onDataReceiveListener.onDataReceiveString(IDNUM);
                             IDNUM = "";
                         }
-                    }
+                    }*/
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                     return;
@@ -198,6 +198,28 @@ public class StoreSerialPort {
 
         String cmdCheckStoreStatus = cmdCheckStoreStatus(1, 1);
         System.out.print("cmdCheckStoreStatus = " + cmdCheckStoreStatus + "\n");
+
+        String cmd = "00020001A103";
+        System.out.print(getSum(cmd));
+
+        String cmd2 = "00A7";
+        System.out.print(getSum(cmd2));
+    }
+
+    public static String bytesToHexString(byte[] src) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (int i = 0; i < src.length; i++) {
+            int v = src[i] & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
     }
 
     public static String cmdOpenStoreDoor(int type, int number, int door) {
