@@ -46,5 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:textSize="@dimen/big_text_size"
+        android:minHeight="@dimen/min_height"
         android:text="返回首页" />
 </RelativeLayout>

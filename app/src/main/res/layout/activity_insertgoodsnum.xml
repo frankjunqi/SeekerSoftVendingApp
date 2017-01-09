@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="返回首页" />
+        android:text="返回首页"
+        android:minHeight="@dimen/min_height"
+        android:textSize="@dimen/big_text_size"/>
 
     <LinearLayout
         android:id="@+id/ll_keyboard"

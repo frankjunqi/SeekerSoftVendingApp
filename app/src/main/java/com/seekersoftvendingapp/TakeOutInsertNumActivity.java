@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.util.KeyChangeUtil;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
@@ -73,13 +74,20 @@ public class TakeOutInsertNumActivity extends BaseActivity {
             return;
         }
 
+        String isFirstFlag = keyPassage.substring(0, 1);
+        String outNum = KeyChangeUtil.getFlagInt(isFirstFlag);
+        if(!TextUtils.isEmpty(outNum)){
+            keyPassage = keyPassage.substring(1,keyPassage.length());
+        }
         // 检查数据库是否有该货道的资源数据（唯一）
         // isDel = false & Stock > 0 & seqNo == keyPassage
         List<Passage> list = passageDao.queryBuilder()
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0)) // 判断库存
                 .where(PassageDao.Properties.IsSend.eq(true))// issend: "true:销售 false:借还"
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage)).list();
+                .where(PassageDao.Properties.SeqNo.eq(keyPassage))
+                .where(PassageDao.Properties.Flag.eq(outNum))
+                .list();
         if (list != null && list.size() > 0) {
             // 检查是否有该硬件货道??
 

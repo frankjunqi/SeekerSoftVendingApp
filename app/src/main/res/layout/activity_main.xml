@@ -15,19 +15,25 @@
             android:id="@+id/btn_getproduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="btn_取货" />
+            android:textSize="@dimen/big_text_size"
+            android:minHeight="@dimen/min_height"
+            android:text="取货" />
 
         <Button
             android:id="@+id/btn_borrow"
+            android:textSize="@dimen/big_text_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="btn_借" />
+            android:minHeight="@dimen/min_height"
+            android:text="借货" />
 
         <Button
             android:id="@+id/btn_back"
+            android:textSize="@dimen/big_text_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="btn_还" />
+            android:minHeight="@dimen/min_height"
+            android:text="还货" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,6 +51,8 @@
             android:id="@+id/btn_manage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="btn_管理" />
+            android:minHeight="@dimen/min_height"
+            android:textSize="@dimen/big_text_size"
+            android:text="管理" />
     </LinearLayout>
 </RelativeLayout>

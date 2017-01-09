@@ -37,7 +37,7 @@ public class StoreSerialPort {
     private boolean isStop = false;
 
     // device & baudrate
-    private String devicePath = "/dev/ttymxc1";// tty02--- ttymxc1   ; tty6---ttyES0
+    private String devicePath = "/dev/ttymxc2";// tty02--- ttymxc1   ; tty6---ttyES0
 
     private int baudrate = 38400;
 

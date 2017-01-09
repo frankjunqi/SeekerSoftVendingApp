@@ -82,11 +82,11 @@ public class ManagerCardReadActivity extends BaseActivity {
         } else {
             // 此人不是管理员则提示他不是管理员，并且重新打开串口
             if (tv_errordesc != null) {
-                tv_errordesc.setText(adminCardNum + "此卡不是管理卡,请您换管理卡，重新刷卡...");
+                tv_errordesc.setText(adminCardNum + "此卡:" + adminCardNum + "不是管理卡,请您换管理卡，重新刷卡...");
             }
             openCardSerialPort();
 
-            ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡不是管理卡.", DataFormat.getNowTime(), "", "", "");
+            ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡:" + adminCardNum + "不是管理卡.", DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
