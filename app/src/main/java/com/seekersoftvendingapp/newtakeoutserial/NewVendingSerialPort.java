@@ -197,8 +197,8 @@ public class NewVendingSerialPort {
     private void ACKorNAK(byte id, int is) {
         byte[] data = new byte[3];
         data[0] = id;
-        data[1] = is;
-        data[2] = is ^ id;
+        //data[1] = is;
+        //data[2] = is ^ id;
         sendBuffer(data);
     }
 
@@ -215,7 +215,7 @@ public class NewVendingSerialPort {
                 break;
             case 0x56://POLL指令
                 if (getOutShipment() != null) {
-                    Answer(0x03);
+                    //Answer(0x03);
                 } else {
                     ACKorNAK(id, ACK);
                 }

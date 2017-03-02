@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartAppActivity"
+            android:name=".SettingActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,7 @@
         <activity android:name=".test.TestStoreActivity" />
 
 
-        <activity android:name=".SettingActivity" />
+        <activity android:name=".StartAppActivity" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop" />
@@ -62,6 +62,8 @@
         <activity android:name=".ManagerGoodsActivity" />
         <activity android:name=".ManagerPassageActivity" />
         <activity android:name=".ManagerCardReadActivity" />
+        <activity android:name=".WebviewActivity" />
+
 
         <receiver android:name=".util.NetworkBroadcastReceiver">
             <intent-filter>

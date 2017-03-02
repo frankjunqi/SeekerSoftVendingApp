@@ -163,6 +163,7 @@ public class SettingActivity extends BaseActivity {
         btn_show_progress.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, WebviewActivity.class));
             }
         });
 
