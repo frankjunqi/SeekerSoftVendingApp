@@ -71,12 +71,12 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".util.AutoStartReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".util.AutoStartReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!--<category android:name="android.intent.category.HOME" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <receiver
             android:name=".updateapk.TCTInsatllActionBroadcastReceiver"

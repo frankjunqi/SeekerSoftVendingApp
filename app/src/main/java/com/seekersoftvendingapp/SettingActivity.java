@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
 import com.seekersoftvendingapp.database.rxdao.TestNoteRXDaoActivity;
 import com.seekersoftvendingapp.image.TestFrescoActivity;
 import com.seekersoftvendingapp.network.TestNetworkActivity;
+import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.test.TestCardReadActivity;
 import com.seekersoftvendingapp.test.TestStoreActivity;
 import com.seekersoftvendingapp.test.TestVendingActivity;
@@ -171,6 +173,17 @@ public class SettingActivity extends BaseActivity {
         btn_hide_progress.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                NewVendingSerialPort.getInstance().setOnDataReceiveListener(new NewVendingSerialPort.OnDataReceiveListener() {
+                    @Override
+                    public void onDataReceiveString(String IDNUM) {
+                        Log.e("buffer: ",IDNUM);
+                    }
+
+                    @Override
+                    public void onDataReceiveBuffer(byte[] buffer, int size) {
+                        //Log.e("buffer: ",new String(buffer, 0, size));
+                    }
+                });
             }
         });
 
