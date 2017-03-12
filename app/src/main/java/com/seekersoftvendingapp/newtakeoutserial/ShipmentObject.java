@@ -6,7 +6,7 @@ package com.seekersoftvendingapp.newtakeoutserial;
  */
 
 public class ShipmentObject {
-    public long timestamp;// 时间戳
-    public int cow;
-    public int row;
+    public long timestamp = 121212;// 时间戳
+    public int cow = 1;
+    public int row = 1;
 }
