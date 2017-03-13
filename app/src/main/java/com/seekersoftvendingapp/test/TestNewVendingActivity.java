@@ -40,6 +40,8 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
 
     }
 
+    private int count = 0;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -50,7 +52,7 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
                 ShipmentObject shipmentObject = new ShipmentObject();
                 shipmentObject.col = col;
                 shipmentObject.row = row;
-                shipmentObject.timestamp = System.currentTimeMillis();
+                shipmentObject.timestamp = count++;
 
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                     @Override
