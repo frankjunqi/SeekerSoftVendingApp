@@ -40,6 +40,7 @@
         <activity android:name=".network.TestNetworkActivity" />
         <activity android:name=".test.TestVendingActivity" />
         <activity android:name=".test.TestStoreActivity" />
+        <activity android:name=".test.TestNewVendingActivity" />
 
 
         <activity android:name=".StartAppActivity" />
@@ -72,10 +73,10 @@
         </receiver>
 
         <!--<receiver android:name=".util.AutoStartReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
-                <!--<category android:name="android.intent.category.HOME" />-->
-            <!--</intent-filter>-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--<category android:name="android.intent.category.HOME" />-->
+        <!--</intent-filter>-->
         <!--</receiver>-->
 
         <receiver

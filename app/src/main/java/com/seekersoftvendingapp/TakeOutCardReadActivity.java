@@ -25,9 +25,10 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.serialport.CardReadSerialPort;
 import com.seekersoftvendingapp.serialport.StoreSerialPort;
-import com.seekersoftvendingapp.serialport.VendingSerialPort;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
@@ -137,7 +138,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         if (isStoreSend) {
             openStoreSerialPort();
         } else {
-            openVendingSerialPort();
+           /* openVendingSerialPort();*/
         }
 
         countDownTimer.start();
@@ -168,7 +169,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
     /**
      * 打开串口螺纹  ---  发送指令出货
      */
-    private void openVendingSerialPort() {
+    /*private void openVendingSerialPort() {
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
@@ -180,7 +181,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Toast.makeText(TakeOutCardReadActivity.this, "Vending Serial = " + new String(buffer, 0, size), Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     /**
      * 打开格子柜子串口
@@ -235,10 +236,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
      *
      * @param objectId 出货的服务端的记录的objectid
      */
-    private void cmdBufferVendingStoreSerial(String objectId) {
-        boolean open = false;
-
+    private void cmdBufferVendingStoreSerial(final String objectId) {
         if (isStoreSend) {
+            boolean open = false;
             // 格子柜子
             try {
                 String cmd = StoreSerialPort.cmdOpenStoreDoor(2,
@@ -253,21 +253,37 @@ public class TakeOutCardReadActivity extends BaseActivity {
             try {
                 int col = Integer.parseInt(pasageId.substring(0, 1));
                 int row = Integer.parseInt(pasageId.substring(1, 2));
-                String cmd = VendingSerialPort.cmdOpenVender(col, row);
-                open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));
+
+                ShipmentObject shipmentObject = new ShipmentObject();
+                shipmentObject.col = col;
+                shipmentObject.row = row;
+                shipmentObject.timestamp = System.currentTimeMillis();
+
+                NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+                    @Override
+                    public void onCmdCallBack(boolean isSuccess) {
+                        handleNewVendingSerialPort(isSuccess, objectId);
+                    }
+                });
+                /*String cmd = VendingSerialPort.cmdOpenVender(col, row);
+                open = VendingSerialPort.getInstance().sendBuffer(VendingSerialPort.HexToByteArr(cmd));*/
             } catch (Exception e) {
-                open = false;
+                handleNewVendingSerialPort(false, objectId);
             }
         }
 
+
+    }
+
+    private void handleNewVendingSerialPort(boolean isSuccessOpen, String objectId) {
         // 成功
-        if (open) {
+        if (isSuccessOpen) {
             if (isStoreSend) {
                 // 关闭格子柜
                 StoreSerialPort.getInstance().closeSerialPort();
             } else {
                 // 关闭螺纹柜
-                VendingSerialPort.getInstance().closeSerialPort();
+                /*VendingSerialPort.getInstance().closeSerialPort();*/
             }
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, productId, new Date(), "", "", "");
@@ -412,6 +428,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
         }
         // 关闭串口(读卡器 & 螺纹柜子)
         CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-        VendingSerialPort.getInstance().closeSerialPort();
+        /*VendingSerialPort.getInstance().closeSerialPort();*/
     }
 }

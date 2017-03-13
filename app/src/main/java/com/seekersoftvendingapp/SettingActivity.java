@@ -23,6 +23,7 @@ import com.seekersoftvendingapp.image.TestFrescoActivity;
 import com.seekersoftvendingapp.network.TestNetworkActivity;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.test.TestCardReadActivity;
+import com.seekersoftvendingapp.test.TestNewVendingActivity;
 import com.seekersoftvendingapp.test.TestStoreActivity;
 import com.seekersoftvendingapp.test.TestVendingActivity;
 
@@ -173,17 +174,7 @@ public class SettingActivity extends BaseActivity {
         btn_hide_progress.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewVendingSerialPort.getInstance().setOnDataReceiveListener(new NewVendingSerialPort.OnDataReceiveListener() {
-                    @Override
-                    public void onDataReceiveString(String IDNUM) {
-                        Log.e("buffer: ",IDNUM);
-                    }
-
-                    @Override
-                    public void onDataReceiveBuffer(byte[] buffer, int size) {
-                        //Log.e("buffer: ",new String(buffer, 0, size));
-                    }
-                });
+                startActivity(new Intent(SettingActivity.this, TestNewVendingActivity.class));
             }
         });
 

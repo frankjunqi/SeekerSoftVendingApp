@@ -82,6 +82,8 @@ public class NewVendingSerialPort {
     private OutputStream mOutputStream;
     private InputStream mInputStream;
     private OnDataReceiveListener onDataReceiveListener = null;
+    private OnCmdCallBackListen onCmdCallBackListen = null;
+
     private ReadThread mReadThread;
     private boolean isStop = false;
     private String devicePath = "/dev/ttymxc1";// tty02
@@ -114,12 +116,13 @@ public class NewVendingSerialPort {
     }
 
     // 往堆栈中压人出货指令
-    public void cmdOutShipment(ShipmentObject shipmentObject) {
+    public NewVendingSerialPort pushCmdOutShipment(ShipmentObject shipmentObject) {
         stack.push(shipmentObject);
+        return this;
     }
 
     // 获取堆栈中栈顶指令
-    public ShipmentObject getOutShipment() {
+    public ShipmentObject popCmdOutShipment() {
         if (stack.isEmpty()) {
             return null;
         } else {
@@ -161,7 +164,7 @@ public class NewVendingSerialPort {
 
 
     // 工控回复vmc，在poll命令条件下
-    private void Answer(byte code) {
+    private void Answer(byte code, int proMum, int number) {
         byte[] sendData = new byte[200];
         byte checksum = 0;
         switch (code) {
@@ -171,14 +174,14 @@ public class NewVendingSerialPort {
                 System.out.println("<<<  VMC Out Product");
                 sendData[0] = POLL;
                 sendData[1] = code;//交易码
-                sendData[2] = 0;//货柜编号
-                sendData[3] = 11;//货道编号
+                sendData[2] = (byte) proMum;//货柜编号
+                sendData[3] = (byte) number;//货道编号
                 sendData[4] = 0;//变价出货
                 sendData[5] = 0;//售卖金额
                 sendData[6] = 0;//售卖金额
                 sendData[7] = 0;//售卖金额
                 sendData[8] = 0;//售卖金额
-                sendData[9] = 0;//支付方式
+                sendData[9] = 1;//支付方式
                 sendData[10] = 0;//流水号
                 sendData[11] = 0;//流水号
                 sendData[12] = 1;//流水号
@@ -186,7 +189,8 @@ public class NewVendingSerialPort {
                     checksum ^= sendData[i];
                 }
                 sendData[13] = checksum;
-                sendBuffer(sendData);
+                // TODO 此处需要重新根据出货成功标识进行判断是否成功出货的回调
+                onCmdCallBackListen.onCmdCallBack(sendBuffer(sendData));
                 break;
             case 0x04://设置货道的价格。
                 break;
@@ -234,8 +238,9 @@ public class NewVendingSerialPort {
                 break;
             case 0x56://POLL指令
                 System.out.println("<<<  0x56 POLL指令");
-                if (getOutShipment() != null) {
-                    Answer((byte) 0x03);
+                ShipmentObject shipmentObject = popCmdOutShipment();
+                if (shipmentObject != null) {
+                    Answer((byte) 0x03, shipmentObject.proNum, shipmentObject.getNum());
                 } else {
                     ACKorNAK(id, ACK);
                 }
@@ -282,17 +287,31 @@ public class NewVendingSerialPort {
         }
     }
 
+    /**
+     * 数据回调接口
+     */
     public interface OnDataReceiveListener {
+
         void onDataReceiveString(String IDNUM);
 
         void onDataReceiveBuffer(byte[] buffer, int size);
     }
 
-    public void setOnDataReceiveListener(OnDataReceiveListener dataReceiveListener) {
-        onDataReceiveListener = dataReceiveListener;
+    public interface OnCmdCallBackListen {
+        void onCmdCallBack(boolean isSuccess);
     }
 
-    public static NewVendingSerialPort getInstance() {
+    public NewVendingSerialPort setOnDataReceiveListener(OnDataReceiveListener dataReceiveListener) {
+        onDataReceiveListener = dataReceiveListener;
+        return this;
+    }
+
+    public NewVendingSerialPort setOnCmdCallBackListen(OnCmdCallBackListen onCmdCallBackListen) {
+        this.onCmdCallBackListen = onCmdCallBackListen;
+        return this;
+    }
+
+    public static NewVendingSerialPort SingleInit() {
         if (null == portUtil) {
             portUtil = new NewVendingSerialPort();
             portUtil.onCreate();
@@ -334,9 +353,12 @@ public class NewVendingSerialPort {
                     if (Protocal(buffer[0])) {
                         CMD(ReSign);
                     }
-                    onDataReceiveListener.onDataReceiveString(bytesToHexString(buffer));
-                    // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
-                    onDataReceiveListener.onDataReceiveBuffer(buffer, size);
+                    // 回传数据给业务
+                    if (onDataReceiveListener != null) {
+                        onDataReceiveListener.onDataReceiveString(bytesToHexString(buffer));
+                        // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
+                        onDataReceiveListener.onDataReceiveBuffer(buffer, size);
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                     return;
