@@ -168,7 +168,7 @@ public class NewVendingSerialPort {
             case 0x02://设置VMC的系统时间
                 break;
             case 0x03://通知VMC出货。
-                System.out.println("<<<  VMC out Product");
+                System.out.println("<<<  VMC Out Product");
                 sendData[0] = POLL;
                 sendData[1] = code;//交易码
                 sendData[2] = 0;//货柜编号
