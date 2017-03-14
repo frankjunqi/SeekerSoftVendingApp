@@ -184,13 +184,13 @@ public class NewVendingSerialPort {
                 sendData[9] = 1;//支付方式
                 sendData[10] = 0;//流水号
                 sendData[11] = 0;//流水号
-                sendData[12] = 1;//流水号
+                sendData[12] = (byte) number;//流水号
                 for (int i = 0; i < 13; i++) {
                     checksum ^= sendData[i];
                 }
                 sendData[13] = checksum;
                 // TODO 此处需要重新根据出货成功标识进行判断是否成功出货的回调
-                onCmdCallBackListen.onCmdCallBack(sendBuffer(sendData));
+                sendBuffer(sendData);
                 break;
             case 0x04://设置货道的价格。
                 break;
@@ -374,7 +374,7 @@ public class NewVendingSerialPort {
     // 校验数据是否格式签名正确
     public boolean Protocal(byte ch) {
         ReceiveData[ReceiveLn++] = ch;
-        // System.out.println("<<<  " + byteToInt(ch));
+        System.out.print(byteToInt(ch));
         int byteCh = byteToInt(ch);
         if ((state == DATASTATE.IDEL) && (byteCh == H1))//0xEF
         {
