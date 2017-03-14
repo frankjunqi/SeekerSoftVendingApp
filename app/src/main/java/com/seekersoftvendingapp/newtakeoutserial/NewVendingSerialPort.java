@@ -263,6 +263,12 @@ public class NewVendingSerialPort {
                 break;
             case 0x5C://出货
                 System.out.println("<<<  0x5C 出货");
+                // TODO 判断出货是否成功
+                if (ReceiveData != null && ReceiveData.length == 11) {
+
+                } else {
+                    onCmdCallBackListen.onCmdCallBack(false);
+                }
                 ACKorNAK(id, ACK);
                 break;
             case 0x5D://机器运行（故障）信息

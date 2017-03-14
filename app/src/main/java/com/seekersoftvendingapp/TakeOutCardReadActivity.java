@@ -166,10 +166,10 @@ public class TakeOutCardReadActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 打开串口螺纹  ---  发送指令出货
-     */
-    /*private void openVendingSerialPort() {
+
+    /*
+     打开串口螺纹  ---  发送指令出货
+    private void openVendingSerialPort() {
         VendingSerialPort.getInstance().setOnDataReceiveListener(new VendingSerialPort.OnDataReceiveListener() {
             @Override
             public void onDataReceiveString(String IDNUM) {
