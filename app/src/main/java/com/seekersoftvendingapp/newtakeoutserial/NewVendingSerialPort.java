@@ -164,7 +164,7 @@ public class NewVendingSerialPort {
 
 
     // 工控回复vmc，在poll命令条件下
-    private void Answer(byte code, int proMum, int number) {
+    private void Answer(byte code, int containerNum, int proMum, int objectId) {
         byte[] sendData = new byte[200];
         byte checksum = 0;
         switch (code) {
@@ -174,8 +174,8 @@ public class NewVendingSerialPort {
                 System.out.println("<<<  VMC Out Product");
                 sendData[0] = POLL;
                 sendData[1] = code;//交易码
-                sendData[2] = (byte) proMum;//货柜编号
-                sendData[3] = (byte) number;//货道编号
+                sendData[2] = (byte) containerNum;//货柜编号
+                sendData[3] = (byte) proMum;//货道编号
                 sendData[4] = 0;//变价出货
                 sendData[5] = 0;//售卖金额
                 sendData[6] = 0;//售卖金额
@@ -184,7 +184,7 @@ public class NewVendingSerialPort {
                 sendData[9] = 1;//支付方式
                 sendData[10] = 0;//流水号
                 sendData[11] = 0;//流水号
-                sendData[12] = (byte) number;//流水号
+                sendData[12] = (byte) objectId;//流水号
                 for (int i = 0; i < 13; i++) {
                     checksum ^= sendData[i];
                 }
@@ -240,7 +240,7 @@ public class NewVendingSerialPort {
                 System.out.println("<<<  0x56 POLL指令");
                 ShipmentObject shipmentObject = popCmdOutShipment();
                 if (shipmentObject != null) {
-                    Answer((byte) 0x03, shipmentObject.proNum, shipmentObject.getNum());
+                    Answer((byte) 0x03, shipmentObject.containerNum, shipmentObject.proNum, shipmentObject.objectId);
                 } else {
                     ACKorNAK(id, ACK);
                 }

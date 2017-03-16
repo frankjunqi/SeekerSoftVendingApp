@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.test;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +10,6 @@ import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
-import com.seekersoftvendingapp.serialport.VendingSerialPort;
 
 /**
  * Created by Frank on 16/11/20.
@@ -50,9 +48,8 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
                 int row = Integer.parseInt(et_row.getText().toString());
                 tv_showdata.setText(col + " " + row);
                 ShipmentObject shipmentObject = new ShipmentObject();
-                shipmentObject.col = col;
-                shipmentObject.row = row;
-                shipmentObject.timestamp = count++;
+                shipmentObject.proNum = col * 10 + row;
+                shipmentObject.objectId = count++;
 
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                     @Override

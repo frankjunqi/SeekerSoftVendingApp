@@ -1,6 +1,7 @@
 package com.seekersoftvendingapp.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -31,6 +32,12 @@ public class KeyBordView extends RelativeLayout implements View.OnClickListener 
 
     public String getKeyBoradStr() {
         return enterBuild.toString();
+    }
+
+    public void setKeyWordHint(String hint) {
+        if (tv_showstr != null && !TextUtils.isEmpty(hint)) {
+            tv_showstr.setHint(hint);
+        }
     }
 
     private void initView(Context context) {

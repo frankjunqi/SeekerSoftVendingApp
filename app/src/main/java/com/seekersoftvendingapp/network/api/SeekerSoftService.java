@@ -65,17 +65,17 @@ public interface SeekerSoftService {
 
 
     /*
-    http://smartbox.leanapp.cn/api/getData/[deviceid]/[timestamp] 获取基础数据 & 数据更新接口
+    http://smartbox.leanapp.cn/api/getData/[deviceid]/[objectId] 获取基础数据 & 数据更新接口
     根据上一次同步的时间戳获取更新时间大于时间戳的数据
-    参数：deviceid(设备ID)，timestamp(上一次同步的时间戳)
+    参数：deviceid(设备ID)，objectId(上一次同步的时间戳)
     返回值：data:{表1:[],表2:[]...}
     与初始化返回的数据表形式一致*/
-    @GET("{api}/{serviceName}/{deviceId}/{timestamp}")
+    @GET("{api}/{serviceName}/{deviceId}/{objectId}")
     Call<SynchroBaseDataResBody> getSynchroBaseData(
             @Path("api") String api,
             @Path("serviceName") String serviceName,
             @Path("deviceId") String deviceId,
-            @Path("timestamp") String timestamp
+            @Path("objectId") String timestamp
     );
 
 

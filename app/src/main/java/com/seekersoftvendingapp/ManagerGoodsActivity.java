@@ -62,7 +62,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managergoods);
-
+        setTitle("管理信息...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
 

@@ -2,14 +2,12 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
@@ -24,12 +22,13 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.borrow.BorrowResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
-import com.seekersoftvendingapp.serialport.CardReadSerialPort;
-import com.seekersoftvendingapp.serialport.StoreSerialPort;
+import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
+import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.Date;
 import java.util.List;
@@ -46,9 +45,10 @@ import retrofit2.Retrofit;
 
 public class BorrowCardReadActivity extends BaseActivity {
 
-    private Button btn_return_goods;
+    private LinearLayout ll_keyboard;
+    private KeyBordView keyBordView;
 
-    private TextView tv_errordesc;
+    private String cardId = "";
 
     // 货道的产品
     private String productId = "";
@@ -59,33 +59,12 @@ public class BorrowCardReadActivity extends BaseActivity {
     private EmployeeDao employeeDao;
     private Passage passage;
     private Employee employee;// 当前扫描的卡是属于哪个员工
-    private Handler mHandle = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case SeekerSoftConstant.CARDRECEIVECODE:
-                    SeekerSoftConstant.CARDID = msg.obj.toString();
-                    if (TextUtils.isEmpty(SeekerSoftConstant.CARDID)) {
-                        // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                        Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        CardReadSerialPort.getCradSerialInstance().closeReadSerial();
-                        // 处理业务
-                        handleReadCardAfterBusniess();
-                    }
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrow_cardread);
-
+        setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
         employeeDao = daoSession.getEmployeeDao();
@@ -97,13 +76,6 @@ public class BorrowCardReadActivity extends BaseActivity {
             passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
         }
 
-        btn_return_goods = (Button) findViewById(R.id.btn_return_goods);
-        btn_return_goods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleReadCardAfterBusniess();
-            }
-        });
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,52 +85,29 @@ public class BorrowCardReadActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        tv_errordesc = (TextView) findViewById(R.id.tv_errordesc);
 
-        openCardSerialPort();
-        openStoreSerialPort();
+        ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
+        keyBordView = new KeyBordView(this);
+        keyBordView.setKeyWordHint("请输入您的卡号...");
+        keyBordView.setSureClickListen(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardId = keyBordView.getKeyBoradStr();
+                if (TextUtils.isEmpty(cardId)) {
+                    // 读到的卡号为null or ""
+                    ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                    Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                    Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 处理业务
+                    handleReadCardAfterBusniess(cardId);
+                }
+            }
+        });
+        ll_keyboard.addView(keyBordView);
 
         countDownTimer.start();
     }
-
-    /**
-     * 打开串口读卡器  -- 串口读到数据后关闭串口 -- 判断能否进行借接口
-     */
-    private void openCardSerialPort() {
-        CardReadSerialPort.getCradSerialInstance().setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
-            @Override
-            public void onDataReceiveString(String IDNUM) {
-                Log.e("TAG", IDNUM);
-                Message message = new Message();
-                message.what = SeekerSoftConstant.CARDRECEIVECODE;
-                message.obj = IDNUM;
-                mHandle.sendMessage(message);
-            }
-
-            @Override
-            public void onDataReceiveBuffer(byte[] buffer, int size) {
-                Log.e("TAG", "length is:" + size + ",data is:" + new String(buffer, 0, size));
-            }
-        });
-    }
-
-    /**
-     * 打开柜子串口
-     */
-    private void openStoreSerialPort() {
-        StoreSerialPort.getInstance().setOnDataReceiveListener(new StoreSerialPort.OnDataReceiveListener() {
-            @Override
-            public void onDataReceiveString(String IDNUM) {
-
-            }
-
-            @Override
-            public void onDataReceiveBuffer(byte[] buffer, int size) {
-                Toast.makeText(BorrowCardReadActivity.this, "Borrow Store = " + new String(buffer, 0, size), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 
     /**
      * 本地判断是否可以进行借出去
@@ -166,13 +115,13 @@ public class BorrowCardReadActivity extends BaseActivity {
     /**
      * 处理读到卡之后的业务
      */
-    private void handleReadCardAfterBusniess() {
+    private void handleReadCardAfterBusniess(String cardId) {
         // 网络判断是否可以出货(网络优先)
         if (SeekerSoftConstant.NETWORKCONNECT) {
-            isBorrowPro(SeekerSoftConstant.CARDID);
+            isBorrowPro(cardId);
         } else {
             // 本地判断是否可以出货
-            TakeOutError takeOutError = localBorrowPro(productId, SeekerSoftConstant.CARDID);
+            TakeOutError takeOutError = localBorrowPro(productId, cardId);
             outProResult(takeOutError);
         }
     }
@@ -197,19 +146,31 @@ public class BorrowCardReadActivity extends BaseActivity {
      *
      * @return
      */
-    private void cmdBufferVendingSerial(String objectId) {
-        boolean open = false;
+    private void cmdBufferVendingSerial(final String objectId) {
+
+        ShipmentObject shipmentObject = new ShipmentObject();
         try {
-            String cmd = StoreSerialPort.cmdOpenStoreDoor(2,
-                    TextUtils.isEmpty(passage.getFlag()) ? 0 : Integer.parseInt(passage.getFlag()),
-                    Integer.parseInt(passage.getSeqNo()));
-            open = StoreSerialPort.getInstance().sendBuffer(StoreSerialPort.HexToByteArr(cmd));
+            // 格子柜子
+            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 0 : Integer.parseInt(passage.getFlag());
+            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+            // TODO 需要生成唯一码
+            shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+
+            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+                @Override
+                public void onCmdCallBack(boolean isSuccess) {
+                    handleStoreSerialPort(isSuccess, objectId);
+                }
+            });
         } catch (Exception e) {
-            open = false;
+            handleStoreSerialPort(false, objectId);
         }
-        if (open) {
+    }
+
+    private void handleStoreSerialPort(boolean isSuccess, String objectId) {
+        if (isSuccess) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, SeekerSoftConstant.CARDID, true, true, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, cardId, true, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             // 更新此人已经借走货物
@@ -227,13 +188,12 @@ public class BorrowCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             // 串口操作失败
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, true, false, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, cardId, true, false, new Date(), "", "", "");
             Track.getInstance(BorrowCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败
             handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
         }
-        StoreSerialPort.getInstance().closeSerialPort();
     }
 
     /**
@@ -246,10 +206,8 @@ public class BorrowCardReadActivity extends BaseActivity {
             startActivity(intent);
             this.finish();
         } else {
-            if (tv_errordesc != null) {
-                tv_errordesc.setText(takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg());
-            }
-            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, SeekerSoftConstant.CARDID, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
+            Toast.makeText(BorrowCardReadActivity.this, cardId + takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
+            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
@@ -286,7 +244,6 @@ public class BorrowCardReadActivity extends BaseActivity {
                 }
             }
             // 此人无权限
-            openCardSerialPort();
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {
             // 无此员工
@@ -321,7 +278,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             public void onFailure(Call<BorrowResBody> call, Throwable throwable) {
                 hideProgress();
                 Toast.makeText(BorrowCardReadActivity.this, "网络链接问题，本地进行借货操作", Toast.LENGTH_LONG).show();
-                TakeOutError takeOutError = localBorrowPro(productId, SeekerSoftConstant.CARDID);
+                TakeOutError takeOutError = localBorrowPro(productId, cardId);
                 outProResult(takeOutError);
             }
         });

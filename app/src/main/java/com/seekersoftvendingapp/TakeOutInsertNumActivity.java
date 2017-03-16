@@ -35,7 +35,7 @@ public class TakeOutInsertNumActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insertgoodsnum);
-
+        setTitle("输入货道...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
 
@@ -51,6 +51,7 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
         ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
         keyBordView = new KeyBordView(this);
+        keyBordView.setKeyWordHint("请输入货道号...");
         keyBordView.setSureClickListen(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,8 +77,8 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
         String isFirstFlag = keyPassage.substring(0, 1);
         String outNum = KeyChangeUtil.getFlagInt(isFirstFlag);
-        if(!TextUtils.isEmpty(outNum)){
-            keyPassage = keyPassage.substring(1,keyPassage.length());
+        if (!TextUtils.isEmpty(outNum)) {
+            keyPassage = keyPassage.substring(1, keyPassage.length());
         }
         // 检查数据库是否有该货道的资源数据（唯一）
         // isDel = false & Stock > 0 & seqNo == keyPassage
