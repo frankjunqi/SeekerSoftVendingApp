@@ -155,15 +155,18 @@ public class ReturnCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            handleStoreSerialPort(true, objectId);
+            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
+                    // TODO NEED DELETE
+                    isSuccess = true;
                     handleStoreSerialPort(isSuccess, objectId);
                 }
-            });
+            });*/
         } catch (Exception e) {
-            handleStoreSerialPort(false, objectId);
+            // TODO NEED Change true ---> false
+            handleStoreSerialPort(true, objectId);
         }
 
     }

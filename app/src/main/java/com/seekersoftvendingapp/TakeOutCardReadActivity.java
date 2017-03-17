@@ -172,14 +172,18 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 // TODO 需要生成唯一码
                 shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
             }
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            handleNewVendingSerialPort(true, objectId);
+            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
+                    // TODO NEED DELETE
+                    isSuccess = true;
                     handleNewVendingSerialPort(isSuccess, objectId);
                 }
-            });
+            });*/
         } catch (Exception e) {
-            handleNewVendingSerialPort(false, objectId);
+            // TODO NEED Change true ---> false
+            handleNewVendingSerialPort(true, objectId);
         }
     }
 
