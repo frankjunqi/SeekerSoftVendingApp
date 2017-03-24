@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/et_col"
         android:layout_width="match_parent"
-        android:hint="COL"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="COL" />
 
     <EditText
         android:id="@+id/et_row"
         android:layout_width="match_parent"
-        android:hint="ROW"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="ROW" />
 
 
     <TextView
@@ -25,5 +26,11 @@
         android:id="@+id/btn_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OUT PRODUCT"/>
+        android:text="OUT PRODUCT" />
+
+    <Button
+        android:id="@+id/btn_gezi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="btn_格子" />
 </LinearLayout>

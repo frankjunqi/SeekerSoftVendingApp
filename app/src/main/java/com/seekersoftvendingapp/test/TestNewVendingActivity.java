@@ -19,7 +19,7 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
 
     private String TAG = TestNewVendingActivity.class.getSimpleName();
     private EditText et_col, et_row;
-    private Button btn_out;
+    private Button btn_out, btn_gezi;
     private TextView tv_showdata;
 
 
@@ -35,6 +35,9 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
         btn_out = (Button) findViewById(R.id.btn_out);
         btn_out.setOnClickListener(this);
 
+        btn_gezi = (Button) findViewById(R.id.btn_gezi);
+        btn_gezi.setOnClickListener(this);
+
 
     }
 
@@ -48,17 +51,37 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
                 int row = Integer.parseInt(et_row.getText().toString());
                 tv_showdata.setText(col + " " + row);
                 ShipmentObject shipmentObject = new ShipmentObject();
+                shipmentObject.containerNum = 1;
                 shipmentObject.proNum = col * 10 + row;
                 shipmentObject.objectId = count++;
 
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                     @Override
                     public void onCmdCallBack(boolean isSuccess) {
-                        tv_showdata.setText(tv_showdata.getText() + " -- " + isSuccess);
+                        System.out.println("<<< error" + tv_showdata.getText() + " -- " + isSuccess);
                     }
                 });
                 break;
+
+            case R.id.btn_gezi:
+                int col1 = Integer.parseInt(et_col.getText().toString());
+                int row1 = Integer.parseInt(et_row.getText().toString());
+                tv_showdata.setText(col1 + " " + row1);
+                ShipmentObject shipmentObjectG = new ShipmentObject();
+                shipmentObjectG.containerNum = 2;
+                shipmentObjectG.proNum = col1 * 10 + row1;
+                shipmentObjectG.objectId = count++;
+
+                NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObjectG).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+                    @Override
+                    public void onCmdCallBack(boolean isSuccess) {
+                        System.out.println("<<< gezi out result: " + tv_showdata.getText() + " -- " + isSuccess);
+                    }
+                });
+                break;
+
         }
+
     }
 
 
