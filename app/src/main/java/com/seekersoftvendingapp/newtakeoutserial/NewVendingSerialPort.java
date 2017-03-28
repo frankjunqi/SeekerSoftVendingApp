@@ -157,6 +157,8 @@ public class NewVendingSerialPort {
                 return 1;//POS机状态信息
             case 0x62:
                 return 401;//货道优惠信息
+            case 0x64:
+                return 11;// 格子柜的信息
             default:
                 return 0;
         }
@@ -262,11 +264,13 @@ public class NewVendingSerialPort {
                 ACKorNAK(id, ACK);
                 break;
             case 0x5C://出货
-                System.out.println("<<<  0x5C 出货");
+                System.out.println("<<<  0x5C 出货" + ReceiveData[7]);
                 // TODO 判断出货是否成功
-                if (ReceiveData != null && ReceiveData.length == 11) {
-
+                if ((byte) 0 == ReceiveData[7]) {
+                    System.out.println("<<<  0x5C 出货 success");
+                    onCmdCallBackListen.onCmdCallBack(true);
                 } else {
+                    System.out.println("<<<  0x5C 出货 failed");
                     onCmdCallBackListen.onCmdCallBack(false);
                 }
                 ACKorNAK(id, ACK);
@@ -285,6 +289,10 @@ public class NewVendingSerialPort {
                 break;
             case 0x62://货道优惠信息
                 System.out.println("<<<  0x62 货道优惠信息");
+                ACKorNAK(id, ACK);
+                break;
+            case 0x64://格子的状态
+                System.out.println("<<<  0x64 格子的状态");
                 ACKorNAK(id, ACK);
                 break;
             default:
@@ -380,7 +388,7 @@ public class NewVendingSerialPort {
     // 校验数据是否格式签名正确
     public boolean Protocal(byte ch) {
         ReceiveData[ReceiveLn++] = ch;
-        System.out.print(byteToInt(ch));
+        //System.out.print(byteToInt(ch));
         int byteCh = byteToInt(ch);
         if ((state == DATASTATE.IDEL) && (byteCh == H1))//0xEF
         {
