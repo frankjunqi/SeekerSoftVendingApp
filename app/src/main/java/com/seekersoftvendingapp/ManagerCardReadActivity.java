@@ -3,9 +3,12 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,8 +30,7 @@ import java.util.List;
 
 public class ManagerCardReadActivity extends BaseActivity {
 
-    private LinearLayout ll_keyboard;
-    private KeyBordView keyBordView;
+    private EditText et_getcard;
     private String cardId = "";
 
     private AdminCardDao adminCardDao;
@@ -43,7 +45,6 @@ public class ManagerCardReadActivity extends BaseActivity {
                 .where(AdminCardDao.Properties.IsDel.eq(false))
                 .where(AdminCardDao.Properties.Card.like("%" + adminCardNum + "%"))
                 .list();
-        // .where(AdminCardDao.Properties.Card.like("%" + adminCardNum + "%"))
         if (adminList != null && adminList.size() > 0) {
             // 此人是管理员
             AdminCard adminCard = adminList.get(0);
@@ -78,25 +79,33 @@ public class ManagerCardReadActivity extends BaseActivity {
             }
         });
 
-        ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
-        keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("请输入您的卡号...");
-        keyBordView.setSureClickListen(new View.OnClickListener() {
+        et_getcard = (EditText) findViewById(R.id.et_getcard);
+        et_getcard.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                cardId = keyBordView.getKeyBoradStr();
-                if (TextUtils.isEmpty(cardId)) {
-                    // 读到的卡号为null or ""
-                    ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                    Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                } else {
-                    // 处理业务
-                    handleReadCardAfterBusniess(cardId);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().endsWith("\n")) {
+                    cardId = s.toString().replace("\n", "");
+                    if (TextUtils.isEmpty(cardId)) {
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                    } else {
+                        // 处理业务
+                        handleReadCardAfterBusniess(cardId);
+                    }
                 }
             }
-        });
-        ll_keyboard.addView(keyBordView);
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         countDownTimer.start();
     }
 

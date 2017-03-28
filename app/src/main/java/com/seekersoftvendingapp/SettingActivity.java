@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.dao.TestAdminCardDaoActivity;
 import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
@@ -174,7 +175,10 @@ public class SettingActivity extends BaseActivity {
         btn_hide_progress.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestNewVendingActivity.class));
+                String str = "1234567896\n";
+                if (str.endsWith("\n")) {
+                    Toast.makeText(SettingActivity.this, "is \n", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
