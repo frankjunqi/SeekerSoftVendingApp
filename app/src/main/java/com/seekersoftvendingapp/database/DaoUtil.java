@@ -21,8 +21,10 @@ public class DaoUtil {
         Schema schema = new Schema(1, "com.seekersoftvendingapp.database.table");
 
         addNote(schema);
-        addAdminCard(schema);
+
+        addEmpCard(schema);
         addEmployee(schema);
+        addAdminCard(schema);
         addEmpPower(schema);
         addPassage(schema);
         addProduct(schema);
@@ -38,42 +40,6 @@ public class DaoUtil {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Note DEMO 测试
-     *
-     * @param schema
-     */
-    private static void addNote(Schema schema) {
-        Entity note = schema.addEntity("Note");
-        note.addIdProperty();
-        note.addStringProperty("text").notNull();
-        note.addStringProperty("comment");
-        note.addDateProperty("date");
-    }
-
-    /**
-     * public String card; // card id
-     * public String objectId;
-     * public String createdAt;
-     * public String updatedAt;
-     * <p>
-     * 管理员表AdminCard --- cardid
-     *
-     * @param schema
-     */
-    private static void addAdminCard(Schema schema) {
-        Entity adminCard = schema.addEntity("AdminCard");
-        adminCard.addBooleanProperty("isDel");
-        adminCard.addStringProperty("card").notNull();
-        adminCard.addStringProperty("objectId").primaryKey();
-        adminCard.addDateProperty("createdAt");
-        adminCard.addDateProperty("updatedAt");
-        adminCard.addStringProperty("keepone");
-        adminCard.addStringProperty("keeptwo");
-        adminCard.addStringProperty("keepthree");
-    }
-
 
     /**
      * public String empNo;
@@ -102,6 +68,55 @@ public class DaoUtil {
     }
 
     /**
+     * Note DEMO 测试
+     *
+     * @param schema
+     */
+    private static void addNote(Schema schema) {
+        Entity note = schema.addEntity("Note");
+        note.addIdProperty();
+        note.addStringProperty("text").notNull();
+        note.addStringProperty("comment");
+        note.addDateProperty("date");
+    }
+
+    public static void addEmpCard(Schema schema) {
+        Entity empCard = schema.addEntity("EmpCard");
+        empCard.addStringProperty("card").notNull();
+        empCard.addStringProperty("emp");
+        empCard.addBooleanProperty("isDel");
+        empCard.addDateProperty("createdAt");
+        empCard.addDateProperty("updatedAt");
+        empCard.addStringProperty("objectId");
+        empCard.addStringProperty("keepone");
+        empCard.addStringProperty("keeptwo");
+        empCard.addStringProperty("keepthree");
+    }
+
+    /**
+     * public String card; // card id
+     * public String objectId;
+     * public String createdAt;
+     * public String updatedAt;
+     * <p>
+     * 管理员表AdminCard --- cardid
+     *
+     * @param schema
+     */
+    private static void addAdminCard(Schema schema) {
+        Entity adminCard = schema.addEntity("AdminCard");
+        adminCard.addBooleanProperty("isDel");
+        adminCard.addStringProperty("card").notNull();
+        adminCard.addStringProperty("objectId").primaryKey();
+        adminCard.addDateProperty("createdAt");
+        adminCard.addDateProperty("updatedAt");
+        adminCard.addStringProperty("keepone");
+        adminCard.addStringProperty("keeptwo");
+        adminCard.addStringProperty("keepthree");
+    }
+
+
+    /**
      * public String unit;
      * public BeginDate begin = new BeginDate();
      * public EmPowerProduct product = new EmPowerProduct();
@@ -116,15 +131,17 @@ public class DaoUtil {
      */
     private static void addEmpPower(Schema schema) {
         Entity empPower = schema.addEntity("EmpPower");
-        empPower.addBooleanProperty("isDel");
+        empPower.addStringProperty("emp");
         empPower.addStringProperty("unit");
-        empPower.addDateProperty("begin");
+        empPower.addBooleanProperty("isDel");
         empPower.addStringProperty("product");
         empPower.addIntProperty("count");
         empPower.addIntProperty("period");
+        empPower.addIntProperty("used");
         empPower.addStringProperty("objectId").primaryKey();
         empPower.addDateProperty("createdAt");
         empPower.addDateProperty("updatedAt");
+
         empPower.addStringProperty("keepone");
         empPower.addStringProperty("keeptwo");
         empPower.addStringProperty("keepthree");
@@ -149,16 +166,20 @@ public class DaoUtil {
      */
     private static void addPassage(Schema schema) {
         Entity passage = schema.addEntity("Passage");
-        passage.addStringProperty("flag");// 副柜的 ABCD 的标识
-        passage.addBooleanProperty("isDel");
         passage.addIntProperty("capacity");
-        passage.addStringProperty("product");
+        passage.addBooleanProperty("isDel");
         passage.addStringProperty("seqNo");
+        passage.addStringProperty("used");// 匹配的是empcard中的emp
+        passage.addStringProperty("product");
         passage.addBooleanProperty("borrowState");
-        passage.addStringProperty("borrowUser");
         passage.addIntProperty("stock");
-        passage.addIntProperty("whorlSize");
         passage.addBooleanProperty("isSend");
+
+        passage.addStringProperty("flag");// 副柜的 ABCD 的标识
+        passage.addIntProperty("whorlSize");
+
+        passage.addStringProperty("borrowUser");
+
         passage.addStringProperty("objectId").primaryKey();
         passage.addDateProperty("createdAt");
         passage.addDateProperty("updatedAt");

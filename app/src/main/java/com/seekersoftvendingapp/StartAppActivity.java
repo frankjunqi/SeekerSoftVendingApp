@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
@@ -51,7 +51,7 @@ public class StartAppActivity extends BaseActivity {
     private static TextView tv_resultdata;
 
     private AdminCardDao adminCardDao;
-    private EmployeeDao employeeDao;
+    private EmpCardDao empCardDao;
     private EmpPowerDao empPowerDao;
     private PassageDao passageDao;
     private ProductDao productDao;
@@ -82,10 +82,10 @@ public class StartAppActivity extends BaseActivity {
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
-        employeeDao = daoSession.getEmployeeDao();
         empPowerDao = daoSession.getEmpPowerDao();
         passageDao = daoSession.getPassageDao();
         productDao = daoSession.getProductDao();
+        empCardDao = daoSession.getEmpCardDao();
 
         asyncGetBaseDataRequest();
 
@@ -117,10 +117,10 @@ public class StartAppActivity extends BaseActivity {
                         && response.body().data.EmpPower.size() > 0
                         && response.body().data.Product != null
                         && response.body().data.Product.size() > 0
-                        && response.body().data.Employee != null
-                        && response.body().data.Employee.size() > 0) {
+                        && response.body().data.EmpCard != null
+                        && response.body().data.EmpCard.size() > 0) {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
-                    employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
+                    empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
                     empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
                     // 第一次请求，直接全部更新
                     passageDao.insertOrReplaceInTx(response.body().getPassageList());

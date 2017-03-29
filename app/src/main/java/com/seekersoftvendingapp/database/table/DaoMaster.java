@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 
 import org.greenrobot.greendao.AbstractDaoMaster;
+import org.greenrobot.greendao.database.StandardDatabase;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseOpenHelper;
-import org.greenrobot.greendao.database.StandardDatabase;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
 
@@ -22,8 +22,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         NoteDao.createTable(db, ifNotExists);
-        AdminCardDao.createTable(db, ifNotExists);
+        EmpCardDao.createTable(db, ifNotExists);
         EmployeeDao.createTable(db, ifNotExists);
+        AdminCardDao.createTable(db, ifNotExists);
         EmpPowerDao.createTable(db, ifNotExists);
         PassageDao.createTable(db, ifNotExists);
         ProductDao.createTable(db, ifNotExists);
@@ -36,8 +37,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         NoteDao.dropTable(db, ifExists);
-        AdminCardDao.dropTable(db, ifExists);
+        EmpCardDao.dropTable(db, ifExists);
         EmployeeDao.dropTable(db, ifExists);
+        AdminCardDao.dropTable(db, ifExists);
         EmpPowerDao.dropTable(db, ifExists);
         PassageDao.dropTable(db, ifExists);
         ProductDao.dropTable(db, ifExists);
@@ -64,8 +66,9 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(NoteDao.class);
-        registerDaoClass(AdminCardDao.class);
+        registerDaoClass(EmpCardDao.class);
         registerDaoClass(EmployeeDao.class);
+        registerDaoClass(AdminCardDao.class);
         registerDaoClass(EmpPowerDao.class);
         registerDaoClass(PassageDao.class);
         registerDaoClass(ProductDao.class);

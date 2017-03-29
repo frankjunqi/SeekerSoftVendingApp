@@ -29,7 +29,7 @@ public class PassageEntity implements Serializable {
 
 
     public Passage getPassage() {
-        return new Passage(TextUtils.isEmpty(flag) ? "" : flag, isDel, capacity, product, seqNo, borrowState, TextUtils.isEmpty(used) ? "" : used, stock, whorlSize, isSend, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
+        return new Passage(capacity, isDel, seqNo, used, product, borrowState, stock, isSend, TextUtils.isEmpty(flag) ? "" : flag, whorlSize, "", objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
 
     @Override

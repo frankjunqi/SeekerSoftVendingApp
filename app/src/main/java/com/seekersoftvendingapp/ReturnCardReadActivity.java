@@ -69,7 +69,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
-        employeeDao = daoSession.getEmployeeDao();
+        //employeeDao = daoSession.getEmployeeDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage != null) {
@@ -186,7 +186,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             passage.setStock(passage.getStock() + 1);
             passage.setBorrowState(false);
             // 更新此人已经还货物
-            passage.setBorrowUser("");
+            //passage.setBorrowUser("");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);
@@ -249,14 +249,14 @@ public class ReturnCardReadActivity extends BaseActivity {
         if (employeeList != null && employeeList.size() > 0) {
             Employee employee = employeeList.get(0);
             // 必须是同一个人进行还货
-            if (employee.getObjectId().equals(passage.getBorrowUser())) {
+            /*if (employee.getObjectId().equals(passage.getBorrowUser())) {
                 for (EmpPower empPower : listEmpPowers) {
                     if (employee.getPower().contains(empPower.getObjectId())) {
                         // 此人有权限进行归还物品
                         return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
                     }
                 }
-            }
+            }*/
             // 此人无权限
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {

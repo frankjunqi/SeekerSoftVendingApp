@@ -10,18 +10,19 @@ import java.io.Serializable;
  */
 
 public class EmpPowerEntity implements Serializable {
+    public String emp;
     public boolean isDel;// 软删除的标记
     public String unit;// 周期单位
-    public String begin;// 周期开始时间
     public String product;// 产品id
     public int count;// 数量
+    public int used;
     public int period;// 周期
     public String objectId;
     public String createdAt;
     public String updatedAt;
 
     public EmpPower getEmpPower() {
-        return new EmpPower(isDel, unit, DataFormat.fromISODate(begin), product, count, period, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt),"","","");
+        return new EmpPower(emp, unit, isDel, product, count, period, used, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
 
     @Override

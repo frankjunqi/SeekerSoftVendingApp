@@ -1,11 +1,13 @@
 package com.seekersoftvendingapp.network.entity;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.EmpCard;
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.Product;
 import com.seekersoftvendingapp.network.entity.basedata.AdminCardEntity;
+import com.seekersoftvendingapp.network.entity.basedata.EmpCardEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmpPowerEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmployeeEntity;
 import com.seekersoftvendingapp.network.entity.basedata.PassageEntity;
@@ -46,14 +48,14 @@ public class SynchroBaseDataResBody implements Serializable {
         return products;
     }
 
-    public List<Employee> getEmployeeList() {
-        List<Employee> employees = new ArrayList<Employee>();
-        if (data.Employee != null) {
-            for (EmployeeEntity employeeEntity : data.Employee) {
-                employees.add(employeeEntity.getEmployee());
+    public List<EmpCard> getEmpCardList() {
+        List<EmpCard> empCardes = new ArrayList<EmpCard>();
+        if (data.EmpCard != null) {
+            for (EmpCardEntity empCardEntity : data.EmpCard) {
+                empCardes.add(empCardEntity.getEmpCard());
             }
         }
-        return employees;
+        return empCardes;
     }
 
     public List<EmpPower> getEmpPowerList() {
@@ -77,46 +79,11 @@ public class SynchroBaseDataResBody implements Serializable {
     }
 
     public class SyncharBaseEntity implements Serializable {
-
         public List<AdminCardEntity> AdminCard = new ArrayList<AdminCardEntity>();
+        public List<EmpCardEntity> EmpCard = new ArrayList<EmpCardEntity>();
         public List<ProductEntity> Product = new ArrayList<ProductEntity>();
-        public List<EmployeeEntity> Employee = new ArrayList<EmployeeEntity>();
         public List<EmpPowerEntity> EmpPower = new ArrayList<EmpPowerEntity>();
         public List<PassageEntity> Passage = new ArrayList<PassageEntity>();
 
-        @Override
-        public String toString() {
-            String admincard = "";
-            String product = "";
-            String employee = "";
-            String emppower = "";
-            String passage = "";
-            for (int i = 0; i < AdminCard.size(); i++) {
-                admincard = admincard + AdminCard.get(i).toString();
-            }
-
-            for (int i = 0; i < Product.size(); i++) {
-                product = product + Product.get(i).toString();
-            }
-
-            for (int i = 0; i < Employee.size(); i++) {
-                employee = employee + Employee.get(i).toString();
-            }
-
-            for (int i = 0; i < EmpPower.size(); i++) {
-                emppower = emppower + EmpPower.get(i).toString();
-            }
-
-            for (int i = 0; i < Passage.size(); i++) {
-                passage = passage + Passage.get(i).toString();
-            }
-
-            return "{ \nAdminCard = " + admincard + ",\nProduct" + product + ",\nEmployee = " + employee + ",\nEmpPower = " + emppower + ",\nPassage = " + passage + "}";
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "{ status = " + status + ",\nmessage = " + message + ",\nserver_time = " + server_time + ",\ndata = " + data.toString() + "}";
     }
 }

@@ -69,7 +69,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
-        employeeDao = daoSession.getEmployeeDao();
+        //employeeDao = daoSession.getEmployeeDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage != null) {
@@ -182,7 +182,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             // 更新此人已经借走货物
-            passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
+            //passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);

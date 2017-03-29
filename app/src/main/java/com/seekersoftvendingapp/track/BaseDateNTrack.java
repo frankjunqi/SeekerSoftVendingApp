@@ -64,7 +64,7 @@ public class BaseDateNTrack implements InterfaceTrack {
         this.mContext = mContext;
         DaoSession daoSession = ((SeekersoftApp) mContext).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
-        employeeDao = daoSession.getEmployeeDao();
+        //employeeDao = daoSession.getEmployeeDao();
         empPowerDao = daoSession.getEmpPowerDao();
         passageDao = daoSession.getPassageDao();
         productDao = daoSession.getProductDao();
