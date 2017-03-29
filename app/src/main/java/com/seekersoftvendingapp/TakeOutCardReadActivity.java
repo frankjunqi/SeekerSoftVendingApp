@@ -181,12 +181,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 // TODO 需要生成唯一码
                 shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
             }
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            handleNewVendingSerialPort(true, objectId);
+            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     handleNewVendingSerialPort(isSuccess, objectId);
                 }
-            });
+            });*/
         } catch (Exception e) {
             handleNewVendingSerialPort(false, objectId);
         }
@@ -249,7 +250,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
      */
     private TakeOutError localTakeOutPro(String productId, String cardId) {
         // 具体查询card对应的用户
-        List<EmpCard> empCardList = empCardDao.queryBuilder().where(EmpCardDao.Properties.IsDel.eq(false))
+        List<EmpCard> empCardList = empCardDao.queryBuilder()
+                .where(EmpCardDao.Properties.IsDel.eq(false))
                 .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
         if (empCardList != null && empCardList.size() > 0) {
             EmpCard empCard = empCardList.get(0);

@@ -9,8 +9,8 @@ import android.util.Log;
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.ProductDao;
@@ -41,7 +41,8 @@ public class BaseDateNTrack implements InterfaceTrack {
      * 基础数据 GET
      */
     private AdminCardDao adminCardDao;
-    private EmployeeDao employeeDao;
+    //private EmployeeDao employeeDao;
+    private EmpCardDao empCardDao;
     private EmpPowerDao empPowerDao;
     private PassageDao passageDao;
     private ProductDao productDao;
@@ -64,6 +65,7 @@ public class BaseDateNTrack implements InterfaceTrack {
         this.mContext = mContext;
         DaoSession daoSession = ((SeekersoftApp) mContext).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
+        empCardDao = daoSession.getEmpCardDao();
         //employeeDao = daoSession.getEmployeeDao();
         empPowerDao = daoSession.getEmpPowerDao();
         passageDao = daoSession.getPassageDao();
@@ -95,7 +97,8 @@ public class BaseDateNTrack implements InterfaceTrack {
             Response<SynchroBaseDataResBody> response = updateAction.execute();
             if (response != null && response.body() != null) {
                 adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
-                employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
+                empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
+                //employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
                 empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
 
                 if (TextUtils.isEmpty(timestamp)) {

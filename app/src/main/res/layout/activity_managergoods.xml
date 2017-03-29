@@ -8,27 +8,28 @@
         android:id="@+id/btn_onekeyinsert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/big_text_size"
         android:minHeight="@dimen/min_height"
-        android:text="一键补货" />
+        android:text="一键补货"
+        android:textSize="@dimen/big_text_size"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_onebyoneinsert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/big_text_size"
-        android:minHeight="@dimen/min_height"
         android:layout_below="@id/btn_onekeyinsert"
-        android:text="货道补货" />
+        android:minHeight="@dimen/min_height"
+        android:text="货道补货"
+        android:textSize="@dimen/big_text_size" />
 
     <Button
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/big_text_size"
-        android:minHeight="@dimen/min_height"
         android:layout_below="@id/btn_onebyoneinsert"
-        android:text="软件升级" />
+        android:minHeight="@dimen/min_height"
+        android:text="软件升级"
+        android:textSize="@dimen/big_text_size" />
 
     <Button
         android:id="@+id/btn_exit"
@@ -36,8 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_update"
         android:minHeight="@dimen/min_height"
-        android:textSize="@dimen/big_text_size"
-        android:text="退出程序" />
+        android:text="退出程序"
+        android:textSize="@dimen/big_text_size" />
 
     <Button
         android:id="@+id/btn_backtomain"
@@ -45,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:minHeight="@dimen/min_height"
-        android:textSize="@dimen/big_text_size"
-        android:text="返回首页" />
+        android:text="返回首页"
+        android:textSize="@dimen/big_text_size" />
 
 
 </RelativeLayout>

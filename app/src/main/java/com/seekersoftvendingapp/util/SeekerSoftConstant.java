@@ -8,18 +8,10 @@ public class SeekerSoftConstant {
 
     // 设备号
     public static String DEVICEID = "";
-    public static String CARDID = "";// 585000b2128fe1006931525a   ||   98152
-
-    public static final String ADMINCARDNUM = "";
 
     // 网络是否链接
     public static boolean NETWORKCONNECT = true;
 
-    // 读取卡中的数据的消息
-    public static final int CARDRECEIVECODE = 1101;
-
-    // 管理员读取卡中的数据的消息
-    public static final int ADMINCARDRECECIVECODE = 1102;
     // 管理员卡号key
     public static String ADMINCARD = "admincard";
 

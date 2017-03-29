@@ -10,15 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
 import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpPower;
+import com.seekersoftvendingapp.database.table.EmpCard;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.Employee;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.network.api.Host;
@@ -31,7 +29,6 @@ import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
-import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.Date;
 import java.util.List;
@@ -57,8 +54,8 @@ public class ReturnCardReadActivity extends BaseActivity {
     private String pasageId = "";
     private String passageFlag = "";
 
-    private EmpPowerDao empPowerDao;
-    private EmployeeDao employeeDao;
+    private EmpCardDao empCardDao;
+    //private EmployeeDao employeeDao;
 
     private Passage passage;
 
@@ -68,7 +65,8 @@ public class ReturnCardReadActivity extends BaseActivity {
         setContentView(R.layout.activity_return_cardread);
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        empPowerDao = daoSession.getEmpPowerDao();
+        //empPowerDao = daoSession.getEmpPowerDao();
+        empCardDao = daoSession.getEmpCardDao();
         //employeeDao = daoSession.getEmployeeDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
@@ -133,7 +131,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             isReturnPro(cardId);
         } else {
             // 本地判断是否可以出货
-            TakeOutError takeOutError = localReturnPro(productId, SeekerSoftConstant.CARDID);
+            TakeOutError takeOutError = localReturnPro(productId, cardId);
             outProResult(takeOutError);
         }
     }
@@ -166,12 +164,13 @@ public class ReturnCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            handleStoreSerialPort(true, objectId);
+            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     handleStoreSerialPort(isSuccess, objectId);
                 }
-            });
+            });*/
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }
@@ -185,8 +184,8 @@ public class ReturnCardReadActivity extends BaseActivity {
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, cardId, false, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() + 1);
             passage.setBorrowState(false);
+            passage.setUsed("");
             // 更新此人已经还货物
-            //passage.setBorrowUser("");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);
@@ -230,39 +229,54 @@ public class ReturnCardReadActivity extends BaseActivity {
      * 本地进行判断是否可以出货
      */
     private TakeOutError localReturnPro(String productId, String cardId) {
-        // 同一个商品 权限详细信息list 消费频次 周期消费次数
-        List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(EmpPowerDao.Properties.IsDel.eq(false))
-                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
-
-        if (listEmpPowers == null || listEmpPowers.size() == 0) {
-            // 此商品暂时没有赋予出货权限
-            return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
-        }
-
         // 具体查询card对应的用户
-        List<Employee> employeeList = employeeDao.queryBuilder()
+        List<EmpCard> empCardList = empCardDao.queryBuilder()
+                .where(EmpCardDao.Properties.IsDel.eq(false))
+                .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
+        if (empCardList != null && empCardList.size() > 0) {
+            EmpCard empCard = empCardList.get(0);
+            if (!TextUtils.isEmpty(empCard.getEmp()) && empCard.getEmp().equals(passage.getUsed())) {
+                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+            } else {
+                // 此人无权限
+                return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
+            }
+            /*List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
+                    .where(EmpPowerDao.Properties.IsDel.eq(false))
+                    .where(EmpPowerDao.Properties.Emp.like("%" + empCard.getEmp() + "%"))
+                    .where(EmpPowerDao.Properties.Product.eq(productId)).list();
+            if (listEmpPowers == null || listEmpPowers.size() == 0) {
+                // 此商品暂时没有赋予出货权限
+                return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
+            } else {
+                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+            }*/
+        } else {
+            // 无此员工
+            return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
+        }
+        /*List<Employee> employeeList = employeeDao.queryBuilder()
                 .where(EmployeeDao.Properties.IsDel.eq(false))
                 .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
-                .list();
+                .list();*/
 
-        if (employeeList != null && employeeList.size() > 0) {
+        /*if (employeeList != null && employeeList.size() > 0) {
             Employee employee = employeeList.get(0);
             // 必须是同一个人进行还货
-            /*if (employee.getObjectId().equals(passage.getBorrowUser())) {
+            if (employee.getObjectId().equals(passage.getBorrowUser())) {
                 for (EmpPower empPower : listEmpPowers) {
                     if (employee.getPower().contains(empPower.getObjectId())) {
                         // 此人有权限进行归还物品
                         return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
                     }
                 }
-            }*/
+            }
             // 此人无权限
             return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
         } else {
             // 无此员工
             return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
-        }
+        }*/
     }
 
 

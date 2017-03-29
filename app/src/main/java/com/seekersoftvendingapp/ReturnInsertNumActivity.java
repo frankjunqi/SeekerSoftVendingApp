@@ -82,7 +82,7 @@ public class ReturnInsertNumActivity extends BaseActivity {
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .where(PassageDao.Properties.IsSend.eq(false))
                 .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
-                //.where(PassageDao.Properties.BorrowUser.isNotNull())// 已经有被人借了，待还状态
+                .where(PassageDao.Properties.Used.isNotNull())// 已经有被人借了，待还状态
                 .where(PassageDao.Properties.BorrowState.eq(true))// 判断此货道是否可以借出去: true是借出,false是归还
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
                 .list();

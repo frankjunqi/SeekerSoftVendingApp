@@ -10,15 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpCard;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.Employee;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.network.api.Host;
@@ -31,7 +30,6 @@ import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
-import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.Date;
 import java.util.List;
@@ -58,9 +56,11 @@ public class BorrowCardReadActivity extends BaseActivity {
     private String passageFlag = "";
 
     private EmpPowerDao empPowerDao;
-    private EmployeeDao employeeDao;
+    private EmpCardDao empCardDao;
+    //private EmployeeDao employeeDao;
     private Passage passage;
-    private Employee employee;// 当前扫描的卡是属于哪个员工
+    private EmpCard empCard;
+    //private Employee employee;// 当前扫描的卡是属于哪个员工
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
+        empCardDao = daoSession.getEmpCardDao();
         //employeeDao = daoSession.getEmployeeDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
@@ -164,12 +165,13 @@ public class BorrowCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            handleStoreSerialPort(true, objectId);
+            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     handleStoreSerialPort(isSuccess, objectId);
                 }
-            });
+            });*/
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }
@@ -181,6 +183,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, cardId, true, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
+            passage.setUsed(empCard != null ? empCard.getEmp() : "");
             // 更新此人已经借走货物
             //passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
             if (TextUtils.isEmpty(objectId)) {
@@ -227,7 +230,29 @@ public class BorrowCardReadActivity extends BaseActivity {
      * 本地进行判断是否可以出货
      */
     private TakeOutError localBorrowPro(String productId, String cardId) {
-        // 同一个商品 权限详细信息list 消费频次 周期消费次数
+        // 具体查询card对应的用户
+        List<EmpCard> empCardList = empCardDao.queryBuilder()
+                .where(EmpCardDao.Properties.IsDel.eq(false))
+                .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
+        if (empCardList != null && empCardList.size() > 0) {
+            empCard = empCardList.get(0);
+            List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
+                    .where(EmpPowerDao.Properties.IsDel.eq(false))
+                    .where(EmpPowerDao.Properties.Emp.like("%" + empCard.getEmp() + "%"))
+                    .where(EmpPowerDao.Properties.Product.eq(productId)).list();
+            if (listEmpPowers == null || listEmpPowers.size() == 0) {
+                // 此商品暂时没有赋予出货权限
+                return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
+            } else {
+                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+            }
+        } else {
+            // 无此员工
+            return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
+        }
+
+
+        /*// 同一个商品 权限详细信息list 消费频次 周期消费次数
         List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
                 .where(EmpPowerDao.Properties.IsDel.eq(false))
                 .where(EmpPowerDao.Properties.Product.eq(productId)).list();
@@ -256,7 +281,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         } else {
             // 无此员工
             return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
-        }
+        }*/
     }
 
     /**
