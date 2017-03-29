@@ -43,9 +43,9 @@
         <activity android:name=".test.TestNewVendingActivity" />
 
 
-        <activity android:name=".StartAppActivity" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".StartAppActivity"
             android:launchMode="singleTop" />
         <activity android:name=".TakeOutInsertNumActivity" />
         <activity android:name=".TakeOutCardReadActivity" />

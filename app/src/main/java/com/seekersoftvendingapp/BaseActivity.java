@@ -76,8 +76,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO 上线需要delete
-        super.onBackPressed();
     }
 
     public void showProgress() {

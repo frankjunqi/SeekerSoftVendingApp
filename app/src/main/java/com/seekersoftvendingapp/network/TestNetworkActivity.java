@@ -129,7 +129,6 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 textView.setText("AdminCard: " + response.body().data.AdminCard.size() + "\n"
-                        + "Employee: " + response.body().data.Employee.size() + "\n"
                         + "EmpPower: " + response.body().data.EmpPower.size() + "\n"
                         + "Passage: " + response.body().data.Passage.size() + "\n"
                         + "Product: " + response.body().data.Product.size() + "\n"
@@ -161,7 +160,6 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 textView.setText("AdminCard: " + response.body().data.AdminCard.size() + "\n"
-                        + "Employee: " + response.body().data.Employee.size() + "\n"
                         + "EmpPower: " + response.body().data.EmpPower.size() + "\n"
                         + "Passage: " + response.body().data.Passage.size() + "\n"
                         + "Product: " + response.body().data.Product.size() + "\n"

@@ -3,10 +3,13 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -45,8 +48,7 @@ import retrofit2.Retrofit;
 
 public class BorrowCardReadActivity extends BaseActivity {
 
-    private LinearLayout ll_keyboard;
-    private KeyBordView keyBordView;
+    private EditText et_getcard;
 
     private String cardId = "";
 
@@ -67,7 +69,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
-        employeeDao = daoSession.getEmployeeDao();
+        //employeeDao = daoSession.getEmployeeDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage != null) {
@@ -86,26 +88,34 @@ public class BorrowCardReadActivity extends BaseActivity {
             }
         });
 
-        ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
-        keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("请输入您的卡号...");
-        keyBordView.setSureClickListen(new View.OnClickListener() {
+        et_getcard = (EditText) findViewById(R.id.et_getcard);
+        et_getcard.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                cardId = keyBordView.getKeyBoradStr();
-                if (TextUtils.isEmpty(cardId)) {
-                    // 读到的卡号为null or ""
-                    ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                    Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                    Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
-                } else {
-                    // 处理业务
-                    handleReadCardAfterBusniess(cardId);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().endsWith("\n")) {
+                    cardId = s.toString().replace("\n", "");
+                    if (TextUtils.isEmpty(cardId)) {
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                        Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 处理业务
+                        handleReadCardAfterBusniess(cardId);
+                    }
                 }
             }
-        });
-        ll_keyboard.addView(keyBordView);
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         countDownTimer.start();
     }
 
@@ -147,15 +157,13 @@ public class BorrowCardReadActivity extends BaseActivity {
      * @return
      */
     private void cmdBufferVendingSerial(final String objectId) {
-
         ShipmentObject shipmentObject = new ShipmentObject();
         try {
             // 格子柜子
-            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 0 : Integer.parseInt(passage.getFlag());
+            shipmentObject.containerNum = 2;
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-
             NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
@@ -174,7 +182,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             // 更新此人已经借走货物
-            passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
+            //passage.setBorrowUser(employee != null ? employee.getObjectId() : "");
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
                 borrowRecord.setIsFlag(false);

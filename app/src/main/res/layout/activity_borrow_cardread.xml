@@ -13,12 +13,20 @@
         android:text="返回首页"
         android:textSize="@dimen/big_text_size" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/btn_return_mainpage"
-        android:orientation="vertical" />
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_getcard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

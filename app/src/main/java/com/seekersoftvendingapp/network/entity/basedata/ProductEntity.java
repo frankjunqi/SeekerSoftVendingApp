@@ -18,7 +18,7 @@ public class ProductEntity implements Serializable {
     public String updatedAt;
 
     public Product getProduct() {
-        return new Product(isDel, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt),"","","");
+        return new Product(isDel, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
 
 

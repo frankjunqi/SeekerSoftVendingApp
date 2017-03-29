@@ -3,14 +3,18 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpCard;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Employee;
@@ -29,7 +33,6 @@ import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
-import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.Date;
 import java.util.List;
@@ -47,8 +50,7 @@ import retrofit2.Retrofit;
 
 public class TakeOutCardReadActivity extends BaseActivity {
 
-    private LinearLayout ll_keyboard;
-    private KeyBordView keyBordView;
+    private EditText et_getcard;
 
     private String cardId = "";
 
@@ -61,8 +63,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private boolean isStoreSend = false;
 
     private EmpPowerDao empPowerDao;
-    private EmployeeDao employeeDao;
-    private TakeoutRecordDao takeOutRecordDao;
+    private EmpCardDao empCardDao;
+    private EmpPower empPower;
 
     private Passage passage;
 
@@ -73,8 +75,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
-        employeeDao = daoSession.getEmployeeDao();
-        takeOutRecordDao = daoSession.getTakeoutRecordDao();
+        empCardDao = daoSession.getEmpCardDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage != null) {
@@ -97,26 +98,34 @@ public class TakeOutCardReadActivity extends BaseActivity {
             }
         });
 
-        ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
-        keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("请输入您的卡号...");
-        keyBordView.setSureClickListen(new View.OnClickListener() {
+        et_getcard = (EditText) findViewById(R.id.et_getcard);
+        et_getcard.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                cardId = keyBordView.getKeyBoradStr();
-                if (TextUtils.isEmpty(cardId)) {
-                    // 读到的卡号为null or ""
-                    ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "出货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                    Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                    Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
-                } else {
-                    // 处理业务
-                    handleReadCardAfterBusniess(cardId);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().endsWith("\n")) {
+                    cardId = s.toString().replace("\n", "");
+                    if (TextUtils.isEmpty(cardId)) {
+                        // 读到的卡号为null or ""
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "出货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                        Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 处理业务
+                        handleReadCardAfterBusniess(cardId);
+                    }
                 }
             }
-        });
-        ll_keyboard.addView(keyBordView);
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         countDownTimer.start();
     }
 
@@ -159,7 +168,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         try {
             if (isStoreSend) {
                 // 格子柜子
-                shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 0 : Integer.parseInt(passage.getFlag());
+                shipmentObject.containerNum = 2;
                 shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
                 // TODO 需要生成唯一码
                 shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
@@ -186,6 +195,10 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private void handleNewVendingSerialPort(boolean isSuccessOpen, String objectId) {
         // 成功
         if (isSuccessOpen) {
+            if (empPower != null) {
+                empPower.setUsed(empPower.getUsed() + 1);
+                empPowerDao.insertOrReplace(empPower);
+            }
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, cardId, productId, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
@@ -222,7 +235,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             startActivity(intent);
             this.finish();
         } else {
-            Toast.makeText(TakeOutCardReadActivity.this, keyBordView.getKeyBoradStr() + takeOutError.serverMsg + "---" + takeOutError.getTakeOutMsg(), Toast.LENGTH_LONG).show();
+            Toast.makeText(TakeOutCardReadActivity.this, et_getcard.getText().toString() + takeOutError.serverMsg + "---" + takeOutError.getTakeOutMsg(), Toast.LENGTH_LONG).show();
             ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "消费问题: " + cardId + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
@@ -235,47 +248,27 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * 本地进行判断是否可以出货
      */
     private TakeOutError localTakeOutPro(String productId, String cardId) {
-        // 同一个商品 权限详细信息list 消费频次 周期消费次数
-        List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(EmpPowerDao.Properties.IsDel.eq(false))
-                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
-
-        if (listEmpPowers == null || listEmpPowers.size() == 0) {
-            // 此商品暂时没有赋予出货权限
-            return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
-        }
-
         // 具体查询card对应的用户
-        List<Employee> employeeList = employeeDao.queryBuilder()
-                .where(EmployeeDao.Properties.IsDel.eq(false))
-                .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
-                .list();
-
-        if (employeeList != null && employeeList.size() > 0) {
-            Employee employee = employeeList.get(0);
-            for (EmpPower empPower : listEmpPowers) {
-                if (employee.getPower().contains(empPower.getObjectId())) {
-                    // 此人有权限（判断此人权限的消费次数问题）
-                    int period = empPower.getPeriod();
-                    String unit = empPower.getUnit();
-                    int count = empPower.getCount();
-
-                    List<TakeoutRecord> takeOutRecordList = takeOutRecordDao.queryBuilder().where(TakeoutRecordDao.Properties.Card.eq(cardId))
-                            .where(TakeoutRecordDao.Properties.Passage.eq(pasageId))
-                            .where(TakeoutRecordDao.Properties.ProductId.eq(productId))
-                            .where(TakeoutRecordDao.Properties.Time.between(DataFormat.periodUnitGetStartDate(period, unit), DataFormat.getTodayDate()))
-                            .list();
-                    if (takeOutRecordList != null && takeOutRecordList.size() < count) {
-                        // 此人消费次数未满，可以进行消费
-                        return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
-                    } else {
-                        // 此人消费次数已满，不可以进行消费
-                        return new TakeOutError(TakeOutError.FAILE_TAKEOUT_FLAG);
-                    }
-                }
+        List<EmpCard> empCardList = empCardDao.queryBuilder().where(EmpCardDao.Properties.IsDel.eq(false))
+                .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
+        if (empCardList != null && empCardList.size() > 0) {
+            EmpCard empCard = empCardList.get(0);
+            // 同一个商品 权限详细信息list 消费频次 周期消费次数
+            List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
+                    .where(EmpPowerDao.Properties.IsDel.eq(false))
+                    .where(EmpPowerDao.Properties.Emp.like("%" + empCard.getEmp() + "%"))
+                    .where(EmpPowerDao.Properties.Product.eq(productId)).list();
+            if (listEmpPowers == null || listEmpPowers.size() == 0) {
+                // 此商品暂时没有赋予出货权限
+                return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
             }
-            // 此人无权限
-            return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
+            empPower = listEmpPowers.get(0);
+            if (empPower.getUsed() < empPower.getCount()) {
+                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
+            } else {
+                // 此人消费次数已满，不可以进行消费
+                return new TakeOutError(TakeOutError.FAILE_TAKEOUT_FLAG);
+            }
         } else {
             // 无此员工
             return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);

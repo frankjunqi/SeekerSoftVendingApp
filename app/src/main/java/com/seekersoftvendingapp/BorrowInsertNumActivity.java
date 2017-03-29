@@ -82,7 +82,7 @@ public class BorrowInsertNumActivity extends BaseActivity {
                 .where(PassageDao.Properties.IsSend.eq(false))
                 .where(PassageDao.Properties.Stock.gt(0))
                 .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
-                .where(PassageDao.Properties.BorrowUser.eq(""))// 保证可以没有被人借走
+                //.where(PassageDao.Properties.BorrowUser.eq(""))// 保证可以没有被人借走
                 .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
                 .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
                 .list();
