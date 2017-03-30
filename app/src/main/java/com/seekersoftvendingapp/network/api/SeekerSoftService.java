@@ -80,7 +80,7 @@ public interface SeekerSoftService {
 
 
     /*
-    http://smartbox.leanapp.cn/api/takeout/[deviceid]/[card]/[passage]
+    http://smartbox.leanapp.cn/api/takeout/[deviceid]/[card]/[passage]/[number]
     根据设备号、卡号、货道号判断是否能出货
     参数：deviceid(设备ID)，card(员工卡号)，passage(货道号)
     返回值：data:{result:true/false,objectId:abc123}
@@ -90,11 +90,12 @@ public interface SeekerSoftService {
             "Accept: application/json",
             "Content-type: application/json"
     })
-    @GET("api/takeout/{deviceid}/{card}/{passage}")
+    @GET("api/takeout/{deviceid}/{card}/{passage}/{number}")
     Call<TakeOutResBody> takeOut(
             @Path("deviceid") String deviceid,
             @Path("card") String card,
-            @Path("passage") String passage
+            @Path("passage") String passage,
+            @Path("number") String number
     );
 
 

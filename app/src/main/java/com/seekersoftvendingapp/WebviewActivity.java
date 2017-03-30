@@ -3,8 +3,6 @@ package com.seekersoftvendingapp;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.webkit.GeolocationPermissions;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;

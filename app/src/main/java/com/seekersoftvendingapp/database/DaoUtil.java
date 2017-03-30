@@ -224,6 +224,7 @@ public class DaoUtil {
         takeoutRecord.addStringProperty("card");
         takeoutRecord.addStringProperty("productId");
         takeoutRecord.addDateProperty("time");
+        takeoutRecord.addIntProperty("count");
         takeoutRecord.addStringProperty("keepone");
         takeoutRecord.addStringProperty("keeptwo");
         takeoutRecord.addStringProperty("keepthree");

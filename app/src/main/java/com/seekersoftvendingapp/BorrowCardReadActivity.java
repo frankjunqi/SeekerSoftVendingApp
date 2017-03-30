@@ -147,6 +147,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             // 串口柜子passageID操作
             cmdBufferVendingSerial("");
         } else {
+            et_getcard.setText("");
             // 不可以出货
             handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
         }
@@ -165,13 +166,12 @@ public class BorrowCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            handleStoreSerialPort(true, objectId);
-            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     handleStoreSerialPort(isSuccess, objectId);
                 }
-            });*/
+            });
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }

@@ -7,8 +7,6 @@ import com.seekersoftvendingapp.util.KeyChangeUtil;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Card Read Serial Port Util

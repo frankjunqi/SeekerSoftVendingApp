@@ -63,6 +63,9 @@
         <activity android:name=".ManagerGoodsActivity" />
         <activity android:name=".ManagerPassageActivity" />
         <activity android:name=".ManagerCardReadActivity" />
+
+        <activity android:name=".TakeOutNumActivity" />
+
         <activity android:name=".WebviewActivity" />
 
 

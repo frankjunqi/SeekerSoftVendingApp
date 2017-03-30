@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
@@ -19,7 +18,6 @@ import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
-import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.List;
 
@@ -54,6 +52,7 @@ public class ManagerCardReadActivity extends BaseActivity {
             this.finish();
 
         } else {
+            et_getcard.setText("");
             // 此人不是管理员则提示他不是管理员，并且重新打开串口
             Toast.makeText(ManagerCardReadActivity.this, cardId + "此卡:" + adminCardNum + "不是管理卡,请您换管理卡，重新刷卡...", Toast.LENGTH_SHORT).show();
             ErrorRecord errorRecord = new ErrorRecord(null, false, "", adminCardNum, "管理员读卡", "此卡:" + adminCardNum + "不是管理卡.", DataFormat.getNowTime(), "", "", "");

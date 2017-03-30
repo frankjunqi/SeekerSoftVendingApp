@@ -25,6 +25,8 @@ public class SeekerSoftConstant {
     public final static String PASSAGE = "PASSAGE";// new Passga()
     public final static String TAKEOUTERROR = "TAKEOUTERROR";
 
+    public final static String TakeoutNum = "TakeoutNum";
+
     public final static int TIMELOGN = 1000 * 10;// 基础数据的同步时间长
 
     public final static int ENDTIEMLONG = 30;

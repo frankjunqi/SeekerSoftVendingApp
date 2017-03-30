@@ -94,8 +94,14 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
             // 货道实体
             Passage passage = list.get(0);
-            Intent intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
+            Intent intent = null;
+            if (TextUtils.isEmpty(passage.getFlag())) {
+                intent = new Intent(TakeOutInsertNumActivity.this, TakeOutNumActivity.class);
+            } else {
+                intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
+            }
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
+            intent.putExtra(SeekerSoftConstant.TakeoutNum, 1);
             startActivity(intent);
             this.finish();
         } else {

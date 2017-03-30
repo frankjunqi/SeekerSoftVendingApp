@@ -3,13 +3,11 @@ package com.seekersoftvendingapp.network.entity;
 import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.EmpCard;
 import com.seekersoftvendingapp.database.table.EmpPower;
-import com.seekersoftvendingapp.database.table.Employee;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.Product;
 import com.seekersoftvendingapp.network.entity.basedata.AdminCardEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmpCardEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmpPowerEntity;
-import com.seekersoftvendingapp.network.entity.basedata.EmployeeEntity;
 import com.seekersoftvendingapp.network.entity.basedata.PassageEntity;
 import com.seekersoftvendingapp.network.entity.basedata.ProductEntity;
 

@@ -17,12 +17,9 @@ import com.seekersoftvendingapp.database.table.EmpCard;
 import com.seekersoftvendingapp.database.table.EmpCardDao;
 import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.Employee;
-import com.seekersoftvendingapp.database.table.EmployeeDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.TakeoutRecord;
-import com.seekersoftvendingapp.database.table.TakeoutRecordDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
@@ -67,6 +64,10 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private EmpPower empPower;
 
     private Passage passage;
+    private int number = 1;
+
+    private int recordNum = 0;
+    private int recordSuccess = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         empCardDao = daoSession.getEmpCardDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        number = getIntent().getIntExtra(SeekerSoftConstant.TakeoutNum, 1);
         if (passage != null) {
             passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
             productId = passage.getProduct();
@@ -164,30 +166,46 @@ public class TakeOutCardReadActivity extends BaseActivity {
      * @param objectId 出货的服务端的记录的objectid
      */
     private void cmdBufferVendingStoreSerial(final String objectId) {
-        ShipmentObject shipmentObject = new ShipmentObject();
         try {
+            NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+                @Override
+                public void onCmdCallBack(boolean isSuccess) {
+                    recordNum++;
+                    if (!isSuccess) {
+                        //  调用失败接口 如果接口错误，则加入到同步队列里面去
+                        TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, cardId, productId, new Date(), -1, "", "", "");
+                        Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
+                    } else {
+                        recordSuccess++;
+                    }
+                    if (recordNum == number && recordSuccess > 0) {
+                        handleNewVendingSerialPort(true, objectId);
+                    } else if (recordNum == number && recordSuccess == 0) {
+                        handleNewVendingSerialPort(false, objectId);
+                    }
+                }
+            });
             if (isStoreSend) {
+                ShipmentObject shipmentObject = new ShipmentObject();
                 // 格子柜子
                 shipmentObject.containerNum = 2;
                 shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
                 // TODO 需要生成唯一码
                 shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+                NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
             } else {
-                // 螺纹柜子
-                int col = Integer.parseInt(pasageId.substring(0, 1));
-                int row = Integer.parseInt(pasageId.substring(1, 2));
-                shipmentObject.containerNum = 1;
-                shipmentObject.proNum = col * 10 + row;
-                // TODO 需要生成唯一码
-                shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            }
-            handleNewVendingSerialPort(true, objectId);
-            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
-                @Override
-                public void onCmdCallBack(boolean isSuccess) {
-                    handleNewVendingSerialPort(isSuccess, objectId);
+                for (int i = 0; i < number; i++) {
+                    ShipmentObject shipmentObject = new ShipmentObject();
+                    // 螺纹柜子
+                    int col = Integer.parseInt(pasageId.substring(0, 1));
+                    int row = Integer.parseInt(pasageId.substring(1, 2));
+                    shipmentObject.containerNum = 1;
+                    shipmentObject.proNum = col * 10 + row;
+                    // TODO 需要生成唯一码
+                    shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+                    NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
                 }
-            });*/
+            }
         } catch (Exception e) {
             handleNewVendingSerialPort(false, objectId);
         }
@@ -201,7 +219,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 empPowerDao.insertOrReplace(empPower);
             }
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, cardId, productId, new Date(), "", "", "");
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, passageFlag + pasageId, cardId, productId, new Date(), recordSuccess, "", "", "");
             passage.setStock(passage.getStock() - 1);
             if (TextUtils.isEmpty(objectId)) {
                 // 本地消费
@@ -218,8 +236,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 失败
         else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, cardId, productId, new Date(), "", "", "");
-            Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
+            //TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, passageFlag + pasageId, cardId, productId, new Date(), recordSuccess, "", "", "");
+            //Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
 
             // 串口打开螺纹柜子失败
             handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
@@ -236,6 +254,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             startActivity(intent);
             this.finish();
         } else {
+            et_getcard.setText("");
             Toast.makeText(TakeOutCardReadActivity.this, et_getcard.getText().toString() + takeOutError.serverMsg + "---" + takeOutError.getTakeOutMsg(), Toast.LENGTH_LONG).show();
             ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "消费问题: " + cardId + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
@@ -265,7 +284,9 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
             }
             empPower = listEmpPowers.get(0);
-            if (empPower.getUsed() < empPower.getCount()) {
+            int used = empPower.getUsed();
+            int count = used + number;
+            if (count <= empPower.getCount()) {
                 return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
             } else {
                 // 此人消费次数已满，不可以进行消费
@@ -285,7 +306,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId, String.valueOf(number));
         Log.e("json", "takeOut = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<TakeOutResBody>() {
             @Override

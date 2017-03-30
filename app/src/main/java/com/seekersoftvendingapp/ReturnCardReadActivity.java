@@ -16,7 +16,6 @@ import com.seekersoftvendingapp.database.table.BorrowRecord;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.EmpCard;
 import com.seekersoftvendingapp.database.table.EmpCardDao;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.network.api.Host;
@@ -164,13 +163,12 @@ public class ReturnCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            handleStoreSerialPort(true, objectId);
-            /*NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     handleStoreSerialPort(isSuccess, objectId);
                 }
-            });*/
+            });
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }
@@ -216,6 +214,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             startActivity(intent);
             this.finish();
         } else {
+            et_getcard.setText("");
             Toast.makeText(ReturnCardReadActivity.this, cardId + takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
             ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
