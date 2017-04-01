@@ -27,7 +27,7 @@ public class SeekerSoftConstant {
 
     public final static String TakeoutNum = "TakeoutNum";
 
-    public final static int TIMELOGN = 1000 * 10;// 基础数据的同步时间长
+    public final static long TIMELOGN = 1000 * 60 * 5;// 基础数据的同步时间长
 
     public final static int ENDTIEMLONG = 30;
     public final static int ENDTIEMSHORT = 10;

@@ -63,8 +63,6 @@ public class SettingActivity extends BaseActivity {
     private Button btn_vending;
     private Button btn_store;
     private Button btn_db_admincard_dao;
-    private Button btn_show_progress;
-    private Button btn_hide_progress;
 
     private Dialog progressDialog;
 
@@ -157,29 +155,14 @@ public class SettingActivity extends BaseActivity {
         btn_store.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
-            }
-        });
-
-        btn_show_progress = (Button) findViewById(R.id.btn_show_progress);
-        btn_show_progress.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, TestNewVendingActivity.class));
             }
         });
-
-        btn_hide_progress = (Button) findViewById(R.id.btn_hide_progress);
-        btn_hide_progress.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str = "1234567896\n";
-                if (str.endsWith("\n")) {
-                    Toast.makeText(SettingActivity.this, "is \n", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
+        //startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
+        /*String str = "1234567896\n";
+        if (str.endsWith("\n")) {
+            Toast.makeText(SettingActivity.this, "is \n", Toast.LENGTH_LONG).show();
+        }*/
     }
 
     private void populateAutoComplete() {

@@ -6,6 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.seekersoftvendingapp.database.table.DaoMaster;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import org.greenrobot.greendao.database.Database;
@@ -37,7 +38,7 @@ public class SeekersoftApp extends Application {
         daoSession = new DaoMaster(db).newSession();
 
         // 初始化设备信息
-        SeekerSoftConstant.DEVICEID = "c45774e8b52619c9";
+        SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
 
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();

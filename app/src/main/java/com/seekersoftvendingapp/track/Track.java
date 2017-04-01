@@ -87,6 +87,7 @@ public class Track {
      * 基础数据的同步
      */
     public void setBaseDataNTrackCommand() {
+        System.out.println("-------- basedata -------");
         mBaseDataNTrack.asyncBaseData();
     }
 

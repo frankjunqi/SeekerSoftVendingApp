@@ -21,6 +21,7 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -110,15 +111,7 @@ public class StartAppActivity extends BaseActivity {
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
-                if (response != null && response.body() != null && response.body().data != null
-                        && response.body().data.Passage != null
-                        && response.body().data.Passage.size() > 0
-                        && response.body().data.EmpPower != null
-                        && response.body().data.EmpPower.size() > 0
-                        && response.body().data.Product != null
-                        && response.body().data.Product.size() > 0
-                        && response.body().data.EmpCard != null
-                        && response.body().data.EmpCard.size() > 0) {
+                if (response != null && response.body() != null && response.body().status != 201) {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
                     empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());

@@ -52,7 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="btn_db_dao"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btn_db_admincard_dao"
@@ -61,7 +63,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="btn_db_admincard_dao"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btn_db_rxdao"
@@ -70,7 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="btn_db_rxdao"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btn_network"
@@ -97,7 +103,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="btn_read_card"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btn_vending"
@@ -106,7 +114,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="btn_vending"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_store"
@@ -114,25 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="btn_store"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btn_show_progress"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_show_progress"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btn_hide_progress"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_hide_progress"
+                android:text="串口调试"
                 android:textStyle="bold" />
 
         </LinearLayout>
