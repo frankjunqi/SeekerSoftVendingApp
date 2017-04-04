@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.AdminCard;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ManagerCardReadActivity extends BaseActivity {
 
     private EditText et_getcard;
+    private RelativeLayout ll_keyboard;
     private String cardId = "";
 
     private AdminCardDao adminCardDao;
@@ -67,6 +69,14 @@ public class ManagerCardReadActivity extends BaseActivity {
         setTitle("输入卡号...");
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
+
+        ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
+        ll_keyboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {

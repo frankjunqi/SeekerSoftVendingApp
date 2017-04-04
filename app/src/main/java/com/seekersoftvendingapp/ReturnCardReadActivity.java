@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
@@ -45,6 +46,7 @@ import retrofit2.Retrofit;
 public class ReturnCardReadActivity extends BaseActivity {
 
     private EditText et_getcard;
+    private RelativeLayout ll_keyboard;
 
     private String cardId = "";
 
@@ -74,6 +76,13 @@ public class ReturnCardReadActivity extends BaseActivity {
             pasageId = passage.getSeqNo();
             passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
         }
+        ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
+        ll_keyboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {

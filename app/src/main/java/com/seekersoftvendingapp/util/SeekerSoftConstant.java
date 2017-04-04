@@ -6,6 +6,8 @@ package com.seekersoftvendingapp.util;
 
 public class SeekerSoftConstant {
 
+    public static final boolean DEBUG = true;
+
     // 设备号
     public static String DEVICEID = "";
 

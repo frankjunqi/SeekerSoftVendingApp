@@ -124,7 +124,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "");
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("123", "");
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
@@ -155,7 +155,7 @@ public class TestNetworkActivity extends BaseActivity implements View.OnClickLis
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", "123", "1480763417");
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("123", "1480763417");
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {

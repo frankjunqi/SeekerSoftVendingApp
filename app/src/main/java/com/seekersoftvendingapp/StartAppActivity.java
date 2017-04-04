@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -106,7 +107,7 @@ public class StartAppActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", SeekerSoftConstant.DEVICEID, "");
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, "");
         Log.e("json", "getSynchroBaseData = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
@@ -122,7 +123,8 @@ public class StartAppActivity extends BaseActivity {
                     successInit();
                 } else {
                     mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                    Toast.makeText(StartAppActivity.this, "【" + response.body().message + "】", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(StartAppActivity.this, "【" + ((response != null && response.body() != null && !TextUtils.isEmpty(response.body().message)) ? response.body().message : "服务端无描述信息.") + "】", Toast.LENGTH_SHORT).show();
                 }
             }
 

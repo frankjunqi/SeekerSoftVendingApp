@@ -10,6 +10,7 @@ import com.seekersoftvendingapp.BaseActivity;
 import com.seekersoftvendingapp.R;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
+import com.seekersoftvendingapp.util.LogCat;
 
 /**
  * Created by Frank on 16/11/20.
@@ -58,7 +59,7 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                     @Override
                     public void onCmdCallBack(boolean isSuccess) {
-                        System.out.println("<<< error" + tv_showdata.getText() + " -- " + isSuccess);
+                        LogCat.e("<<< error" + tv_showdata.getText() + " -- " + isSuccess);
                     }
                 });
                 break;
@@ -75,7 +76,7 @@ public class TestNewVendingActivity extends BaseActivity implements View.OnClick
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObjectG).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                     @Override
                     public void onCmdCallBack(boolean isSuccess) {
-                        System.out.println("<<< gezi out result: " + tv_showdata.getText() + " -- " + isSuccess);
+                        LogCat.e("<<< gezi out result: " + tv_showdata.getText() + " -- " + isSuccess);
                     }
                 });
                 break;

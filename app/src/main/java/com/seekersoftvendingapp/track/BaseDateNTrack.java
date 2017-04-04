@@ -91,7 +91,7 @@ public class BaseDateNTrack implements InterfaceTrack {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData("api", "getData", SeekerSoftConstant.DEVICEID, timestamp);
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, timestamp);
         Log.e("json", "getSynchroBaseData = " + updateAction.request().url().toString());
         try {
             Response<SynchroBaseDataResBody> response = updateAction.execute();

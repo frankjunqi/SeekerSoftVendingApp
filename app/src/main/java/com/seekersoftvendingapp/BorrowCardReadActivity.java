@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.BorrowRecord;
@@ -47,6 +48,7 @@ import retrofit2.Retrofit;
 public class BorrowCardReadActivity extends BaseActivity {
 
     private EditText et_getcard;
+    private RelativeLayout ll_keyboard;
 
     private String cardId = "";
 
@@ -71,6 +73,15 @@ public class BorrowCardReadActivity extends BaseActivity {
         empPowerDao = daoSession.getEmpPowerDao();
         empCardDao = daoSession.getEmpCardDao();
         //employeeDao = daoSession.getEmployeeDao();
+
+        ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
+        ll_keyboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage != null) {

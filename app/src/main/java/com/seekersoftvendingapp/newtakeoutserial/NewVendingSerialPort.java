@@ -3,6 +3,7 @@ package com.seekersoftvendingapp.newtakeoutserial;
 import android.util.Log;
 
 import com.seekersoftvendingapp.serialport.SeekerSoftSerialPort;
+import com.seekersoftvendingapp.util.LogCat;
 
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +174,8 @@ public class NewVendingSerialPort {
             case 0x02://设置VMC的系统时间
                 break;
             case 0x03://通知VMC出货。
-                System.out.println("<<<  VMC Out Product");
+                LogCat.e("<<<  VMC Out Product");
+                LogCat.e("<<<  VMC Out Product");
                 sendData[0] = POLL;
                 sendData[1] = code;//交易码
                 sendData[2] = (byte) containerNum;//货柜编号
@@ -223,7 +225,7 @@ public class NewVendingSerialPort {
         data[0] = id;
         data[1] = (byte) is;
         data[2] = (byte) (is ^ byteToInt(id));
-        System.out.println("<<<  ACKorNAK " + bytesToHexString(data));
+        LogCat.e("<<<  ACKorNAK " + bytesToHexString(data));
         sendBuffer(data);
     }
 
@@ -231,15 +233,15 @@ public class NewVendingSerialPort {
     private void CMD(byte id) {
         switch (id) {
             case 0x54://货柜连接信息
-                System.out.println("<<<  0x54 货柜连接信息");
+                LogCat.e("<<<  0x54 货柜连接信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x55://货道设置信息
-                System.out.println("<<<  0x55 货道设置信息");
+                LogCat.e("<<<  0x55 货道设置信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x56://POLL指令
-                System.out.println("<<<  0x56 POLL指令");
+                LogCat.e("<<<  0x56 POLL指令");
                 ShipmentObject shipmentObject = popCmdOutShipment();
                 if (shipmentObject != null) {
                     Answer((byte) 0x03, shipmentObject.containerNum, shipmentObject.proNum, shipmentObject.objectId);
@@ -248,55 +250,55 @@ public class NewVendingSerialPort {
                 }
                 break;
             case 0x58:// 签到
-                System.out.println("<<<  0x58 签到");
+                LogCat.e("<<<  0x58 签到");
                 ACKorNAK(id, ACK);
                 break;
             case 0x59://货道故障（有货无货）信息
-                System.out.println("<<<  0x59 货道故障（有货无货）信息");
+                LogCat.e("<<<  0x59 货道故障（有货无货）信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x5A://系统配置信息
-                System.out.println("<<<  0x5A 系统配置信息");
+                LogCat.e("<<<  0x5A 系统配置信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x5B://商品销售汇总信息
-                System.out.println("<<<  0x5B 商品销售汇总信息");
+                LogCat.e("<<<  0x5B 商品销售汇总信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x5C://出货
-                System.out.println("<<<  0x5C 出货" + ReceiveData[7]);
+                ACKorNAK(id, ACK);
+                LogCat.e("<<<  0x5C 出货" + (ReceiveData.length >= 8 ? ReceiveData[7] : ""));
                 // TODO 判断出货是否成功
-                if ((byte) 0 == ReceiveData[7]) {
-                    System.out.println("<<<  0x5C 出货 success");
+                if (ReceiveData.length >= 8 && (byte) 0 == ReceiveData[7]) {
+                    LogCat.e("<<<  0x5C 出货 success");
                     onCmdCallBackListen.onCmdCallBack(true);
                 } else {
-                    System.out.println("<<<  0x5C 出货 failed");
+                    LogCat.e("<<<  0x5C 出货 failed");
                     onCmdCallBackListen.onCmdCallBack(false);
                 }
-                ACKorNAK(id, ACK);
                 break;
             case 0x5D://机器运行（故障）信息
-                System.out.println("<<<  0x5D 机器运行（故障）信息");
+                LogCat.e("<<<  0x5D 机器运行（故障）信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x5F://货道价格信息
-                System.out.println("<<<  0x5F 货道价格信息");
+                LogCat.e("<<<  0x5F 货道价格信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x61://POS机状态信息
-                System.out.println("<<<  0x61 POS机状态信息");
+                LogCat.e("<<<  0x61 POS机状态信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x62://货道优惠信息
-                System.out.println("<<<  0x62 货道优惠信息");
+                LogCat.e("<<<  0x62 货道优惠信息");
                 ACKorNAK(id, ACK);
                 break;
             case 0x64://格子的状态
-                System.out.println("<<<  0x64 格子的状态");
+                LogCat.e("<<<  0x64 格子的状态");
                 ACKorNAK(id, ACK);
                 break;
             default:
-                System.out.println("<<<  ERROR DEFAULT ");
+                LogCat.e("<<<  ERROR DEFAULT ");
                 break;
         }
     }
@@ -392,11 +394,11 @@ public class NewVendingSerialPort {
         int byteCh = byteToInt(ch);
         if ((state == DATASTATE.IDEL) && (byteCh == H1))//0xEF
         {
-            System.out.println("<<< H1");
+            LogCat.e("<<< H1");
             state = DATASTATE.FIND_H1;
         } else if ((state == DATASTATE.FIND_H1) && (byteCh == H2))//0xEE
         {
-            System.out.println("<<< H2");
+            LogCat.e("<<< H2");
             state = DATASTATE.FIND_H2;
         } else if ((state == DATASTATE.FIND_H2) && (byteCh == H3))//0xFE
         {
@@ -411,7 +413,7 @@ public class NewVendingSerialPort {
 
             byte[] byteResign = new byte[1];
             byteResign[0] = ReSign;
-            System.out.println("<<< H3 " + bytesToHexString(byteResign) + " ," + DataLn);
+            LogCat.e("<<< H3 " + bytesToHexString(byteResign) + " ," + DataLn);
         } else if (state == DATASTATE.FIND_ALL_DATA)//开始接收数据
         {
             if (ReceiveLn == DataLn) {
@@ -422,7 +424,7 @@ public class NewVendingSerialPort {
                 checksum ^= ReceiveData[i];
             }
             if (checksum == byteCh) {// pass
-                System.out.println("<<< OK");
+                LogCat.e("<<< OK");
                 return true;
             } else {
                 state = DATASTATE.IDEL;

@@ -70,10 +70,8 @@ public interface SeekerSoftService {
     参数：deviceid(设备ID)，objectId(上一次同步的时间戳)
     返回值：data:{表1:[],表2:[]...}
     与初始化返回的数据表形式一致*/
-    @GET("{api}/{serviceName}/{deviceId}/{objectId}")
+    @GET("api/getData1/{deviceId}/{objectId}")
     Call<SynchroBaseDataResBody> getSynchroBaseData(
-            @Path("api") String api,
-            @Path("serviceName") String serviceName,
             @Path("deviceId") String deviceId,
             @Path("objectId") String timestamp
     );
