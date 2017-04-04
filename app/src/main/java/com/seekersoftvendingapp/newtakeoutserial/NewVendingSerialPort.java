@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Stack;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Card Read Serial Port Util
@@ -167,34 +168,37 @@ public class NewVendingSerialPort {
 
 
     // 工控回复vmc，在poll命令条件下
-    private void Answer(byte code, int containerNum, int proMum, int objectId) {
+    private void Answer(byte id, byte code, int containerNum, int proMum, int objectId) {
         byte[] sendData = new byte[200];
         byte checksum = 0;
         switch (code) {
             case 0x02://设置VMC的系统时间
                 break;
             case 0x03://通知VMC出货。
-                LogCat.e("<<<  VMC Out Product");
-                LogCat.e("<<<  VMC Out Product");
-                sendData[0] = POLL;
-                sendData[1] = code;//交易码
-                sendData[2] = (byte) containerNum;//货柜编号
-                sendData[3] = (byte) proMum;//货道编号
-                sendData[4] = 0;//变价出货
-                sendData[5] = 0;//售卖金额
-                sendData[6] = 0;//售卖金额
-                sendData[7] = 0;//售卖金额
-                sendData[8] = 0;//售卖金额
-                sendData[9] = 1;//支付方式
-                sendData[10] = 0;//流水号
-                sendData[11] = 0;//流水号
-                sendData[12] = (byte) objectId;//流水号
-                for (int i = 0; i < 13; i++) {
-                    checksum ^= sendData[i];
+                try {
+                    LogCat.e("<<<  VMC Out Product");
+                    sendData[0] = POLL;
+                    sendData[1] = code;//交易码
+                    sendData[2] = (byte) containerNum;//货柜编号
+                    sendData[3] = (byte) proMum;//货道编号
+                    sendData[4] = 0;//变价出货
+                    sendData[5] = 0;//售卖金额
+                    sendData[6] = 0;//售卖金额
+                    sendData[7] = 0;//售卖金额
+                    sendData[8] = 0;//售卖金额
+                    sendData[9] = 1;//支付方式
+                    sendData[10] = 0;//流水号
+                    sendData[11] = 0;//流水号
+                    sendData[12] = (byte) objectId;//流水号
+                    for (int i = 0; i < 13; i++) {
+                        checksum ^= sendData[i];
+                    }
+                    sendData[13] = checksum;
+                    // TODO 此处需要重新根据出货成功标识进行判断是否成功出货的回调
+                    sendBuffer(sendData);
+                } catch (Exception e) {
+                    ACKorNAK(id, ACK);
                 }
-                sendData[13] = checksum;
-                // TODO 此处需要重新根据出货成功标识进行判断是否成功出货的回调
-                sendBuffer(sendData);
                 break;
             case 0x04://设置货道的价格。
                 break;
@@ -244,7 +248,7 @@ public class NewVendingSerialPort {
                 LogCat.e("<<<  0x56 POLL指令");
                 ShipmentObject shipmentObject = popCmdOutShipment();
                 if (shipmentObject != null) {
-                    Answer((byte) 0x03, shipmentObject.containerNum, shipmentObject.proNum, shipmentObject.objectId);
+                    Answer(id, (byte) 0x03, shipmentObject.containerNum, shipmentObject.proNum, shipmentObject.objectId);
                 } else {
                     ACKorNAK(id, ACK);
                 }
@@ -299,6 +303,7 @@ public class NewVendingSerialPort {
                 break;
             default:
                 LogCat.e("<<<  ERROR DEFAULT ");
+                ACKorNAK(id, ACK);
                 break;
         }
     }
