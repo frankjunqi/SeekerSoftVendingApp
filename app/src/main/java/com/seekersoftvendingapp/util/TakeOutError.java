@@ -29,8 +29,12 @@ public class TakeOutError implements Serializable {
     public static final int HAS_NOPOWER_FLAG = 5;
 
     // 串口打开螺纹柜子失败
-    private static final String OPEN_LUOWEN_SERIAL_FAILED = "串口打开螺纹柜子失败";
+    private static final String OPEN_LUOWEN_SERIAL_FAILED = "串口打开螺纹柜子失败...";
     public static final int OPEN_LUOWEN_SERIAL_FAILED_FLAG = 6;
+
+    // 串口打开螺纹柜子失败
+    private static final String OPEN_GEZI_SERIAL_FAILED = "串口打开格子柜子失败...";
+    public static final int OPEN_GEZI_SERIAL_FAILED_FLAG = 7;
 
     private int takeOutFLag;
 
@@ -68,6 +72,8 @@ public class TakeOutError implements Serializable {
                 return HAS_NOPOWER;
             case OPEN_LUOWEN_SERIAL_FAILED_FLAG:
                 return OPEN_LUOWEN_SERIAL_FAILED;
+            case OPEN_GEZI_SERIAL_FAILED_FLAG:
+                return OPEN_GEZI_SERIAL_FAILED;
             default:
                 return FAILE_TAKEOUT;
         }

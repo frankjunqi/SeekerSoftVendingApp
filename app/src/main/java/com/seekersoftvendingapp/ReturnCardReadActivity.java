@@ -176,10 +176,6 @@ public class ReturnCardReadActivity extends BaseActivity {
         ShipmentObject shipmentObject = new ShipmentObject();
         try {
             // 格子柜子
-            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
-            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
-            // TODO 需要生成唯一码
-            shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
             NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
@@ -196,6 +192,10 @@ public class ReturnCardReadActivity extends BaseActivity {
 
                 }
             });
+            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
+            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+            // TODO 需要生成唯一码
+            shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }
@@ -227,7 +227,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             BorrowRecord borrowRecord = new BorrowRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, false, new Date(), "", "", "");
             Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
             // 串口打开柜子失败
-            handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
+            handleResult(new TakeOutError(TakeOutError.OPEN_GEZI_SERIAL_FAILED_FLAG));
         }
     }
 

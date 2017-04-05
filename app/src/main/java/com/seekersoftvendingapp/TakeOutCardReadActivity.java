@@ -295,7 +295,11 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 失败
         else {
             // 串口打开螺纹柜子失败
-            handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
+            if (isStoreSend) {
+                handleResult(new TakeOutError(TakeOutError.OPEN_GEZI_SERIAL_FAILED_FLAG));
+            } else {
+                handleResult(new TakeOutError(TakeOutError.OPEN_LUOWEN_SERIAL_FAILED_FLAG));
+            }
         }
     }
 
