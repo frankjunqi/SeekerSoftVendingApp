@@ -194,12 +194,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
      */
     private void cmdBufferVendingStoreSerial(final String objectId) {
         if (isStoreSend) {
-            ShipmentObject shipmentObject = new ShipmentObject();
-            // 格子柜子
-            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
-            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
-            shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
             NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
@@ -214,15 +208,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     mHnadler.sendMessage(msg);
                 }
             });
+            ShipmentObject shipmentObject = new ShipmentObject();
+            // 格子柜子
+            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
+            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+            shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
         } else {
-            for (int i = 0; i < number; i++) {
-                ShipmentObject shipmentObject = new ShipmentObject();
-                // 螺纹柜子
-                shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
-                shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
-                shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-                NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
-            }
             NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
@@ -237,6 +229,14 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     mHnadler.sendMessage(msg);
                 }
             });
+            for (int i = 0; i < number; i++) {
+                ShipmentObject shipmentObject = new ShipmentObject();
+                // 螺纹柜子
+                shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
+                shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+                shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+                NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
+            }
         }
     }
 
