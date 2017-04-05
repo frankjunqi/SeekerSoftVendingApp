@@ -16,6 +16,7 @@ import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordReqBody;
 import com.seekersoftvendingapp.network.entity.borrowrecord.BorrowRecordResBody;
 import com.seekersoftvendingapp.network.entity.returnpro.ReturnSuccessResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         borrowRecordReqBody.record.addAll(borrowRecordList);
         Gson gson = new Gson();
         String josn = gson.toJson(borrowRecordReqBody);
-        Log.e("json", "borrowRecord = " + josn);
+        LogCat.e("borrowRecord = " + josn);
         Call<BorrowRecordResBody> postAction = service.borrowRecord(borrowRecordReqBody);
         try {
             Response<BorrowRecordResBody> response = postAction.execute();
@@ -100,10 +101,10 @@ public class BorrowReturnNTrack implements InterfaceTrack {
                 // 同步成功
                 setBorrowReturnRecordOk();
             } else {
-                Log.e("request", "borrow Record: Failure");
+                LogCat.e("borrow Record: Failure");
             }
         } catch (IOException e) {
-            Log.e("request", "borrow Record: IOException");
+            LogCat.e("borrow Record: IOException");
         }
     }
 
@@ -123,7 +124,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowSuccessResBody> updateAction = service.borrowFail(borrowObjectId);
-        Log.e("json", "borrowFail = " + updateAction.request().url().toString());
+        LogCat.e("borrowFail = " + updateAction.request().url().toString());
         try {
             Response<BorrowSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {
@@ -147,7 +148,7 @@ public class BorrowReturnNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnSuccessResBody> updateAction = service.returnFail(returnObjectId);
-        Log.e("json", "returnFail = " + updateAction.request().url().toString());
+        LogCat.e("returnFail = " + updateAction.request().url().toString());
         try {
             Response<ReturnSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {

@@ -1,7 +1,6 @@
 package com.seekersoftvendingapp.track;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.seekersoftvendingapp.SeekersoftApp;
@@ -13,6 +12,7 @@ import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.error.ErrorReqBody;
 import com.seekersoftvendingapp.network.entity.error.ErrorResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.io.IOException;
@@ -75,14 +75,14 @@ public class ErrorNTrack implements InterfaceTrack {
         errorRecordReqBody.error.addAll(errorRecordList);
         Gson gson = new Gson();
         String josn = gson.toJson(errorRecordReqBody);
-        Log.e("json", "error = " + josn);
+        LogCat.e("error = " + josn);
         Call<ErrorResBody> postAction = service.error(errorRecordReqBody);
         try {
             Response<ErrorResBody> response = postAction.execute();
             if (response != null && response.body() != null) {
                 setErrorRecordOk();
             } else {
-                Log.e("request", "error : Failure");
+                LogCat.e("error : Failure");
             }
         } catch (IOException e) {
 

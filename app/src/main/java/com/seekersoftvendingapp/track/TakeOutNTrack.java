@@ -2,7 +2,6 @@ package com.seekersoftvendingapp.track;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.seekersoftvendingapp.SeekersoftApp;
@@ -15,6 +14,7 @@ import com.seekersoftvendingapp.network.entity.takeout.TakeOutSuccessResBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordReqBody;
 import com.seekersoftvendingapp.network.entity.takeoutrecord.TakeoutRecordResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.io.IOException;
@@ -91,7 +91,7 @@ public class TakeOutNTrack implements InterfaceTrack {
         takeoutRecordReqBody.record.addAll(takeOutRecordList);
         Gson gson = new Gson();
         String josn = gson.toJson(takeoutRecordReqBody);
-        Log.e("json", "takeoutRecord = " + josn);
+        LogCat.e("takeoutRecord = " + josn);
         Call<TakeoutRecordResBody> postAction = service.takeoutRecord(takeoutRecordReqBody);
         try {
             Response<TakeoutRecordResBody> response = postAction.execute();
@@ -100,11 +100,11 @@ public class TakeOutNTrack implements InterfaceTrack {
                 setTaketOutRecordOk();
             } else {
                 // 失败不需要更新数据库标识
-                Log.e("request", "takeout Record: Failure");
+                LogCat.e("takeout Record: Failure");
             }
         } catch (IOException e) {
             // 失败不需要更新数据库标识
-            Log.e("request", "takeout Record: IOException");
+            LogCat.e("takeout Record: IOException");
         }
     }
 
@@ -128,7 +128,7 @@ public class TakeOutNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<TakeOutSuccessResBody> updateAction = service.takeOutFail(takeOutObjectId);
-        Log.e("json", "takeOutFail = " + updateAction.request().url().toString());
+        LogCat.e("takeOutFail = " + updateAction.request().url().toString());
         try {
             Response<TakeOutSuccessResBody> response = updateAction.execute();
             if (response != null && response.body() != null && response.body().data) {

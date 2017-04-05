@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.seekersoftvendingapp.SeekersoftApp;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
@@ -91,7 +90,7 @@ public class BaseDateNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, timestamp);
-        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
+        LogCat.e("5 min update: getSynchroBaseData = " + updateAction.request().url().toString());
         try {
             Response<SynchroBaseDataResBody> response = updateAction.execute();
             if (response != null && response.body() != null) {
