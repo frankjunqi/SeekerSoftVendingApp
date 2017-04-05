@@ -24,6 +24,7 @@ import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import retrofit2.Call;
@@ -108,7 +109,7 @@ public class StartAppActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, "");
-        Log.e("json", "getSynchroBaseData = " + updateAction.request().url().toString());
+        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +28,7 @@ import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
 
@@ -261,38 +261,6 @@ public class BorrowCardReadActivity extends BaseActivity {
             // 无此员工
             return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
         }
-
-
-        /*// 同一个商品 权限详细信息list 消费频次 周期消费次数
-        List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                .where(EmpPowerDao.Properties.IsDel.eq(false))
-                .where(EmpPowerDao.Properties.Product.eq(productId)).list();
-
-        if (listEmpPowers == null || listEmpPowers.size() == 0) {
-            // 此商品暂时没有赋予出货权限
-            return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
-        }
-
-        // 具体查询card对应的用户
-        List<Employee> employeeList = employeeDao.queryBuilder()
-                .where(EmployeeDao.Properties.IsDel.eq(false))
-                .where(EmployeeDao.Properties.Card.like("%" + cardId + "%"))
-                .list();
-
-        if (employeeList != null && employeeList.size() > 0) {
-            employee = employeeList.get(0);
-            for (EmpPower empPower : listEmpPowers) {
-                if (employee.getPower().contains(empPower.getObjectId())) {
-                    // 此人有权限进行借此物品
-                    return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
-                }
-            }
-            // 此人无权限
-            return new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
-        } else {
-            // 无此员工
-            return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
-        }*/
     }
 
     /**
@@ -304,7 +272,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
-        Log.e("json", "borrow = " + updateAction.request().url().toString());
+        LogCat.e("borrow = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<BorrowResBody>() {
             @Override
             public void onResponse(Call<BorrowResBody> call, Response<BorrowResBody> response) {

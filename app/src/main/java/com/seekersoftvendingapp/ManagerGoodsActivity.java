@@ -34,6 +34,7 @@ import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
 import com.seekersoftvendingapp.util.DataFormat;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.util.List;
@@ -202,7 +203,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         }
         Gson gson = new Gson();
         String josn = gson.toJson(supplyRecordReqBody);
-        Log.e("json", "supplyRecord = " + josn);
+        LogCat.e("supplyRecord = " + josn);
 
         Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
         postAction.enqueue(new Callback<SupplyRecordResBody>() {
@@ -216,7 +217,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                     Toast.makeText(ManagerGoodsActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ManagerGoodsActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
-                    Log.e("request", "supply Record: Failure");
+                    LogCat.e("supply Record: Failure");
                 }
                 hideProgress();
             }

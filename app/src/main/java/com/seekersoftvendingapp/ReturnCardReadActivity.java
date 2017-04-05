@@ -27,6 +27,7 @@ import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
 
@@ -297,7 +298,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<ReturnProResBody> updateAction = service.returnPro(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
-        Log.e("json", "returnPro = " + updateAction.request().url().toString());
+        LogCat.e("returnPro = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<ReturnProResBody>() {
             @Override
             public void onResponse(Call<ReturnProResBody> call, Response<ReturnProResBody> response) {

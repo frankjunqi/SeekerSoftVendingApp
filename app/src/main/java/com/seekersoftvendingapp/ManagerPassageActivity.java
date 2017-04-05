@@ -23,6 +23,7 @@ import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.util.DataFormat;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.EmptyRecyclerView;
 
@@ -166,7 +167,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
 
         Gson gson = new Gson();
         String josn = gson.toJson(supplyRecordReqBody);
-        Log.e("json", "supplyRecord = " + josn);
+        LogCat.e("supplyRecord = " + josn);
 
         Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
         postAction.enqueue(new Callback<SupplyRecordResBody>() {
