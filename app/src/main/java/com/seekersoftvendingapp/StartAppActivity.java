@@ -133,7 +133,7 @@ public class StartAppActivity extends BaseActivity {
                     successInit();
                 } else {
                     mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                    Toast.makeText(StartAppActivity.this, "基础数据获取失败.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -120,7 +120,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                     cardId = s.toString().replace("\n", "");
                     if (TextUtils.isEmpty(cardId)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
                         Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
@@ -207,7 +207,7 @@ public class BorrowCardReadActivity extends BaseActivity {
     private void handleStoreSerialPort(boolean isSuccess, String objectId) {
         if (isSuccess) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, true, true, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, true, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             passage.setUsed(empCard != null ? empCard.getEmp() : "");
@@ -226,7 +226,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             // 串口操作失败
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, true, false, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, true, false, new Date(), "", "", "");
             Track.getInstance(BorrowCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败
@@ -239,7 +239,7 @@ public class BorrowCardReadActivity extends BaseActivity {
      */
     private void handleResult(TakeOutError takeOutError) {
         if (!takeOutError.isSuccess()) {
-            ErrorRecord errorRecord = new ErrorRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
+            ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
         Intent intent = new Intent(BorrowCardReadActivity.this, HandleResultActivity.class);
@@ -285,7 +285,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo());
+        Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo());
         LogCat.e("borrow = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<BorrowResBody>() {
             @Override
