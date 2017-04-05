@@ -197,7 +197,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             // 格子柜子
             shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
-            // TODO 需要生成唯一码
+            // 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
@@ -258,12 +258,12 @@ public class BorrowCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<EmpCard> empCardList = empCardDao.queryBuilder()
                 .where(EmpCardDao.Properties.IsDel.eq(false))
-                .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
+                .where(EmpCardDao.Properties.Card.like(cardId)).list();
         if (empCardList != null && empCardList.size() > 0) {
             empCard = empCardList.get(0);
             List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
                     .where(EmpPowerDao.Properties.IsDel.eq(false))
-                    .where(EmpPowerDao.Properties.Emp.like("%" + empCard.getEmp() + "%"))
+                    .where(EmpPowerDao.Properties.Emp.like(empCard.getEmp()))
                     .where(EmpPowerDao.Properties.Product.eq(productId)).list();
             if (listEmpPowers == null || listEmpPowers.size() == 0) {
                 // 此商品暂时没有赋予出货权限

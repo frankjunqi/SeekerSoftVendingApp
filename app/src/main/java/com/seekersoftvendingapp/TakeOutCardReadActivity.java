@@ -328,13 +328,13 @@ public class TakeOutCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<EmpCard> empCardList = empCardDao.queryBuilder()
                 .where(EmpCardDao.Properties.IsDel.eq(false))
-                .where(EmpCardDao.Properties.Card.like("%" + cardId + "%")).list();
+                .where(EmpCardDao.Properties.Card.like(cardId)).list();
         if (empCardList != null && empCardList.size() > 0) {
             EmpCard empCard = empCardList.get(0);
             // 同一个商品 权限详细信息list 消费频次 周期消费次数
             List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
                     .where(EmpPowerDao.Properties.IsDel.eq(false))
-                    .where(EmpPowerDao.Properties.Emp.like("%" + empCard.getEmp() + "%"))
+                    .where(EmpPowerDao.Properties.Emp.like(empCard.getEmp()))
                     .where(EmpPowerDao.Properties.Product.eq(productId)).list();
             if (listEmpPowers == null || listEmpPowers.size() == 0) {
                 // 此商品暂时没有赋予出货权限

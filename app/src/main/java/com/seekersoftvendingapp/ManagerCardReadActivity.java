@@ -43,7 +43,7 @@ public class ManagerCardReadActivity extends BaseActivity {
     private void handleReadCardAfterBusniess(String adminCardNum) {
         List<AdminCard> adminList = adminCardDao.queryBuilder()
                 .where(AdminCardDao.Properties.IsDel.eq(false))
-                .where(AdminCardDao.Properties.Card.like("%" + adminCardNum + "%"))
+                .where(AdminCardDao.Properties.Card.like(adminCardNum))
                 .list();
         if (adminList != null && adminList.size() > 0) {
             // 此人是管理员

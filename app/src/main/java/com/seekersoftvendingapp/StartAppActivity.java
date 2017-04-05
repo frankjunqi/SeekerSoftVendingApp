@@ -78,8 +78,8 @@ public class StartAppActivity extends BaseActivity {
         btn_tryagain = (Button) findViewById(R.id.btn_tryagain);
         tv_resultdata = (TextView) findViewById(R.id.tv_resultdata);
 
-        // 初始化网络状态
-        DeviceInfoTool.handleConnect(getApplicationContext());
+        // TODO 初始化网络状态
+        //DeviceInfoTool.handleConnect(getApplicationContext());
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();

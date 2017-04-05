@@ -96,7 +96,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.btn_onebyoneinsert:
-                if (SeekerSoftConstant.NETWORKCONNECT) {
+                if (true) {
                     startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
                 } else {
                     needNetwork();

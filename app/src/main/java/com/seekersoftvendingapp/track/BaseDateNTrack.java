@@ -122,10 +122,10 @@ public class BaseDateNTrack implements InterfaceTrack {
                 productDao.insertOrReplaceInTx(response.body().getProductList());
                 // 成功初始化基础数据
             } else {
-                // TODO 失败
+                // 失败
             }
         } catch (IOException e) {
-            // TODO 异常
+            // 异常
         }
         if (!StopMesage) {
             mHandle.sendEmptyMessageDelayed(SENDBASEDATEUPDATE, SeekerSoftConstant.TIMELOGN);

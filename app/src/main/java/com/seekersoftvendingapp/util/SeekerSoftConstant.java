@@ -12,7 +12,7 @@ public class SeekerSoftConstant {
     public static String DEVICEID = "";
 
     // 网络是否链接
-    public static boolean NETWORKCONNECT = true;
+    public static boolean NETWORKCONNECT = false;
 
     // 管理员卡号key
     public static String ADMINCARD = "admincard";

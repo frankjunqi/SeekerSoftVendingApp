@@ -136,7 +136,7 @@ public class NewVendingSerialPort {
                         checksum ^= sendData[i];
                     }
                     sendData[13] = checksum;
-                    // TODO 此处需要重新根据出货成功标识进行判断是否成功出货的回调
+                    // 此处需要重新根据出货成功标识进行判断是否成功出货的回调
                     sendBuffer(sendData);
                 } catch (Exception e) {
                     ACKorNAK(id, ACK);
@@ -214,7 +214,7 @@ public class NewVendingSerialPort {
             case 0x5C://出货
                 ACKorNAK(id, ACK);
                 LogCat.e("<<<  0x5C 出货" + (ReceiveData.length >= 8 ? ReceiveData[7] : ""));
-                // TODO 判断出货是否成功
+                // 判断出货是否成功
                 if (ReceiveData.length >= 8 && (byte) 0 == ReceiveData[7]) {
                     LogCat.e("<<<  0x5C 出货 success");
                     onCmdCallBackListen.onCmdCallBack(true);
@@ -283,7 +283,6 @@ public class NewVendingSerialPort {
     }
 
     /**
-     * TODO
      * 初始化串口信息，并启动此串口的read来自vmc的信号数据
      * 在启动程序的时候就做此初始化操作。
      */
@@ -412,7 +411,6 @@ public class NewVendingSerialPort {
     }
 
     /**
-     * TODO
      * 关闭串口，在程序退出的时候，在调用这个串口的关闭
      */
     public void closeSerialPort() {
