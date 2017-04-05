@@ -2,6 +2,8 @@ package com.seekersoftvendingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +22,7 @@ import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.ResultObj;
 import com.seekersoftvendingapp.network.entity.returnpro.ReturnProResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
@@ -53,6 +56,20 @@ public class ReturnCardReadActivity extends BaseActivity {
     private EmpCardDao empCardDao;
 
     private Passage passage;
+
+    private static final int GEZI = 1;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case GEZI:
+                    ResultObj resultObj = (ResultObj) msg.obj;
+                    handleStoreSerialPort(resultObj.isSuccess, resultObj.objectId);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,7 +183,17 @@ public class ReturnCardReadActivity extends BaseActivity {
             NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
-                    handleStoreSerialPort(isSuccess, objectId);
+
+                    Message msg = new Message();
+                    msg.what = GEZI;
+
+                    ResultObj resultObj = new ResultObj();
+                    resultObj.isSuccess = isSuccess;
+                    resultObj.objectId = objectId;
+                    msg.obj = resultObj;
+
+                    mHandler.sendMessage(msg);
+
                 }
             });
         } catch (Exception e) {
@@ -208,17 +235,15 @@ public class ReturnCardReadActivity extends BaseActivity {
      * 处理本地消费结果（到结果页面）
      */
     private void handleResult(TakeOutError takeOutError) {
-        if (takeOutError.isSuccess()) {
-            Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
-            intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
-            startActivity(intent);
-            this.finish();
-        } else {
+        if (!takeOutError.isSuccess()) {
             et_getcard.setText("");
-            Toast.makeText(ReturnCardReadActivity.this, cardId + takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
             ErrorRecord errorRecord = new ErrorRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
+        Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
+        intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
+        startActivity(intent);
+        this.finish();
     }
 
 
