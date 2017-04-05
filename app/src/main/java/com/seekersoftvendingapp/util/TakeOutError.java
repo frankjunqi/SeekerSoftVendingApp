@@ -45,14 +45,6 @@ public class TakeOutError implements Serializable {
         this.takeOutFLag = takeOutFLag;
     }
 
-    public void setTakeOutFLag(int takeOutFLag) {
-        this.takeOutFLag = takeOutFLag;
-    }
-
-    public int getTakeOutFlag() {
-        return takeOutFLag;
-    }
-
     /**
      * 获取描述信息
      *
