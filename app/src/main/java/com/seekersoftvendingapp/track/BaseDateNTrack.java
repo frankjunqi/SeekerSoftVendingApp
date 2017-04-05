@@ -18,6 +18,7 @@ import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.io.IOException;
@@ -41,7 +42,6 @@ public class BaseDateNTrack implements InterfaceTrack {
      * 基础数据 GET
      */
     private AdminCardDao adminCardDao;
-    //private EmployeeDao employeeDao;
     private EmpCardDao empCardDao;
     private EmpPowerDao empPowerDao;
     private PassageDao passageDao;
@@ -66,7 +66,6 @@ public class BaseDateNTrack implements InterfaceTrack {
         DaoSession daoSession = ((SeekersoftApp) mContext).getDaoSession();
         adminCardDao = daoSession.getAdminCardDao();
         empCardDao = daoSession.getEmpCardDao();
-        //employeeDao = daoSession.getEmployeeDao();
         empPowerDao = daoSession.getEmpPowerDao();
         passageDao = daoSession.getPassageDao();
         productDao = daoSession.getProductDao();
@@ -92,13 +91,12 @@ public class BaseDateNTrack implements InterfaceTrack {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
         Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, timestamp);
-        Log.e("json", "getSynchroBaseData = " + updateAction.request().url().toString());
+        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
         try {
             Response<SynchroBaseDataResBody> response = updateAction.execute();
             if (response != null && response.body() != null) {
                 adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                 empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
-                //employeeDao.insertOrReplaceInTx(response.body().getEmployeeList());
                 empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
 
                 if (TextUtils.isEmpty(timestamp)) {

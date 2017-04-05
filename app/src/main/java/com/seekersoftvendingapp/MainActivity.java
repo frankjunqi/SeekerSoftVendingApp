@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
+import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -43,6 +44,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (exitFlag == 1) {
             // 退出程序
             Track.getInstance(MainActivity.this).removeBaseDataUpdateMessage();
+            NewVendingSerialPort.SingleInit().closeSerialPort();
             this.finish();
         }
     }

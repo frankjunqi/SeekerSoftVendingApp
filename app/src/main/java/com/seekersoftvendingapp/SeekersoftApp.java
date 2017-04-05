@@ -2,11 +2,9 @@ package com.seekersoftvendingapp;
 
 import android.app.Application;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.seekersoftvendingapp.database.table.DaoMaster;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
-import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import org.greenrobot.greendao.database.Database;
@@ -29,8 +27,6 @@ public class SeekersoftApp extends Application {
     public void onCreate() {
         super.onCreate();
         mSeekersoftApp = this;
-        // Image Fresco Application Init
-        Fresco.initialize(getApplicationContext());
 
         // Database Application Init
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? "notes-db-encrypted" : "notes-db");

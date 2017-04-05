@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingActivity"
+            android:name=".StartAppActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -37,7 +37,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".StartAppActivity"
+            android:name=".SettingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -81,10 +81,6 @@
             android:name=".TakeOutNumActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".WebviewActivity"
-            android:screenOrientation="portrait" />
-
 
         <receiver android:name=".util.NetworkBroadcastReceiver">
             <intent-filter>
@@ -126,9 +122,6 @@
 
         <activity
             android:name=".database.rxdao.TestNoteRXDaoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".image.TestFrescoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".network.TestNetworkActivity"

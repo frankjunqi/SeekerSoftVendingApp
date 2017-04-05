@@ -88,7 +88,7 @@ public class BorrowInsertNumActivity extends BaseActivity {
                 .list();
         if (list != null && list.size() > 0) {
             Passage passage = list.get(0);
-            // TODO 检查是否有该硬件货道??
+            // TODO 检查是否有该硬件货道
             Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
             intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
             startActivity(intent);

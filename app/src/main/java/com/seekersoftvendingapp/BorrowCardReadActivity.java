@@ -52,17 +52,10 @@ public class BorrowCardReadActivity extends BaseActivity {
 
     private String cardId = "";
 
-    // 货道的产品
-    private String productId = "";
-    private String pasageId = "";
-    private String passageFlag = "";
-
     private EmpPowerDao empPowerDao;
     private EmpCardDao empCardDao;
-    //private EmployeeDao employeeDao;
     private Passage passage;
     private EmpCard empCard;
-    //private Employee employee;// 当前扫描的卡是属于哪个员工
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +65,6 @@ public class BorrowCardReadActivity extends BaseActivity {
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
         empCardDao = daoSession.getEmpCardDao();
-        //employeeDao = daoSession.getEmployeeDao();
 
         ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
         ll_keyboard.setOnClickListener(new View.OnClickListener() {
@@ -82,12 +74,10 @@ public class BorrowCardReadActivity extends BaseActivity {
             }
         });
 
-
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
-        if (passage != null) {
-            productId = passage.getProduct();
-            pasageId = passage.getSeqNo();
-            passageFlag = TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag();
+        if (passage == null) {
+            Toast.makeText(BorrowCardReadActivity.this, "输入货道信息有异常，请重试...", Toast.LENGTH_SHORT).show();
+            this.finish();
         }
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
@@ -113,7 +103,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                     cardId = s.toString().replace("\n", "");
                     if (TextUtils.isEmpty(cardId)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                        ErrorRecord errorRecord = new ErrorRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, "借货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
                         Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
@@ -143,7 +133,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             isBorrowPro(cardId);
         } else {
             // 本地判断是否可以出货
-            TakeOutError takeOutError = localBorrowPro(productId, cardId);
+            TakeOutError takeOutError = localBorrowPro(passage.getProduct(), cardId);
             outProResult(takeOutError);
         }
     }
@@ -173,7 +163,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         ShipmentObject shipmentObject = new ShipmentObject();
         try {
             // 格子柜子
-            shipmentObject.containerNum = 2;
+            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // TODO 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
@@ -191,7 +181,7 @@ public class BorrowCardReadActivity extends BaseActivity {
     private void handleStoreSerialPort(boolean isSuccess, String objectId) {
         if (isSuccess) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, passageFlag + pasageId, cardId, true, true, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, true, true, new Date(), "", "", "");
             passage.setStock(passage.getStock() - 1);
             passage.setBorrowState(true);
             passage.setUsed(empCard != null ? empCard.getEmp() : "");
@@ -210,7 +200,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             // 串口操作失败
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, passageFlag + pasageId, cardId, true, false, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, true, false, new Date(), "", "", "");
             Track.getInstance(BorrowCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
 
             // 串口打开柜子失败
@@ -229,7 +219,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(BorrowCardReadActivity.this, cardId + takeOutError.serverMsg + "----" + takeOutError.getTakeOutMsg(), Toast.LENGTH_SHORT).show();
-            ErrorRecord errorRecord = new ErrorRecord(null, false, passageFlag + pasageId, cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
+            ErrorRecord errorRecord = new ErrorRecord(null, false, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo(), cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
     }
@@ -271,7 +261,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, passageFlag + pasageId);
+        Call<BorrowResBody> updateAction = service.borrow(SeekerSoftConstant.DEVICEID, cardId, TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag() + passage.getSeqNo());
         LogCat.e("borrow = " + updateAction.request().url().toString());
         updateAction.enqueue(new Callback<BorrowResBody>() {
             @Override
@@ -280,7 +270,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                     cmdBufferVendingSerial(response.body().data.objectId);
                 } else {
                     TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
-                    takeOutError.serverMsg = response.body().message;
+                    takeOutError.serverMsg = response != null && response.body() != null && !TextUtils.isEmpty(response.body().message) ? response.body().message : "";
                     handleResult(takeOutError);
                 }
                 hideProgress();
@@ -290,7 +280,7 @@ public class BorrowCardReadActivity extends BaseActivity {
             public void onFailure(Call<BorrowResBody> call, Throwable throwable) {
                 hideProgress();
                 Toast.makeText(BorrowCardReadActivity.this, "网络链接问题，本地进行借货操作", Toast.LENGTH_LONG).show();
-                TakeOutError takeOutError = localBorrowPro(productId, cardId);
+                TakeOutError takeOutError = localBorrowPro(passage.getProduct(), cardId);
                 outProResult(takeOutError);
             }
         });

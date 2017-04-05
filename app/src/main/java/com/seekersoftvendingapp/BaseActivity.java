@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onTick(long millisUntilFinished) {
             if (btn_return_mainpage != null) {
-                btn_return_mainpage.setText("倒计时(" + millisUntilFinished / 1000 + "s)后返回，或点击返回.");
+                btn_return_mainpage.setText("返回(" + millisUntilFinished / 1000 + "秒)");
             }
         }
 

@@ -3,7 +3,6 @@ package com.seekersoftvendingapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -14,17 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.dao.TestAdminCardDaoActivity;
-import com.seekersoftvendingapp.database.dao.TestNoteDaoActivity;
-import com.seekersoftvendingapp.database.rxdao.TestNoteRXDaoActivity;
-import com.seekersoftvendingapp.image.TestFrescoActivity;
 import com.seekersoftvendingapp.network.TestNetworkActivity;
-import com.seekersoftvendingapp.test.TestCardReadActivity;
 import com.seekersoftvendingapp.test.TestNewVendingActivity;
-import com.seekersoftvendingapp.test.TestStoreActivity;
-import com.seekersoftvendingapp.test.TestVendingActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -55,16 +46,8 @@ public class SettingActivity extends BaseActivity {
     private View mLoginFormView;
 
     private Button btn_startapp;
-    private Button btn_db_dao;
-    private Button btn_db_rxdao;
-    private Button btn_fresco;
     private Button btn_network;
-    private Button btn_read_card;
-    private Button btn_vending;
     private Button btn_store;
-    private Button btn_db_admincard_dao;
-
-    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,66 +69,12 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-        // 数据库操作
-        btn_db_dao = (Button) findViewById(R.id.btn_db_dao);
-        btn_db_dao.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestNoteDaoActivity.class));
-            }
-        });
-
-        // 数据库操作 AdminCard 表
-        btn_db_admincard_dao = (Button) findViewById(R.id.btn_db_admincard_dao);
-        btn_db_admincard_dao.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestAdminCardDaoActivity.class));
-            }
-        });
-
-        // 数据库操作 RX 系列
-        btn_db_rxdao = (Button) findViewById(R.id.btn_db_rxdao);
-        btn_db_rxdao.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestNoteRXDaoActivity.class));
-            }
-        });
-
-        // 图片加载 FRESCO
-        btn_fresco = (Button) findViewById(R.id.btn_fresco);
-        btn_fresco.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestFrescoActivity.class));
-            }
-        });
-
         // 网络加载 ( POST GET )
         btn_network = (Button) findViewById(R.id.btn_network);
         btn_network.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, TestNetworkActivity.class));
-            }
-        });
-
-        // 读卡( ID IC )
-        btn_read_card = (Button) findViewById(R.id.btn_read_card);
-        btn_read_card.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestCardReadActivity.class));
-            }
-        });
-
-        // 螺纹柜的串口通信
-        btn_vending = (Button) findViewById(R.id.btn_vending);
-        btn_vending.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestVendingActivity.class));
             }
         });
 
@@ -158,11 +87,6 @@ public class SettingActivity extends BaseActivity {
                 startActivity(new Intent(SettingActivity.this, TestNewVendingActivity.class));
             }
         });
-        //startActivity(new Intent(SettingActivity.this, TestStoreActivity.class));
-        /*String str = "1234567896\n";
-        if (str.endsWith("\n")) {
-            Toast.makeText(SettingActivity.this, "is \n", Toast.LENGTH_LONG).show();
-        }*/
     }
 
     private void populateAutoComplete() {

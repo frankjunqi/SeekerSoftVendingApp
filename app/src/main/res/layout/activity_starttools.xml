@@ -46,39 +46,6 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btn_db_dao"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_db_dao"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-            <Button
-                android:id="@+id/btn_db_admincard_dao"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_db_admincard_dao"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-            <Button
-                android:id="@+id/btn_db_rxdao"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_db_rxdao"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-            <Button
                 android:id="@+id/btn_network"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
@@ -87,35 +54,6 @@
                 android:text="btn_network"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_fresco"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_fresco"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btn_read_card"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_read_card"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-            <Button
-                android:id="@+id/btn_vending"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="btn_vending"
-                android:textStyle="bold"
-                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_store"
