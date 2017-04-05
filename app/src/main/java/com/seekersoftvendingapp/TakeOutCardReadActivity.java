@@ -183,7 +183,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
             cmdBufferVendingStoreSerial("");
         } else {
             // 不可以出货
-            handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
+            handleResult(takeOutError);
         }
     }
 

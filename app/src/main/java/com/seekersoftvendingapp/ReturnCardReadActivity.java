@@ -163,7 +163,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             cmdBufferStoreSerial("");
         } else {
             // 不可以出货
-            handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
+            handleResult(takeOutError);
         }
     }
 

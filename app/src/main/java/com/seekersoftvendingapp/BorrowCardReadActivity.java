@@ -167,7 +167,7 @@ public class BorrowCardReadActivity extends BaseActivity {
         } else {
             et_getcard.setText("");
             // 不可以出货
-            handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
+            handleResult(takeOutError);
         }
     }
 
