@@ -3,6 +3,7 @@ package com.seekersoftvendingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,7 +31,11 @@ public class HandleResultActivity extends BaseActivity {
 
         TakeOutError takeOutError = (TakeOutError) getIntent().getSerializableExtra(SeekerSoftConstant.TAKEOUTERROR);
         if (takeOutError != null) {
-            tv_handle_result.setText(takeOutError.getTakeOutMsg());
+            if (TextUtils.isEmpty(takeOutError.serverMsg)) {
+                tv_handle_result.setText(takeOutError.getTakeOutMsg());
+            } else {
+                tv_handle_result.setText(takeOutError.serverMsg);
+            }
         }
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
