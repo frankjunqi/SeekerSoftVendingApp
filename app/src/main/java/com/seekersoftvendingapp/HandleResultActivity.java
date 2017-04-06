@@ -32,9 +32,9 @@ public class HandleResultActivity extends BaseActivity {
         TakeOutError takeOutError = (TakeOutError) getIntent().getSerializableExtra(SeekerSoftConstant.TAKEOUTERROR);
         if (takeOutError != null) {
             if (TextUtils.isEmpty(takeOutError.serverMsg)) {
-                tv_handle_result.setText(takeOutError.getTakeOutMsg());
+                tv_handle_result.setText("服务器检测：" + takeOutError.getTakeOutMsg());
             } else {
-                tv_handle_result.setText(takeOutError.serverMsg);
+                tv_handle_result.setText("本地检测：" + takeOutError.serverMsg);
             }
         }
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);

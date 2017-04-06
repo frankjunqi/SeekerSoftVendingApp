@@ -6,13 +6,14 @@ package com.seekersoftvendingapp.util;
 
 public class SeekerSoftConstant {
 
-    public static final boolean DEBUG = true;
+    // TODO 正式包变成false
+    public static final boolean DEBUG = false;
 
     // 设备号
     public static String DEVICEID = "";
 
     // 网络是否链接
-    public static boolean NETWORKCONNECT = false;
+    public static boolean NETWORKCONNECT = true;
 
     // 管理员卡号key
     public static String ADMINCARD = "admincard";
@@ -31,6 +32,6 @@ public class SeekerSoftConstant {
 
     public final static long TIMELOGN = 1000 * 60 * 5;// 基础数据的同步时间长
 
-    public final static int ENDTIEMLONG = 30;
-    public final static int ENDTIEMSHORT = 10;
+    public final static int ENDTIEMLONG = 35;
+    public final static int ENDTIEMSHORT = 15;
 }

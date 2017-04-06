@@ -82,11 +82,11 @@
             android:screenOrientation="portrait" />
 
 
-        <!--<receiver android:name=".util.NetworkBroadcastReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver android:name=".util.NetworkBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
         <!--<receiver android:name=".util.AutoStartReceiver">-->
         <!--<intent-filter>-->

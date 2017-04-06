@@ -243,10 +243,14 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private void gezi(boolean isSuccess, String objectId) {
         recordNum++;
         if (isSuccess) {
-            Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个成功...", Toast.LENGTH_SHORT).show();
+            if (number > 1) {
+                Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个成功...", Toast.LENGTH_SHORT).show();
+            }
             recordSuccess++;
         } else {
-            Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个失败...", Toast.LENGTH_SHORT).show();
+            if (number > 1) {
+                Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个失败...", Toast.LENGTH_SHORT).show();
+            }
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
@@ -261,13 +265,17 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private void luowen(boolean isSuccess, String objectId) {
         recordNum++;
         if (!isSuccess) {
-            Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个失败...", Toast.LENGTH_SHORT).show();
+            if (number > 1) {
+                Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个失败...", Toast.LENGTH_SHORT).show();
+            }
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
             TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
             Track.getInstance(TakeOutCardReadActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         } else {
             recordSuccess++;
-            Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个成功...", Toast.LENGTH_SHORT).show();
+            if (number > 1) {
+                Toast.makeText(TakeOutCardReadActivity.this, "取货第" + recordNum + "个成功...", Toast.LENGTH_SHORT).show();
+            }
         }
         if (recordNum == number && recordSuccess == recordNum) {
             handleNewVendingSerialPort(true);

@@ -176,7 +176,7 @@ public class ReturnCardReadActivity extends BaseActivity {
         ShipmentObject shipmentObject = new ShipmentObject();
         try {
             // 格子柜子
-            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject).setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+            NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
 
@@ -196,6 +196,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
             // 需要生成唯一码
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+            NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
         } catch (Exception e) {
             handleStoreSerialPort(false, objectId);
         }

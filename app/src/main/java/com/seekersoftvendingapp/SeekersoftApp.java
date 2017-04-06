@@ -33,7 +33,7 @@ public class SeekersoftApp extends Application {
         Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-        // 初始化设备信息
+        // TODO 初始化设备信息
         SeekerSoftConstant.DEVICEID = "df66704e87caa0c2";
 
         // 初始化串口设备
