@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             TextView msg = (TextView) progressDialog.findViewById(R.id.id_tv_loadingmsg);
-            msg.setText("加载中...");
+            msg.setText("数据加载请求中...");
         }
         progressDialog.show();
     }
