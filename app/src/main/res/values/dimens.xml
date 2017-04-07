@@ -15,8 +15,8 @@
 
     <dimen name="mainpage_small_text_size">18sp</dimen>
 
-    <dimen name="actionbar_title_size">20sp</dimen>
-    <dimen name="actionbar_right_size">18sp</dimen>
+    <dimen name="actionbar_title_size">22sp</dimen>
+    <dimen name="actionbar_right_size">20sp</dimen>
 
     <dimen name="mainpage_title_size">22sp</dimen>
     <dimen name="mainpage_sub_title_size">18sp</dimen>

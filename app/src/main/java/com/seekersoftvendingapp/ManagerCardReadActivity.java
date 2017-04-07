@@ -1,12 +1,16 @@
 package com.seekersoftvendingapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -21,6 +25,8 @@ import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -33,6 +39,8 @@ public class ManagerCardReadActivity extends BaseActivity {
     private EditText et_getcard;
     private RelativeLayout ll_keyboard;
     private String cardId = "";
+
+    private TextView tv_upup;
 
     private AdminCardDao adminCardDao;
 
@@ -65,6 +73,7 @@ public class ManagerCardReadActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_cardread);
 
@@ -121,7 +130,17 @@ public class ManagerCardReadActivity extends BaseActivity {
 
             }
         });
+
+        tv_upup = (TextView)findViewById(R.id.tv_upup);
+        tv_upup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do nothing
+            }
+        });
+
         countDownTimer.start();
+
     }
 
 }

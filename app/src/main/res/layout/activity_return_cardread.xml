@@ -49,8 +49,19 @@
             android:layout_marginTop="30dp"
             android:padding="10dp"
             android:background="@drawable/keyboard_qty_default"
-            android:minHeight="60dp" />
-
+            android:minHeight="60dp" >
+            <requestFocus/>
+        </EditText>
+        <TextView
+            android:id="@+id/tv_upup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_in"
+            android:layout_marginLeft="@dimen/padding_left_right"
+            android:layout_marginRight="@dimen/padding_left_right"
+            android:layout_marginTop="30dp"
+            android:minHeight="60dp"
+            android:padding="10dp"/>
     </RelativeLayout>
 
     <Button

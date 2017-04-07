@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -58,6 +59,8 @@ public class ReturnCardReadActivity extends BaseActivity {
 
     private Passage passage;
 
+    private TextView tv_upup;
+
     private static final int GEZI = 1;
 
     private Handler mHandler = new Handler() {
@@ -74,6 +77,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_cardread);
 
@@ -138,6 +142,14 @@ public class ReturnCardReadActivity extends BaseActivity {
             }
         });
         countDownTimer.start();
+
+        tv_upup = (TextView)findViewById(R.id.tv_upup);
+        tv_upup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // do nothing
+            }
+        });
     }
 
 
