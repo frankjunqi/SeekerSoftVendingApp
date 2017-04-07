@@ -57,7 +57,7 @@ public class ReturnInsertNumActivity extends BaseActivity {
 
         ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
         keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("请输入货道号...");
+        keyBordView.setKeyWordHint("货道号...");
         keyBordView.setSureClickListen(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

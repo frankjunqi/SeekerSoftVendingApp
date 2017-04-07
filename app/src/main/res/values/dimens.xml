@@ -3,11 +3,35 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="min_height">68dp</dimen>
+    <dimen name="min_height">54dp</dimen>
+
+    <dimen name="padding_left_right">100dp</dimen>
+
+    <dimen name="manager_padding_left_right">50dp</dimen>
+    <dimen name="manager_abc_size">14sp</dimen>
 
     <dimen name="keybord_text_size">22sp</dimen>
-    <dimen name="big_text_size">24sp</dimen>
+    <dimen name="big_text_size">22sp</dimen>
+
+    <dimen name="mainpage_small_text_size">18sp</dimen>
 
     <dimen name="actionbar_title_size">20sp</dimen>
     <dimen name="actionbar_right_size">18sp</dimen>
+
+    <dimen name="mainpage_title_size">22sp</dimen>
+    <dimen name="mainpage_sub_title_size">18sp</dimen>
+
+
+    <dimen name="paluse_size">28sp</dimen>
+    <dimen name="paluse_small_size">20sp</dimen>
+
+    <dimen name="card_page">24sp</dimen>
+
+    <dimen name="result_page">24sp</dimen>
+
+    <dimen name="keyborad_title">22sp</dimen>
+    <dimen name="keyborad_value">20sp</dimen>
+
+    <dimen name="btn_min_height">42dp</dimen>
+
 </resources>

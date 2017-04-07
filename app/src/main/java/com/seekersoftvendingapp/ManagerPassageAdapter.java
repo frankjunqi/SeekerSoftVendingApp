@@ -1,10 +1,10 @@
 package com.seekersoftvendingapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,8 +116,6 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selecteStock = which + 1;
-                        passage.setKeeptwo(String.valueOf(selecteStock));
-                        tv_modify_down.setText("-" + String.valueOf(selecteStock));
                     }
                 })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -127,6 +125,8 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
                             Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        passage.setKeeptwo(String.valueOf(selecteStock));
+                        tv_modify_down.setText("-" + String.valueOf(selecteStock));
                         // 重置
                         selecteStock = 0;
                     }

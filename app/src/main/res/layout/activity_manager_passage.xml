@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/il_actionbar"
@@ -17,7 +16,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -29,40 +27,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
                 android:text="主柜"
-                android:textSize="@dimen/big_text_size" />
+                android:textSize="@dimen/manager_abc_size" />
 
             <Button
                 android:id="@+id/btn_a"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
                 android:text="A"
-                android:textSize="@dimen/big_text_size" />
+                android:textSize="@dimen/manager_abc_size" />
 
             <Button
                 android:id="@+id/btn_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
                 android:text="B"
-                android:textSize="@dimen/big_text_size" />
+                android:textSize="@dimen/manager_abc_size" />
 
             <Button
                 android:id="@+id/btn_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
                 android:text="C"
-                android:textSize="@dimen/big_text_size" />
+                android:textSize="@dimen/manager_abc_size" />
 
         </LinearLayout>
 
-        <include
-            android:id="@+id/il"
-            layout="@layout/item_modify_stock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/item_modify_stock" />
 
     </LinearLayout>
 
@@ -89,7 +87,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="暂时还没有内容哦"
-            android:textSize="@dimen/big_text_size" />
+            android:textSize="@dimen/mainpage_small_text_size" />
 
 
     </RelativeLayout>
@@ -99,9 +97,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:minHeight="@dimen/min_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="@dimen/padding_left_right"
+        android:layout_marginRight="@dimen/padding_left_right"
+        android:background="@drawable/selector_btn_dialog"
+        android:minHeight="@dimen/btn_min_height"
         android:text="返回"
-        android:textSize="@dimen/big_text_size" />
+        android:textSize="@dimen/mainpage_small_text_size" />
 
     <com.seekersoftvendingapp.view.EmptyRecyclerView
         android:id="@+id/recyclerview"

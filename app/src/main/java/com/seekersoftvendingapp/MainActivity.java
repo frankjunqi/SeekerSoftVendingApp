@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.track.Track;
@@ -16,7 +17,8 @@ import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button btn_getproduct, btn_borrow, btn_back, btn_manage;
+    private Button btn_getproduct, btn_borrow, btn_back;
+    private TextView btn_manage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn_getproduct = (Button) findViewById(R.id.btn_getproduct);
         btn_borrow = (Button) findViewById(R.id.btn_borrow);
         btn_back = (Button) findViewById(R.id.btn_back);
-        btn_manage = (Button) findViewById(R.id.btn_manage);
+        btn_manage = (TextView) findViewById(R.id.btn_manage);
 
         btn_getproduct.setOnClickListener(this);
         btn_borrow.setOnClickListener(this);

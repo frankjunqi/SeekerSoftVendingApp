@@ -35,6 +35,7 @@ public class BaseActivity extends Activity {
 
     public void setRightTitle(String rightTitle, View.OnClickListener onClickListener) {
         if (tv_right != null && !TextUtils.isEmpty(rightTitle)) {
+            tv_right.setVisibility(View.VISIBLE);
             tv_right.setText(rightTitle);
         }
 

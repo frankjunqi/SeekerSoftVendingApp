@@ -24,7 +24,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_onekeyinsert"
+        android:layout_marginLeft="@dimen/manager_padding_left_right"
+        android:layout_marginRight="@dimen/manager_padding_left_right"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
+        android:textColor="@color/textcolor"
         android:text="货道补货"
         android:textSize="@dimen/big_text_size" />
 
@@ -33,8 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_onebyoneinsert"
+        android:layout_marginLeft="@dimen/manager_padding_left_right"
+        android:layout_marginRight="@dimen/manager_padding_left_right"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
+        android:textColor="@color/textcolor"
         android:text="软件升级"
+
         android:textSize="@dimen/big_text_size" />
 
     <Button
@@ -42,8 +53,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_update"
+        android:layout_marginLeft="@dimen/manager_padding_left_right"
+        android:layout_marginRight="@dimen/manager_padding_left_right"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
         android:text="退出程序"
+        android:textColor="@color/textcolor"
         android:textSize="@dimen/big_text_size" />
 
     <Button
@@ -51,9 +67,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:minHeight="@dimen/min_height"
-        android:text="返回首页"
-        android:textSize="@dimen/big_text_size" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="@dimen/padding_left_right"
+        android:layout_marginRight="@dimen/padding_left_right"
+        android:minHeight="@dimen/btn_min_height"
+        android:background="@drawable/selector_btn_dialog"
+        android:text="返回"
+        android:textSize="@dimen/mainpage_small_text_size" />
 
 
 </RelativeLayout>

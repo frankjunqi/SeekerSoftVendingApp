@@ -21,8 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="@dimen/manager_padding_left_right"
+        android:layout_marginRight="@dimen/manager_padding_left_right"
+        android:background="@drawable/selector_btn_dialog"
         android:text="重试一下"
         android:textSize="@dimen/big_text_size"
         android:visibility="gone" />

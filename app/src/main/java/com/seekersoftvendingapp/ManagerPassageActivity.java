@@ -47,6 +47,8 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     private EmptyRecyclerView recyclerView;
     private RelativeLayout rl_empty;
 
+    private TextView tv_modify_down;
+
     private ManagerPassageAdapter managerPassageAdapter;
 
     private PassageDao passageDao;
@@ -66,6 +68,16 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("补货差异");
+
+        setRightTitle("保 存", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                asyncSupplyRecordRequest(managerPassageAdapter.getPassageList());
+            }
+        });
+
+        tv_modify_down = (TextView) findViewById(R.id.tv_modify_down);
+        tv_modify_down.setBackground(null);
 
         rl_empty = (RelativeLayout) findViewById(R.id.rl_empty);
 
@@ -221,7 +233,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 managerPassageAdapter.setPassageList(passageListC);
                 break;
             case R.id.btn_return_mainpage:
-                asyncSupplyRecordRequest(managerPassageAdapter.getPassageList());
+                this.finish();
                 return;
         }
     }
