@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/il_actionbar"
+        layout="@layout/actionbar_title" />
+
+
     <LinearLayout
         android:id="@+id/ll_flag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/il_actionbar"
         android:orientation="vertical">
 
         <LinearLayout

@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/il_actionbar"
+        layout="@layout/actionbar_title" />
+
+
     <Button
         android:id="@+id/btn_onekeyinsert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/il_actionbar"
         android:minHeight="@dimen/min_height"
         android:text="一键补货"
         android:textSize="@dimen/big_text_size"

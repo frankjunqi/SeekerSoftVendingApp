@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -60,6 +61,12 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_passage);
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("补货差异");
+
         rl_empty = (RelativeLayout) findViewById(R.id.rl_empty);
 
         btn_main = (Button) findViewById(R.id.btn_main);

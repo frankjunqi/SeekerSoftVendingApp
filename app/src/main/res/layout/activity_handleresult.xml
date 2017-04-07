@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/il_actionbar"
+        layout="@layout/actionbar_title" />
+
+
     <ImageView
         android:id="@+id/vi_flag"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/il_actionbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
         android:src="@drawable/success" />
@@ -22,16 +28,16 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="处理出货结果成功."
-        android:textSize="@dimen/big_text_size"/>
+        android:textSize="@dimen/big_text_size" />
 
     <Button
         android:id="@+id/btn_return_mainpage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textSize="@dimen/big_text_size"
         android:minHeight="@dimen/min_height"
-        android:text="倒计时10秒，返回首页...." />
+        android:text="倒计时10秒，返回首页...."
+        android:textSize="@dimen/big_text_size" />
 
 
 </RelativeLayout>

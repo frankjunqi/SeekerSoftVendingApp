@@ -4,11 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/il_actionbar"
+        layout="@layout/actionbar_title" />
+
+
     <RelativeLayout
         android:id="@+id/ll_keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/btn_return_mainpage"
+        android:layout_below="@id/il_actionbar"
         android:orientation="vertical">
 
         <EditText

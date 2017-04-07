@@ -30,7 +30,11 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insertnum);
-        setTitle("输入取货数量...");
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("取货数量");
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {

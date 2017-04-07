@@ -74,6 +74,12 @@ public class StartAppActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startapp);
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("系统初始化");
+
         pb_loadingdata = (ProgressBar) findViewById(R.id.pb_loadingdata);
         btn_tryagain = (Button) findViewById(R.id.btn_tryagain);
         tv_resultdata = (TextView) findViewById(R.id.tv_resultdata);

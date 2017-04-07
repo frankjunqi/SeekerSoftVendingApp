@@ -1,5 +1,6 @@
 package com.seekersoftvendingapp;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,9 +20,29 @@ import com.seekersoftvendingapp.util.SeekerSoftConstant;
  * Created by kjh08490 on 2016/12/16.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends Activity {
     private Dialog progressDialog;
     protected Button btn_return_mainpage;
+
+    protected TextView tv_title;
+    protected TextView tv_right;
+
+    public void setTitle(String title) {
+        if (tv_title != null && !TextUtils.isEmpty(title)) {
+            tv_title.setText(title);
+        }
+    }
+
+    public void setRightTitle(String rightTitle, View.OnClickListener onClickListener) {
+        if (tv_right != null && !TextUtils.isEmpty(rightTitle)) {
+            tv_right.setText(rightTitle);
+        }
+
+        if (tv_right != null) {
+            tv_right.setOnClickListener(onClickListener);
+        }
+
+    }
 
     protected CountDownTimer countDownTimer = new CountDownTimer(setEndTime() * 1000, 1000) {
         @Override

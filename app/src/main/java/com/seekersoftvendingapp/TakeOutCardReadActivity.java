@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.DaoSession;
@@ -92,7 +93,12 @@ public class TakeOutCardReadActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardread);
-        setTitle("输入卡号...");
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("刷卡确认");
+
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empPowerDao = daoSession.getEmpPowerDao();
         empCardDao = daoSession.getEmpCardDao();

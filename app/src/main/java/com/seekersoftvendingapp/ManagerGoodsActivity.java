@@ -1,5 +1,6 @@
 package com.seekersoftvendingapp;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,11 +13,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -63,7 +64,12 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managergoods);
-        setTitle("管理信息...");
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("管理页面");
+
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
 

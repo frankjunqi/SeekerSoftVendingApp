@@ -26,7 +26,12 @@ public class HandleResultActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handleresult);
-        setTitle("处理结果...");
+
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+
+        setTitle("取货结果");
+
         tv_handle_result = (TextView) findViewById(R.id.tv_handle_result);
 
         TakeOutError takeOutError = (TakeOutError) getIntent().getSerializableExtra(SeekerSoftConstant.TAKEOUTERROR);
