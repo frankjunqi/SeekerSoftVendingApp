@@ -57,6 +57,8 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     private List<Passage> passageListB = new ArrayList<>();
     private List<Passage> passageListC = new ArrayList<>();
 
+    private int flag = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +138,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             if (passage.getCapacity() - passage.getStock() <= 0) {
                 count = 0;
             } else {
-                count = passage.getCapacity() - passage.getStock() + Integer.parseInt(passage.getKeeptwo());
+                count = passage.getCapacity() - passage.getStock() - Integer.parseInt(passage.getKeeptwo());
             }
             // 设置库存
             passage.setStock(passage.getStock() + count);
@@ -156,6 +158,16 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             public void onResponse(Call<SupplyRecordResBody> call, Response<SupplyRecordResBody> response) {
                 if (response != null && response.body() != null) {
                     passageDao.insertOrReplaceInTx(passageList);
+                    updatePassageList();
+                    if (flag == 0) {
+                        managerPassageAdapter.setPassageList(passageListMain);
+                    } else if (flag == 1) {
+                        managerPassageAdapter.setPassageList(passageListA);
+                    } else if (flag == 2) {
+                        managerPassageAdapter.setPassageList(passageListB);
+                    } else if (flag == 3) {
+                        managerPassageAdapter.setPassageList(passageListC);
+                    }
                     Toast.makeText(ManagerPassageActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ManagerPassageActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
@@ -200,7 +212,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             // Keeptwo 差异补货的数量的统计
             passage.setKeeptwo("0");
 
-
             if (TextUtils.isEmpty(passage.getFlag())) {
                 passageListMain.add(passage);
             } else {
@@ -227,15 +238,19 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_main:
+                flag = 0;
                 managerPassageAdapter.setPassageList(passageListMain);
                 break;
             case R.id.btn_a:
+                flag = 1;
                 managerPassageAdapter.setPassageList(passageListA);
                 break;
             case R.id.btn_b:
+                flag = 2;
                 managerPassageAdapter.setPassageList(passageListB);
                 break;
             case R.id.btn_c:
+                flag = 3;
                 managerPassageAdapter.setPassageList(passageListC);
                 break;
             case R.id.btn_return_mainpage:

@@ -29,8 +29,6 @@ public class ManagerCheckPassageActivity extends BaseActivity implements View.On
     private EmptyRecyclerView recyclerView;
     private RelativeLayout rl_empty;
 
-    private TextView tv_modify_down;
-
     private ManagerCheckPassageAdapter managerPassageAdapter;
 
     private PassageDao passageDao;
@@ -50,9 +48,6 @@ public class ManagerCheckPassageActivity extends BaseActivity implements View.On
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("查看库存");
-
-        tv_modify_down = (TextView) findViewById(R.id.tv_modify_down);
-        tv_modify_down.setBackground(null);
 
         rl_empty = (RelativeLayout) findViewById(R.id.rl_empty);
 

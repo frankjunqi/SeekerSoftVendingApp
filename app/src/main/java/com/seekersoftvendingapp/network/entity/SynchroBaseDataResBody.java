@@ -98,7 +98,7 @@ public class SynchroBaseDataResBody implements Serializable {
 
     public String getPhoneDesc() {
         if (data.Box != null && data.Box.size() > 0) {
-            return "紧急情况联系人：" + data.Box.get(0).connecter + ". \n" + "联系方式：" + data.Box.get(0).phone + ".";
+            return "紧急情况联系人：" + data.Box.get(0).connecter + " \n" + "联系方式：" + data.Box.get(0).phone;
         } else {
             return "";
         }

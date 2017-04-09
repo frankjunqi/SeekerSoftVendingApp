@@ -29,7 +29,7 @@
             android:layout_marginLeft="14dp"
             android:layout_marginRight="30dp"
             android:layout_toLeftOf="@id/tv_flag"
-            android:background="@drawable/shape_corner_trans_blue"
+            android:background="@drawable/shape_corner_trans_gray"
             android:gravity="left|center_vertical"
             android:maxLines="1"
             android:minHeight="54dp"

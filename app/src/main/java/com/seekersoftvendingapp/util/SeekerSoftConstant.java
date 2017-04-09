@@ -34,7 +34,7 @@ public class SeekerSoftConstant {
     public final static long TIMELOGN = 1000 * 60 * 5;// 基础数据的同步时间长
 
     public final static int ENDTIEMLONG = 35;
-    public final static int ENDTIEMSHORT = 5;
+    public final static int ENDTIEMSHORT = 3;
 
     public static String machine = "";
     public static String phoneDesc = "";

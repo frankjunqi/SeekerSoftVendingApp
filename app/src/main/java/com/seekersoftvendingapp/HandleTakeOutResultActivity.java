@@ -111,6 +111,7 @@ public class HandleTakeOutResultActivity extends BaseActivity {
             // 判断是否是格子柜消费
             if (!TextUtils.isEmpty(passage.getFlag()) && passage.getIsSend()) {
                 isStoreSend = true;
+                number = passage.getStock();
             }
         }
 
@@ -291,24 +292,14 @@ public class HandleTakeOutResultActivity extends BaseActivity {
     }
 
     private void gezi(boolean isSuccess, String objectId) {
-        recordNum++;
         if (isSuccess) {
-            if (number > 1) {
-                tv_handle_result.setText("取货第" + recordNum + "个成功...");
-            }
-            recordSuccess++;
-        } else {
-            if (number > 1) {
-                tv_handle_result.setText("取货第" + recordNum + "个失败...");
-            }
-            //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
-            Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
-        }
-        if (recordNum == number && recordSuccess == recordNum) {
+            recordSuccess = passage.getStock();
             handleNewVendingSerialPort(true);
         } else {
             handleNewVendingSerialPort(false);
+            //  调用失败接口 如果接口错误，则加入到同步队列里面去
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
+            Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         }
     }
 
@@ -371,9 +362,9 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         }
         if (takeOutError != null) {
             if (TextUtils.isEmpty(takeOutError.serverMsg)) {
-                tv_handle_result.setText("服务器检测：" + takeOutError.getTakeOutMsg());
+                tv_handle_result.setText(takeOutError.getTakeOutMsg());
             } else {
-                tv_handle_result.setText("本地检测：" + takeOutError.serverMsg);
+                tv_handle_result.setText(takeOutError.serverMsg);
             }
         }
         btn_return_mainpage.setVisibility(View.VISIBLE);

@@ -66,7 +66,7 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_down:
-                if (number == 1) {
+                if (number - 1 < 1) {
                     Toast.makeText(TakeOutNumActivity.this, "数量必须 >= 1 .", Toast.LENGTH_SHORT).show();
                 } else {
                     number = number - 1;
@@ -74,10 +74,10 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
             case R.id.btn_up:
-                number = number + 1;
-                if (number > passage.getStock()) {
+                if (number + 1 > passage.getStock()) {
                     Toast.makeText(TakeOutNumActivity.this, "库存超限。", Toast.LENGTH_SHORT).show();
                 } else {
+                    number = number + 1;
                     tv_num.setText(String.valueOf(number));
                 }
                 break;

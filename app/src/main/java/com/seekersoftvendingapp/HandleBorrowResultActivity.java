@@ -212,9 +212,9 @@ public class HandleBorrowResultActivity extends BaseActivity {
         }
         if (takeOutError != null) {
             if (TextUtils.isEmpty(takeOutError.serverMsg)) {
-                tv_handle_result.setText("服务器检测：" + takeOutError.getTakeOutMsg());
+                tv_handle_result.setText(takeOutError.getTakeOutMsg());
             } else {
-                tv_handle_result.setText("本地检测：" + takeOutError.serverMsg);
+                tv_handle_result.setText(takeOutError.serverMsg);
             }
         }
         btn_return_mainpage.setVisibility(View.VISIBLE);

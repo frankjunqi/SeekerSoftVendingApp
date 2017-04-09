@@ -5,6 +5,7 @@ import android.app.Application;
 import com.seekersoftvendingapp.database.table.DaoMaster;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import org.greenrobot.greendao.database.Database;
@@ -34,7 +35,7 @@ public class SeekersoftApp extends Application {
         daoSession = new DaoMaster(db).newSession();
 
         // TODO 初始化设备信息
-        SeekerSoftConstant.DEVICEID = "e3c210b27da16cde";
+        SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
 
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();
