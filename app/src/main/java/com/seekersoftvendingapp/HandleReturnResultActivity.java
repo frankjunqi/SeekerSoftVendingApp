@@ -5,15 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,14 +40,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
- * 3. 还 读卡 页面
+ * 成功 失败 页面（包括成功，失败描述信息页面） 共用
  * Created by kjh08490 on 2016/11/25.
  */
 
-public class ReturnCardReadActivity extends BaseActivity {
+public class HandleReturnResultActivity extends BaseActivity {
 
-    private EditText et_getcard;
-    private RelativeLayout ll_keyboard;
+
+    private TextView tv_handle_result;
 
     private String cardId = "";
 
@@ -60,7 +55,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
     private Passage passage;
 
-    private TextView tv_upup;
+    private ImageView vi_flag;
 
     private static final int GEZI = 1;
 
@@ -78,111 +73,40 @@ public class ReturnCardReadActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_return_cardread);
+        setContentView(R.layout.activity_handleresult);
 
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_right = (TextView) findViewById(R.id.tv_right);
+        vi_flag = (ImageView) findViewById(R.id.vi_flag);
 
-        setTitle("刷卡确认");
+        setTitle("取货结果");
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empCardDao = daoSession.getEmpCardDao();
 
         passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
-        if (passage == null) {
-            Toast.makeText(ReturnCardReadActivity.this, "输入货道信息有异常，请重试...", Toast.LENGTH_SHORT).show();
-            this.finish();
-        }
+        cardId = getIntent().getStringExtra(SeekerSoftConstant.CardNum);
 
-        ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
-        ll_keyboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        tv_handle_result = (TextView) findViewById(R.id.tv_handle_result);
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReturnCardReadActivity.this, MainActivity.class);
+                Intent intent = new Intent(HandleReturnResultActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
 
-        et_getcard = (EditText) findViewById(R.id.et_getcard);
-
-        et_getcard.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (KeyEvent.KEYCODE_ENTER == i && KeyEvent.ACTION_DOWN == keyEvent.getAction()) {
-                    cardId = et_getcard.getText().toString().replace("\n", "");
-                    if (TextUtils.isEmpty(cardId)) {
-                        // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "还货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                        Toast.makeText(ReturnCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // 处理业务
-                        gotoResult();
-                        //handleReadCardAfterBusniess(cardId);
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
-//        et_getcard.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (s.toString().endsWith("\n")) {
-//                    cardId = s.toString().replace("\n", "");
-//                    if (TextUtils.isEmpty(cardId)) {
-//                        // 读到的卡号为null or ""
-//                        ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "还货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-//                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-//                        Toast.makeText(ReturnCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        // 处理业务
-//                        handleReadCardAfterBusniess(cardId);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-        countDownTimer.start();
-
-        tv_upup = (TextView) findViewById(R.id.tv_upup);
-        tv_upup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // do nothing
-            }
-        });
+        handleReadCardAfterBusniess(cardId);
     }
 
-    public void gotoResult() {
-        Intent intent = new Intent(ReturnCardReadActivity.this, HandleReturnResultActivity.class);
-        intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
-        intent.putExtra(SeekerSoftConstant.CardNum, cardId);
-        startActivity(intent);
-        this.finish();
+    @Override
+    public int setEndTime() {
+        return SeekerSoftConstant.ENDTIEMSHORT;
     }
-
 
     /**
      * 本地判断是否可以进行借出去
@@ -222,6 +146,8 @@ public class ReturnCardReadActivity extends BaseActivity {
      * @return
      */
     private void cmdBufferStoreSerial(final String objectId) {
+        vi_flag.setVisibility(View.VISIBLE);
+
         ShipmentObject shipmentObject = new ShipmentObject();
         try {
             // 格子柜子
@@ -268,14 +194,14 @@ public class ReturnCardReadActivity extends BaseActivity {
                 // 网络消费
                 borrowRecord.setIsFlag(true);
             }
-            Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord);
+            Track.getInstance(HandleReturnResultActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord);
 
             // 串口打开柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
             BorrowRecord borrowRecord = new BorrowRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, false, new Date(), "", "", "");
-            Track.getInstance(ReturnCardReadActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
+            Track.getInstance(HandleReturnResultActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
             // 串口打开柜子失败
             handleResult(new TakeOutError(TakeOutError.OPEN_GEZI_SERIAL_FAILED_FLAG));
         }
@@ -286,14 +212,18 @@ public class ReturnCardReadActivity extends BaseActivity {
      */
     private void handleResult(TakeOutError takeOutError) {
         if (!takeOutError.isSuccess()) {
-            et_getcard.setText("");
             ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "消费问题: " + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
             Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
         }
-        Intent intent = new Intent(ReturnCardReadActivity.this, HandleResultActivity.class);
-        intent.putExtra(SeekerSoftConstant.TAKEOUTERROR, takeOutError);
-        startActivity(intent);
-        this.finish();
+        if (takeOutError != null) {
+            if (TextUtils.isEmpty(takeOutError.serverMsg)) {
+                tv_handle_result.setText("服务器检测：" + takeOutError.getTakeOutMsg());
+            } else {
+                tv_handle_result.setText("本地检测：" + takeOutError.serverMsg);
+            }
+        }
+        btn_return_mainpage.setVisibility(View.VISIBLE);
+        countDownTimer.start();
     }
 
 
@@ -348,7 +278,7 @@ public class ReturnCardReadActivity extends BaseActivity {
             @Override
             public void onFailure(Call<ReturnProResBody> call, Throwable throwable) {
                 hideProgress();
-                Toast.makeText(ReturnCardReadActivity.this, "网络链接问题，本地进行还货操作", Toast.LENGTH_LONG).show();
+                Toast.makeText(HandleReturnResultActivity.this, "网络链接问题，本地进行还货操作", Toast.LENGTH_LONG).show();
                 TakeOutError takeOutError = localReturnPro(cardId);
                 handleResult(takeOutError);
             }

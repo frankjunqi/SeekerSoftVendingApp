@@ -29,9 +29,14 @@ public class SeekerSoftConstant {
     public final static String TAKEOUTERROR = "TAKEOUTERROR";
 
     public final static String TakeoutNum = "TakeoutNum";
+    public final static String CardNum = "CardNum";
 
     public final static long TIMELOGN = 1000 * 60 * 5;// 基础数据的同步时间长
 
     public final static int ENDTIEMLONG = 35;
-    public final static int ENDTIEMSHORT = 15;
+    public final static int ENDTIEMSHORT = 5;
+
+    public static String machine = "";
+    public static String phoneDesc = "";
+    public static String versionDesc = "";
 }

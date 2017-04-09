@@ -17,8 +17,8 @@
         android:layout_marginBottom="40dp"
         android:layout_marginLeft="@dimen/padding_left_right"
         android:layout_marginRight="@dimen/padding_left_right"
-        android:minHeight="@dimen/btn_min_height"
         android:background="@drawable/selector_btn_dialog"
+        android:minHeight="@dimen/btn_min_height"
         android:text="返回"
         android:textSize="@dimen/mainpage_small_text_size" />
 
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/btn_return_mainpage"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="80dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -43,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_btn_paluse"
-                android:text="-"
                 android:padding="25dp"
+                android:text="-"
                 android:textSize="@dimen/paluse_size" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:gravity="center"
                 android:minWidth="78dp"
                 android:text="1"
-                android:textSize="@dimen/paluse_size" />
+                android:textSize="100sp" />
 
             <Button
                 android:id="@+id/btn_up"
@@ -69,15 +69,15 @@
         <Button
             android:id="@+id/btn_sure"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
             android:layout_marginLeft="@dimen/padding_left_right"
             android:layout_marginRight="@dimen/padding_left_right"
-            android:minHeight="@dimen/btn_min_height"
             android:layout_marginTop="40dp"
             android:background="@drawable/selector_btn_dialog"
+            android:minHeight="100dp"
             android:text="确认取货"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/paluse_small_size" />
+            android:textSize="50sp" />
     </LinearLayout>
 
 </RelativeLayout>

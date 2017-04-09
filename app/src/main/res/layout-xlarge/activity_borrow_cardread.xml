@@ -23,7 +23,10 @@
             android:id="@+id/et_getcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:lines="1" />
 
     </RelativeLayout>
 </RelativeLayout>

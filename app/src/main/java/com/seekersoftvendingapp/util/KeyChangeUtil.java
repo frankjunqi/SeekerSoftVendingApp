@@ -13,11 +13,11 @@ public class KeyChangeUtil {
 
     public static String getFlagInt(String charOne) {
         String outInt = "";
-        if (charOne.equals("A")) {
+        if ("A".equals(charOne)) {
             outInt = "1";
-        } else if (charOne.equals("B")) {
+        } else if ("B".equals(charOne)) {
             outInt = "2";
-        } else if (charOne.equals("C")) {
+        } else if ("C".equals(charOne)) {
             outInt = "3";
         }
         return outInt;

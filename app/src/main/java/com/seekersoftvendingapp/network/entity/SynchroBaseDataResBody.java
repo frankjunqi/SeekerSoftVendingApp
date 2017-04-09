@@ -6,6 +6,7 @@ import com.seekersoftvendingapp.database.table.EmpPower;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.Product;
 import com.seekersoftvendingapp.network.entity.basedata.AdminCardEntity;
+import com.seekersoftvendingapp.network.entity.basedata.BoxEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmpCardEntity;
 import com.seekersoftvendingapp.network.entity.basedata.EmpPowerEntity;
 import com.seekersoftvendingapp.network.entity.basedata.PassageEntity;
@@ -83,5 +84,32 @@ public class SynchroBaseDataResBody implements Serializable {
         public List<EmpPowerEntity> EmpPower = new ArrayList<EmpPowerEntity>();
         public List<PassageEntity> Passage = new ArrayList<PassageEntity>();
 
+        public List<BoxEntity> Box = new ArrayList<>();
+
     }
+
+    public String getMachine() {
+        if (data.Box != null && data.Box.size() > 0) {
+            return "柜号: " + data.Box.get(0).machine;
+        } else {
+            return "";
+        }
+    }
+
+    public String getPhoneDesc() {
+        if (data.Box != null && data.Box.size() > 0) {
+            return "紧急情况联系人：" + data.Box.get(0).connecter + ". \n" + "联系方式：" + data.Box.get(0).phone + ".";
+        } else {
+            return "";
+        }
+    }
+
+    public String getModle() {
+        if (data.Box != null && data.Box.size() > 0) {
+            return data.Box.get(0).model;
+        } else {
+            return "";
+        }
+    }
+
 }

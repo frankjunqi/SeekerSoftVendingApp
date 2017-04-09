@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -104,16 +105,13 @@ public class ManagerCardReadActivity extends BaseActivity {
         });
 
         et_getcard = (EditText) findViewById(R.id.et_getcard);
-        et_getcard.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
 
+        et_getcard.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().endsWith("\n")) {
-                    cardId = s.toString().replace("\n", "");
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (KeyEvent.KEYCODE_ENTER == i && KeyEvent.ACTION_DOWN == keyEvent.getAction()) {
+                    cardId = et_getcard.getText().toString().replace("\n", "");
                     if (TextUtils.isEmpty(cardId)) {
                         // 读到的卡号为null or ""
                         ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
@@ -122,14 +120,38 @@ public class ManagerCardReadActivity extends BaseActivity {
                         // 处理业务
                         handleReadCardAfterBusniess(cardId);
                     }
+                    return true;
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+                return false;
             }
         });
+
+//        et_getcard.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if (s.toString().endsWith("\n")) {
+//                    cardId = s.toString().replace("\n", "");
+//                    if (TextUtils.isEmpty(cardId)) {
+//                        // 读到的卡号为null or ""
+//                        ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+//                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+//                    } else {
+//                        // 处理业务
+//                        handleReadCardAfterBusniess(cardId);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
         tv_upup = (TextView)findViewById(R.id.tv_upup);
         tv_upup.setOnClickListener(new View.OnClickListener() {

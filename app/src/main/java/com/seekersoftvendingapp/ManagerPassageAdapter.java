@@ -68,7 +68,11 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
         Passage passage = dataset.get(position);
         holder.tv_passageid.setText(String.valueOf(passage.getSeqNo()));
         holder.tv_productname.setText(String.valueOf(passage.getKeepone()));
-        holder.tv_modify_num.setText(String.valueOf(passage.getCapacity() - passage.getStock()));
+        if (passage.getCapacity() - passage.getStock() <= 0) {
+            holder.tv_modify_num.setText("0");
+        } else {
+            holder.tv_modify_num.setText(String.valueOf(passage.getCapacity() - passage.getStock()));
+        }
         holder.tv_modify_down.setText(passage.getKeeptwo());
         holder.tv_modify_down.setOnClickListener(new View.OnClickListener() {
             @Override

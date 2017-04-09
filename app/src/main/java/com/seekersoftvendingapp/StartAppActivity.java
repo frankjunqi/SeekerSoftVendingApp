@@ -118,6 +118,11 @@ public class StartAppActivity extends BaseActivity {
             @Override
             public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
                 if (response != null && response.body() != null && response.body().status != 201) {
+
+                    SeekerSoftConstant.machine = response.body().getMachine();
+                    SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
+                    SeekerSoftConstant.versionDesc = response.body().getModle();
+
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
                     empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());

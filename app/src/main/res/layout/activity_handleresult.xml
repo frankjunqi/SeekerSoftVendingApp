@@ -16,7 +16,8 @@
         android:layout_below="@id/il_actionbar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:src="@drawable/success" />
+        android:src="@drawable/success"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tv_handle_result"
@@ -32,16 +33,17 @@
     <Button
         android:id="@+id/btn_return_mainpage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:layout_marginLeft="@dimen/padding_left_right"
         android:layout_marginRight="@dimen/padding_left_right"
         android:background="@drawable/selector_btn_dialog"
-        android:text="返回"
         android:minHeight="@dimen/btn_min_height"
-        android:textSize="@dimen/mainpage_small_text_size" />
+        android:text="返回"
+        android:textSize="@dimen/mainpage_small_text_size"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

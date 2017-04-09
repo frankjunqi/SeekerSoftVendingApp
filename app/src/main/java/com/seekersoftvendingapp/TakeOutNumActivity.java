@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 /**
@@ -24,6 +25,8 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
     private Button btn_up;
     private Button btn_sure;
 
+    private Passage passage;
+
     private int number = 1;
 
     @Override
@@ -35,6 +38,8 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("取货数量");
+
+        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
@@ -70,12 +75,16 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.btn_up:
                 number = number + 1;
-                tv_num.setText(String.valueOf(number));
+                if (number > passage.getStock()) {
+                    Toast.makeText(TakeOutNumActivity.this, "库存超限。", Toast.LENGTH_SHORT).show();
+                } else {
+                    tv_num.setText(String.valueOf(number));
+                }
                 break;
 
             case R.id.btn_sure:
                 Intent intent = new Intent(TakeOutNumActivity.this, TakeOutCardReadActivity.class);
-                intent.putExtra(SeekerSoftConstant.PASSAGE, getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE));
+                intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
                 intent.putExtra(SeekerSoftConstant.TakeoutNum, number);
                 startActivity(intent);
                 this.finish();

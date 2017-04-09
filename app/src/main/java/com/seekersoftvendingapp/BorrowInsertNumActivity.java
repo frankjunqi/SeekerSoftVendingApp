@@ -80,6 +80,8 @@ public class BorrowInsertNumActivity extends BaseActivity {
             return;
         }
 
+        keyPassage = keyPassage.replace(" ", "");
+
         // 检查数据库是否有该货道的资源数据
         // isDel = false & Stock > 0 & seqNo == keyPassage
         String x = keyPassage.substring(0, 1);
@@ -101,7 +103,6 @@ public class BorrowInsertNumActivity extends BaseActivity {
             this.finish();
         } else {
             Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_LONG).show();
-            return;
         }
     }
 }

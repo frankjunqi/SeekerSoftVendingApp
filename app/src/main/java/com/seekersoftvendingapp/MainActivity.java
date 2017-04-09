@@ -20,6 +20,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button btn_getproduct, btn_borrow, btn_back;
     private TextView btn_manage;
 
+    private TextView tv_number, tv_phone, tv_versiondesc;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn_borrow = (Button) findViewById(R.id.btn_borrow);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_manage = (TextView) findViewById(R.id.btn_manage);
+
+        tv_number = (TextView) findViewById(R.id.tv_number);
+        tv_phone = (TextView) findViewById(R.id.tv_phone);
+        tv_versiondesc = (TextView) findViewById(R.id.tv_versiondesc);
+        tv_number.setText(SeekerSoftConstant.machine);
+        tv_phone.setText(SeekerSoftConstant.phoneDesc);
+        tv_versiondesc.setText("软件版本 1.0.0, 设备型号 " + SeekerSoftConstant.versionDesc);
 
         btn_getproduct.setOnClickListener(this);
         btn_borrow.setOnClickListener(this);

@@ -134,8 +134,12 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
             supplyRecordObj.passage = (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo();
             supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
-
-            int count = passage.getCapacity() - passage.getStock() + Integer.parseInt(passage.getKeeptwo());
+            int count = 0;
+            if (passage.getCapacity() - passage.getStock() <= 0) {
+                count =0;
+            }else{
+                count = passage.getCapacity() - passage.getStock() + Integer.parseInt(passage.getKeeptwo());
+            }
             // 设置库存
             passage.setStock(passage.getStock() + count);
 

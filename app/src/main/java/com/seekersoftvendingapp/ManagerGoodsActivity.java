@@ -32,6 +32,8 @@ import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
 import com.seekersoftvendingapp.util.DataFormat;
@@ -56,6 +58,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_onebyoneinsert;
     private Button btn_exit;
     private Button btn_update;
+    private Button btn_open_all;
 
     private AdminCard adminCard;
     private PassageDao passageDao;
@@ -80,12 +83,14 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);
         btn_update = (Button) findViewById(R.id.btn_update);
+        btn_open_all = (Button) findViewById(R.id.btn_open_all);
 
         btn_onekeyinsert.setOnClickListener(this);
         btn_onebyoneinsert.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
         btn_return_mainpage.setOnClickListener(this);
         btn_update.setOnClickListener(this);
+        btn_open_all.setOnClickListener(this);
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
@@ -137,6 +142,9 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 Intent intent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                break;
+            case R.id.btn_open_all:
+                openGeziAll();
                 break;
         }
     }
@@ -377,6 +385,39 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public void openGeziAll() {
+        List<Passage> passageList = passageDao.queryBuilder()
+                .where(PassageDao.Properties.IsDel.eq(false))
+                .list();
+        if (passageList != null && passageList.size() > 0) {
+
+            NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
+                @Override
+                public void onCmdCallBack(boolean isSuccess) {
+
+                }
+            });
+            for (Passage passage : passageList) {
+                if (TextUtils.isEmpty(passage.getFlag())) {
+                    continue;
+                }
+                try {
+                    ShipmentObject shipmentObject = new ShipmentObject();
+                    shipmentObject.containerNum = Integer.parseInt(passage.getFlag()) + 1;
+                    shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+                    shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
+                    NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
+                } catch (Exception e) {
+
+                }
+            }
+
+
+        } else {
+            Toast.makeText(ManagerGoodsActivity.this, "暂时无货道配置。", Toast.LENGTH_SHORT).show();
         }
     }
 
