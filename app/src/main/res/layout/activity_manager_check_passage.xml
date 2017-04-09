@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/il_actionbar"
+        layout="@layout/actionbar_title" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_flag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/il_actionbar"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+
+            <Button
+                android:id="@+id/btn_main"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
+                android:text="主柜"
+                android:textSize="@dimen/manager_abc_size" />
+
+            <Button
+                android:id="@+id/btn_a"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
+                android:text="A"
+                android:textSize="@dimen/manager_abc_size" />
+
+            <Button
+                android:id="@+id/btn_b"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
+                android:text="B"
+                android:textSize="@dimen/manager_abc_size" />
+
+            <Button
+                android:id="@+id/btn_c"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_dialog"
+                android:text="C"
+                android:textSize="@dimen/manager_abc_size" />
+
+        </LinearLayout>
+
+        <include layout="@layout/item_check_stock" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_flag"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_empty"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="暂时还没有内容哦"
+            android:textSize="@dimen/mainpage_small_text_size" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_return_mainpage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="@dimen/padding_left_right"
+        android:layout_marginRight="@dimen/padding_left_right"
+        android:background="@drawable/selector_btn_dialog"
+        android:minHeight="@dimen/btn_min_height"
+        android:text="返回"
+        android:textSize="@dimen/mainpage_small_text_size" />
+
+    <com.seekersoftvendingapp.view.EmptyRecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_return_mainpage"
+        android:layout_below="@id/ll_flag"
+        android:scrollbars="vertical" />
+
+
+</RelativeLayout>

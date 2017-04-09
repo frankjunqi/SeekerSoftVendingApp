@@ -59,6 +59,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_exit;
     private Button btn_update;
     private Button btn_open_all;
+    private Button btn_check_stock;
 
     private AdminCard adminCard;
     private PassageDao passageDao;
@@ -84,6 +85,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);
         btn_update = (Button) findViewById(R.id.btn_update);
         btn_open_all = (Button) findViewById(R.id.btn_open_all);
+        btn_check_stock = (Button) findViewById(R.id.btn_check_stock);
 
         btn_onekeyinsert.setOnClickListener(this);
         btn_onebyoneinsert.setOnClickListener(this);
@@ -91,6 +93,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_return_mainpage.setOnClickListener(this);
         btn_update.setOnClickListener(this);
         btn_open_all.setOnClickListener(this);
+        btn_check_stock.setOnClickListener(this);
 
         // 同步基础数据
         Track.getInstance(getApplicationContext()).synchroDataToServer();
@@ -145,6 +148,10 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.btn_open_all:
                 openGeziAll();
+                break;
+            case R.id.btn_check_stock:
+                Intent checkIntent = new Intent(ManagerGoodsActivity.this, ManagerCheckPassageActivity.class);
+                startActivity(checkIntent);
                 break;
         }
     }
