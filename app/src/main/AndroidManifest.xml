@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartAppActivity"
+            android:name=".SettingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
@@ -39,7 +39,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".StartAppActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
@@ -121,12 +121,12 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".util.AutoStartReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.HOME" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".util.AutoStartReceiver">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--<category android:name="android.intent.category.HOME" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <receiver
             android:name=".updateapk.TCTInsatllActionBroadcastReceiver"
@@ -142,29 +142,6 @@
             </intent-filter>
         </receiver>
 
-
-        <activity
-            android:name=".test.TestCardReadActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".database.dao.TestNoteDaoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".database.dao.TestAdminCardDaoActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".database.rxdao.TestNoteRXDaoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".network.TestNetworkActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".test.TestVendingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".test.TestStoreActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".test.TestNewVendingActivity"
             android:screenOrientation="portrait" />

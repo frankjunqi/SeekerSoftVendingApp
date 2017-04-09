@@ -14,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.network.TestNetworkActivity;
 import com.seekersoftvendingapp.test.TestNewVendingActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -68,16 +67,6 @@ public class SettingActivity extends BaseActivity {
                 startActivity(new Intent(SettingActivity.this, StartAppActivity.class));
             }
         });
-
-        // 网络加载 ( POST GET )
-        btn_network = (Button) findViewById(R.id.btn_network);
-        btn_network.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingActivity.this, TestNetworkActivity.class));
-            }
-        });
-
 
         // 格子柜的串口通信
         btn_store = (Button) findViewById(R.id.btn_store);

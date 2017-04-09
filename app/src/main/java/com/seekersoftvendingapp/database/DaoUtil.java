@@ -20,10 +20,7 @@ public class DaoUtil {
     private static void creatTable() {
         Schema schema = new Schema(1, "com.seekersoftvendingapp.database.table");
 
-        addNote(schema);
-
         addEmpCard(schema);
-        addEmployee(schema);
         addAdminCard(schema);
         addEmpPower(schema);
         addPassage(schema);

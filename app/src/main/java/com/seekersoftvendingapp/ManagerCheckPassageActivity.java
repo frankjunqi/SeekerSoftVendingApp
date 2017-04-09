@@ -8,32 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
 import com.seekersoftvendingapp.database.table.Product;
 import com.seekersoftvendingapp.database.table.ProductDao;
-import com.seekersoftvendingapp.network.api.Host;
-import com.seekersoftvendingapp.network.api.SeekerSoftService;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
-import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
-import com.seekersoftvendingapp.util.DataFormat;
-import com.seekersoftvendingapp.util.LogCat;
-import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.EmptyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by kjh08490 on 2016/12/15.

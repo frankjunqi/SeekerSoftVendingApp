@@ -73,35 +73,39 @@ public class BorrowInsertNumActivity extends BaseActivity {
      * @param keyPassage
      */
     private void checkPassageDirectUser(String keyPassage) {
-        // 检查用户输入的货道号的校验
-        if (TextUtils.isEmpty(keyPassage)) {
-            Toast.makeText(BorrowInsertNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        try {
+            // 检查用户输入的货道号的校验
+            if (TextUtils.isEmpty(keyPassage)) {
+                Toast.makeText(BorrowInsertNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        keyPassage = keyPassage.replace(" ", "");
+            keyPassage = keyPassage.replace(" ", "");
 
-        // 检查数据库是否有该货道的资源数据
-        // isDel = false & Stock > 0 & seqNo == keyPassage
-        String x = keyPassage.substring(0, 1);
-        List<Passage> list = passageDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.IsSend.eq(false))
-                .where(PassageDao.Properties.Stock.gt(0))
-                .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
-                .where(PassageDao.Properties.Used.eq(""))// 保证可以没有被人借走
-                .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
-                .list();
-        if (list != null && list.size() > 0) {
-            Passage passage = list.get(0);
-            // TODO 检查是否有该硬件货道
-            Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
-            intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
-            startActivity(intent);
-            this.finish();
-        } else {
-            Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_LONG).show();
+            // 检查数据库是否有该货道的资源数据
+            // isDel = false & Stock > 0 & seqNo == keyPassage
+            String x = keyPassage.substring(0, 1);
+            List<Passage> list = passageDao.queryBuilder()
+                    .where(PassageDao.Properties.IsDel.eq(false))
+                    .where(PassageDao.Properties.IsSend.eq(false))
+                    .where(PassageDao.Properties.Stock.gt(0))
+                    .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
+                    .where(PassageDao.Properties.Used.eq(""))// 保证可以没有被人借走
+                    .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
+                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
+                    .list();
+            if (list != null && list.size() > 0) {
+                Passage passage = list.get(0);
+                // TODO 检查是否有该硬件货道
+                Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
+                intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
+                startActivity(intent);
+                this.finish();
+            } else {
+                Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(BorrowInsertNumActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }
