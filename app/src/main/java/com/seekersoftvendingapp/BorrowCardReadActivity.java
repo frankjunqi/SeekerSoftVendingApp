@@ -312,7 +312,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                 .where(EmpCardDao.Properties.IsDel.eq(false))
                 .where(EmpCardDao.Properties.Card.like(cardId)).list();
         if (empCardList != null && empCardList.size() > 0) {
-
+            empCard = empCardList.get(0);
             return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
 
 //            empCard = empCardList.get(0);

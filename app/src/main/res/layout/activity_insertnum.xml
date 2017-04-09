@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/btn_return_mainpage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/btn_height"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
@@ -42,8 +42,9 @@
                 android:id="@+id/btn_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_btn_paluse"
-                android:padding="25dp"
+                android:background="@drawable/selector_btn_dialog"
+                android:minHeight="110dp"
+                android:minWidth="110dp"
                 android:text="-"
                 android:textSize="@dimen/paluse_size" />
 
@@ -52,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:minWidth="78dp"
+                android:minWidth="160dp"
                 android:text="1"
                 android:textSize="100sp" />
 
@@ -60,8 +61,9 @@
                 android:id="@+id/btn_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_btn_paluse"
-                android:padding="25dp"
+                android:background="@drawable/selector_btn_dialog"
+                android:minHeight="110dp"
+                android:minWidth="110dp"
                 android:text="+"
                 android:textSize="@dimen/paluse_size" />
         </LinearLayout>

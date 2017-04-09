@@ -136,8 +136,8 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
             int count = 0;
             if (passage.getCapacity() - passage.getStock() <= 0) {
-                count =0;
-            }else{
+                count = 0;
+            } else {
                 count = passage.getCapacity() - passage.getStock() + Integer.parseInt(passage.getKeeptwo());
             }
             // 设置库存
@@ -178,7 +178,11 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
      * 读取最新数据库数据
      */
     private void updatePassageList() {
-        List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).orderAsc(PassageDao.Properties.SeqNo).list();
+        List<Passage> passageList = passageDao.queryBuilder()
+                .where(PassageDao.Properties.IsDel.eq(false))
+                .orderAsc(PassageDao.Properties.SeqNo)
+                .where(PassageDao.Properties.IsSend.eq(false))// issend: "true:销售 false:借还"
+                .list();
         List<Product> productList = productDao.queryBuilder().where(ProductDao.Properties.IsDel.eq(false)).list();
 
         passageListMain.clear();

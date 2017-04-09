@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="340dp"
         android:background="@drawable/first_page_title">
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/mainpage_sub_title_size" />
+            android:textSize="@dimen/mainpage_machine_size" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,14 +33,15 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/first_page_logo" />
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/first_page_logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
                     android:text="西始工业超市"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/mainpage_title_size" />
@@ -52,7 +53,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="85dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/first_page_logo"
                     android:visibility="invisible" />

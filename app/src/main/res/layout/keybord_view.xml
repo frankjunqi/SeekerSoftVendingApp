@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
-            android:text="输入取货号: "
+            android:text="请输入货道: "
             android:textSize="@dimen/keyborad_title" />
 
         <TextView

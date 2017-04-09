@@ -47,7 +47,7 @@
             android:layout_marginLeft="@dimen/padding_left_right"
             android:layout_marginRight="@dimen/padding_left_right"
             android:layout_marginTop="30dp"
-            android:background="@drawable/keyboard_qty_default"
+            android:background="@drawable/selector_btn_dialog"
             android:imeOptions="actionDone"
             android:inputType="textPassword"
             android:lines="1"

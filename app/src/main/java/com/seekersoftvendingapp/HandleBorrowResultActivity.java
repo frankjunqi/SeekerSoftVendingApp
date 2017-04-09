@@ -80,7 +80,7 @@ public class HandleBorrowResultActivity extends BaseActivity {
         tv_right = (TextView) findViewById(R.id.tv_right);
         vi_flag = (ImageView) findViewById(R.id.vi_flag);
 
-        setTitle("取货结果");
+        setTitle("借还结果");
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         empCardDao = daoSession.getEmpCardDao();

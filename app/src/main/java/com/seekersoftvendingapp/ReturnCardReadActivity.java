@@ -306,7 +306,8 @@ public class ReturnCardReadActivity extends BaseActivity {
         // 具体查询card对应的用户
         List<EmpCard> empCardList = empCardDao.queryBuilder()
                 .where(EmpCardDao.Properties.IsDel.eq(false))
-                .where(EmpCardDao.Properties.Card.like(cardId)).list();
+                .where(EmpCardDao.Properties.Card.like(cardId))
+                .list();
         if (empCardList != null && empCardList.size() > 0) {
             EmpCard empCard = empCardList.get(0);
             if (!TextUtils.isEmpty(empCard.getEmp()) && empCard.getEmp().equals(passage.getUsed())) {

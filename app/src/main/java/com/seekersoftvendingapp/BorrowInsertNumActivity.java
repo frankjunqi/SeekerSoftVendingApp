@@ -38,7 +38,7 @@ public class BorrowInsertNumActivity extends BaseActivity {
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_right = (TextView) findViewById(R.id.tv_right);
 
-        setTitle("取货");
+        setTitle("借还");
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
         passageDao = daoSession.getPassageDao();
@@ -55,7 +55,6 @@ public class BorrowInsertNumActivity extends BaseActivity {
 
         ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
         keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("货道号...");
         keyBordView.setSureClickListen(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

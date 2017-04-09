@@ -22,7 +22,7 @@
     <Button
         android:id="@+id/btn_onebyoneinsert"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_below="@id/btn_onekeyinsert"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -36,7 +36,7 @@
     <Button
         android:id="@+id/btn_open_all"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_below="@id/btn_onebyoneinsert"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -50,7 +50,7 @@
     <Button
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_below="@id/btn_open_all"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -64,7 +64,7 @@
     <Button
         android:id="@+id/btn_exit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_below="@id/btn_update"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"

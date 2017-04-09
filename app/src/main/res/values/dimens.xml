@@ -18,10 +18,12 @@
     <dimen name="mainpage_bottom_text_size">24sp</dimen>
 
     <dimen name="actionbar_title_size">56sp</dimen>
-    <dimen name="actionbar_right_size">26sp</dimen>
+    <dimen name="actionbar_right_size">50sp</dimen>
 
-    <dimen name="mainpage_title_size">42sp</dimen>
-    <dimen name="mainpage_sub_title_size">36sp</dimen>
+    <dimen name="mainpage_title_size">50sp</dimen>
+    <dimen name="mainpage_machine_size">36sp</dimen>
+
+    <dimen name="mainpage_sub_title_size">44sp</dimen>
 
     <dimen name="middle_text_size">40sp</dimen>
 
@@ -30,7 +32,7 @@
 
     <dimen name="card_page">35sp</dimen>
 
-    <dimen name="result_page">24sp</dimen>
+    <dimen name="result_page">50sp</dimen>
 
     <dimen name="keyborad_title">50sp</dimen>
     <dimen name="keyborad_value">50sp</dimen>

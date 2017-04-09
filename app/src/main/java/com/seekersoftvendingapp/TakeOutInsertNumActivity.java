@@ -57,7 +57,6 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
         ll_keyboard = (LinearLayout) findViewById(R.id.ll_keyboard);
         keyBordView = new KeyBordView(this);
-        keyBordView.setKeyWordHint("货道号...");
         keyBordView.setSureClickListen(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

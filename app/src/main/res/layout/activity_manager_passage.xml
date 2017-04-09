@@ -25,7 +25,7 @@
             <Button
                 android:id="@+id/btn_main"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_btn_dialog"
                 android:text="主柜"
@@ -34,7 +34,7 @@
             <Button
                 android:id="@+id/btn_a"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_btn_dialog"
                 android:text="A"
@@ -43,7 +43,7 @@
             <Button
                 android:id="@+id/btn_b"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_btn_dialog"
                 android:text="B"
@@ -52,7 +52,7 @@
             <Button
                 android:id="@+id/btn_c"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_btn_dialog"
                 android:text="C"
