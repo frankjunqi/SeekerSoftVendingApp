@@ -15,7 +15,7 @@ public class DataFormat {
 
 
     public static void main(String[] args) throws Exception {
-        String outDate = formatDatetime(periodUnitGetStartDate(14, "month"));
+        String outDate = getNowTime();
         System.out.print(outDate);
     }
 
@@ -109,7 +109,7 @@ public class DataFormat {
     }
 
     public static String getNowTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         Calendar c = Calendar.getInstance();
         return format.format(c.getTime());
     }

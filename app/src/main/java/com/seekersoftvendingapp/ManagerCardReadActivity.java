@@ -119,34 +119,7 @@ public class ManagerCardReadActivity extends BaseActivity {
             }
         });
 
-//        et_getcard.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (s.toString().endsWith("\n")) {
-//                    cardId = s.toString().replace("\n", "");
-//                    if (TextUtils.isEmpty(cardId)) {
-//                        // 读到的卡号为null or ""
-//                        ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-//                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-//                    } else {
-//                        // 处理业务
-//                        handleReadCardAfterBusniess(cardId);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-
-        tv_upup = (TextView)findViewById(R.id.tv_upup);
+        tv_upup = (TextView) findViewById(R.id.tv_upup);
         tv_upup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
