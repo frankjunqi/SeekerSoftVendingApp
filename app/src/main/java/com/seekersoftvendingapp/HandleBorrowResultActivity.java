@@ -235,18 +235,6 @@ public class HandleBorrowResultActivity extends BaseActivity {
         if (empCardList != null && empCardList.size() > 0) {
             empCard = empCardList.get(0);
             return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
-
-
-//            List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-//                    .where(EmpPowerDao.Properties.IsDel.eq(false))
-//                    .where(EmpPowerDao.Properties.Emp.like(empCard.getEmp()))
-//                    .where(EmpPowerDao.Properties.Product.eq(productId)).list();
-//            if (listEmpPowers == null || listEmpPowers.size() == 0) {
-//                // 此商品暂时没有赋予出货权限
-//                return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
-//            } else {
-//                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
-//            }
         } else {
             // 无此员工
             return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);

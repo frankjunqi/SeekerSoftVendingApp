@@ -3,9 +3,7 @@ package com.seekersoftvendingapp.database;
 
 import org.greenrobot.greendao.generator.DaoGenerator;
 import org.greenrobot.greendao.generator.Entity;
-import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
-import org.greenrobot.greendao.generator.ToMany;
 
 /**
  * Created by kjh08490 on 2016/12/1.
@@ -36,45 +34,6 @@ public class DaoUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * public String empNo;
-     * public ArrayList<String> card = new ArrayList<String>();
-     * public ArrayList<String> power = new ArrayList<String>();
-     * public String objectId;
-     * public String createdAt;
-     * public String updatedAt;
-     * 员工  --  权限ids  --  卡号
-     *
-     * @param schema
-     */
-    private static void addEmployee(Schema schema) {
-        Entity employee = schema.addEntity("Employee");
-        employee.addBooleanProperty("isDel");
-        employee.addStringProperty("empNo").notNull();
-        employee.addStringProperty("card");
-        employee.addStringProperty("power");
-        employee.addStringProperty("objectId").primaryKey();
-        employee.addDateProperty("createdAt");
-        employee.addDateProperty("updatedAt");
-        employee.addStringProperty("keepone");
-        employee.addStringProperty("keeptwo");
-        employee.addStringProperty("keepthree");
-
-    }
-
-    /**
-     * Note DEMO 测试
-     *
-     * @param schema
-     */
-    private static void addNote(Schema schema) {
-        Entity note = schema.addEntity("Note");
-        note.addIdProperty();
-        note.addStringProperty("text").notNull();
-        note.addStringProperty("comment");
-        note.addDateProperty("date");
     }
 
     public static void addEmpCard(Schema schema) {
@@ -244,7 +203,6 @@ public class DaoUtil {
         supplyRecord.addStringProperty("keepthree");
     }
 
-
     /**
      * 借还记录接口
      */
@@ -261,7 +219,6 @@ public class DaoUtil {
         borrowRecord.addStringProperty("keeptwo");
         borrowRecord.addStringProperty("keepthree");
     }
-
 
     /**
      * 提交异常记录
@@ -280,23 +237,5 @@ public class DaoUtil {
         errorRecord.addStringProperty("keepone");
         errorRecord.addStringProperty("keeptwo");
         errorRecord.addStringProperty("keepthree");
-    }
-
-    private static void addCustomerOrder(Schema schema) {
-        // customer
-        Entity customer = schema.addEntity("Customer");
-        customer.addIdProperty();
-        customer.addStringProperty("name").notNull();
-
-        // order
-        Entity order = schema.addEntity("Order");
-        order.setTableName("ORDERS"); // "ORDER" is a reserved keyword
-        order.addIdProperty();
-        Property orderDate = order.addDateProperty("date").getProperty();
-        Property customerId = order.addLongProperty("customerId").notNull().getProperty();
-        order.addToOne(customer, customerId);
-        ToMany customerToOrders = customer.addToMany(order, customerId);
-        customerToOrders.setName("orders");
-        customerToOrders.orderAsc(orderDate);
     }
 }

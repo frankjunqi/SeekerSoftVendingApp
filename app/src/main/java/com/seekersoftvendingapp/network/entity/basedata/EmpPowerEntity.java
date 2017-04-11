@@ -24,10 +24,4 @@ public class EmpPowerEntity implements Serializable {
     public EmpPower getEmpPower() {
         return new EmpPower(emp, unit, isDel, product, count, period, used, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
-
-    @Override
-    public String toString() {
-        return "{ \n    unit = " + unit + ",\n product" + product + ",\n    count" + count + ",\n      period = " + period + ",\n   objectId="
-                + objectId + ",\n   createdAt = " + createdAt + ",\n    updatedAt = " + updatedAt + "}";
-    }
 }

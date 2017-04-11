@@ -12,6 +12,5 @@ import java.util.List;
 
 public class BorrowRecordReqBody implements Serializable {
     public String deviceId;
-
     public List<BorrowRecord> record = new ArrayList<BorrowRecord>();
 }

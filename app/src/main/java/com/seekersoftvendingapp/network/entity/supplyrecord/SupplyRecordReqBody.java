@@ -9,9 +9,6 @@ import java.util.List;
  */
 
 public class SupplyRecordReqBody implements Serializable {
-
     public String deviceId;
-
     public List<SupplyRecordObj> record = new ArrayList<SupplyRecordObj>();
-
 }

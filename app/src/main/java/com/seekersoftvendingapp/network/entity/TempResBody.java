@@ -7,5 +7,4 @@ import java.io.Serializable;
  */
 public class TempResBody implements Serializable {
 
-
 }

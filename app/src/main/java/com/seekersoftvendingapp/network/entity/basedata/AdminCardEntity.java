@@ -18,11 +18,6 @@ public class AdminCardEntity implements Serializable {
     public String updatedAt;
 
     public AdminCard getAdminCard() {
-        return new AdminCard(isDel, card, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt),"","","");
-    }
-
-    @Override
-    public String toString() {
-        return "{ \n    card =" + card + ",\n   objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + "}";
+        return new AdminCard(isDel, card, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
 }

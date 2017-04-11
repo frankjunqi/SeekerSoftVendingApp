@@ -21,5 +21,4 @@ public class UpdateResBody implements Serializable {
         public String createdAt;
         public String updateAt;
     }
-
 }

@@ -14,7 +14,7 @@ public class AutoStartReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO 开机启动
+        // 开机启动
         Intent i = new Intent(context, StartAppActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);

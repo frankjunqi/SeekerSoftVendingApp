@@ -3,7 +3,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="min_height">54dp</dimen>
+    <dimen name="min_height">45dp</dimen>
+
+    <dimen name="height_btn_manager">126dp</dimen>
+
 
     <dimen name="padding_left_right">100dp</dimen>
 

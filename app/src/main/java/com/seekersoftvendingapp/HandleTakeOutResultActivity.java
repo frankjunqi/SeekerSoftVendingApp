@@ -243,19 +243,16 @@ public class HandleTakeOutResultActivity extends BaseActivity {
      */
     private void cmdBufferVendingStoreSerial(final String objectId) {
         vi_flag.setVisibility(View.VISIBLE);
-
         if (isStoreSend) {
             NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
                 @Override
                 public void onCmdCallBack(boolean isSuccess) {
                     Message msg = new Message();
                     msg.what = GEZI;
-
                     ResultObj resultObj = new ResultObj();
                     resultObj.isSuccess = isSuccess;
                     resultObj.objectId = objectId;
                     msg.obj = resultObj;
-
                     mHnadler.sendMessage(msg);
                 }
             });
@@ -271,12 +268,10 @@ public class HandleTakeOutResultActivity extends BaseActivity {
                 public void onCmdCallBack(boolean isSuccess) {
                     Message msg = new Message();
                     msg.what = LUOWEN;
-
                     ResultObj resultObj = new ResultObj();
                     resultObj.isSuccess = isSuccess;
                     resultObj.objectId = objectId;
                     msg.obj = resultObj;
-
                     mHnadler.sendMessage(msg);
                 }
             });

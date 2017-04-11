@@ -18,9 +18,7 @@ import com.seekersoftvendingapp.util.TakeOutError;
 
 public class HandleResultActivity extends BaseActivity {
 
-
     private TextView tv_handle_result;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

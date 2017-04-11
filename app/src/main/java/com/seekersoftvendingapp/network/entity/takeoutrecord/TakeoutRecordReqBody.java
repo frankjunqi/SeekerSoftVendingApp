@@ -11,9 +11,6 @@ import java.util.List;
  */
 
 public class TakeoutRecordReqBody implements Serializable {
-
     public String deviceId;
-
     public List<TakeoutRecord> record = new ArrayList<TakeoutRecord>();
-
 }

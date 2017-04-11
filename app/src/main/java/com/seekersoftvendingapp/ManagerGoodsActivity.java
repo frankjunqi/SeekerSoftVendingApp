@@ -21,11 +21,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.seekersoftvendingapp.database.table.AdminCard;
+import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
+import com.seekersoftvendingapp.database.table.EmpCardDao;
+import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.database.table.PassageDao;
+import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
@@ -53,15 +58,20 @@ import retrofit2.Retrofit;
 
 public class ManagerGoodsActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button btn_onekeyinsert;
+    private Button btn_sync_data;
+
     private Button btn_onebyoneinsert;
     private Button btn_exit;
     private Button btn_update;
     private Button btn_open_all;
     private Button btn_check_stock;
 
-    private AdminCard adminCard;
     private PassageDao passageDao;
+    private AdminCardDao adminCardDao;
+    private EmpCardDao empCardDao;
+    private EmpPowerDao empPowerDao;
+    private ProductDao productDao;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,11 +84,14 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         setTitle("管理页面");
 
         DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
+        adminCardDao = daoSession.getAdminCardDao();
+        empPowerDao = daoSession.getEmpPowerDao();
         passageDao = daoSession.getPassageDao();
+        productDao = daoSession.getProductDao();
+        empCardDao = daoSession.getEmpCardDao();
 
-        adminCard = (AdminCard) getIntent().getSerializableExtra(SeekerSoftConstant.ADMINCARD);
+        btn_sync_data = (Button) findViewById(R.id.btn_sync_data);
 
-        btn_onekeyinsert = (Button) findViewById(R.id.btn_onekeyinsert);
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);
@@ -86,7 +99,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_open_all = (Button) findViewById(R.id.btn_open_all);
         btn_check_stock = (Button) findViewById(R.id.btn_check_stock);
 
-        btn_onekeyinsert.setOnClickListener(this);
+        btn_sync_data.setOnClickListener(this);
+
         btn_onebyoneinsert.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
         btn_return_mainpage.setOnClickListener(this);
@@ -101,7 +115,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_onekeyinsert:
+            case R.id.btn_sync_data:
                 if (SeekerSoftConstant.NETWORKCONNECT) {
                     plainDialogDemo();
                 } else {
@@ -180,17 +194,16 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     }
 
     /**
-     * 一键补货
+     * 同步基础数据
      */
     private void plainDialogDemo() {
         new AlertDialog.Builder(ManagerGoodsActivity.this)
-                .setTitle("一键补货")
-                .setMessage("确定把所有货道上的货品设置成最大库存？")
+                .setTitle("同步基础数据")
+                .setMessage("同步当前服务器中基础数据到本地.")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 一键补货,补货到最大库存
-                        asyncSupplyRecordRequest();
+                        asyncGetBaseDataRequest();
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -204,48 +217,39 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     /**
      * 提交补货记录 POST
      */
-    private void asyncSupplyRecordRequest() {
+    private void asyncGetBaseDataRequest() {
         showProgress();
-        final List<Passage> passageList = passageDao.queryBuilder().where(PassageDao.Properties.IsDel.eq(false)).list();
-        // 异步加载(post)
+        // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        SupplyRecordReqBody supplyRecordReqBody = new SupplyRecordReqBody();
-        supplyRecordReqBody.deviceId = SeekerSoftConstant.DEVICEID;
-        // 处理补货记录
-        for (Passage passage : passageList) {
-            SupplyRecordObj supplyRecordObj = new SupplyRecordObj();
-            supplyRecordObj.passage = (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo();
-            supplyRecordObj.card = SeekerSoftConstant.ADMINCARD;
-            supplyRecordObj.count = passage.getCapacity() - passage.getStock();
-            supplyRecordObj.time = DataFormat.getNowTime();
-            supplyRecordReqBody.record.add(supplyRecordObj);
-        }
-        Gson gson = new Gson();
-        String josn = gson.toJson(supplyRecordReqBody);
-        LogCat.e("supplyRecord = " + josn);
-
-        Call<SupplyRecordResBody> postAction = service.supplyRecord(supplyRecordReqBody);
-        postAction.enqueue(new Callback<SupplyRecordResBody>() {
+        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, "");
+        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
+        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
             @Override
-            public void onResponse(Call<SupplyRecordResBody> call, Response<SupplyRecordResBody> response) {
-                if (response != null && response.body() != null) {
-                    for (Passage passage : passageList) {
-                        passage.setStock(passage.getCapacity());
-                    }
-                    passageDao.insertOrReplaceInTx(passageList);
-                    Toast.makeText(ManagerGoodsActivity.this, "补货成功", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
+                if (response != null && response.body() != null && response.body().status != 201) {
+
+                    SeekerSoftConstant.machine = response.body().getMachine();
+                    SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
+                    SeekerSoftConstant.versionDesc = response.body().getModle();
+
+                    adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
+                    empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
+                    empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
+                    // 第一次请求，直接全部更新
+                    passageDao.insertOrReplaceInTx(response.body().getPassageList());
+                    productDao.insertOrReplaceInTx(response.body().getProductList());
+                    Toast.makeText(ManagerGoodsActivity.this, "基础数据同步成功...", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(ManagerGoodsActivity.this, "supply Record: Failure", Toast.LENGTH_SHORT).show();
-                    LogCat.e("supply Record: Failure");
+                    Toast.makeText(ManagerGoodsActivity.this, "【" + ((response != null && response.body() != null && !TextUtils.isEmpty(response.body().message)) ? response.body().message : "服务端无描述信息.") + "】", Toast.LENGTH_SHORT).show();
                 }
                 hideProgress();
             }
 
             @Override
-            public void onFailure(Call<SupplyRecordResBody> call, Throwable throwable) {
+            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
                 hideProgress();
-                Toast.makeText(ManagerGoodsActivity.this, "supply Record:  Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(ManagerGoodsActivity.this, "基础数据获取失败...", Toast.LENGTH_LONG).show();
             }
         });
     }

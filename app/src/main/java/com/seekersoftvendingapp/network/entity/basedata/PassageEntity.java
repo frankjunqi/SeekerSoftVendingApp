@@ -27,14 +27,7 @@ public class PassageEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
-
     public Passage getPassage() {
         return new Passage(capacity, isDel, seqNo, used, product, borrowState, stock, isSend, TextUtils.isEmpty(flag) ? "" : flag, whorlSize, "", objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
-    }
-
-    @Override
-    public String toString() {
-        return "{ \n    capacity = " + capacity + ",\n  seqNo = " + seqNo + ",\n    whorlSize = " + whorlSize + ",\n    isSend = " + isSend + ",\n      product"
-                + product.toString() + ",\n     borrowState" + borrowState + ",\n    stock = " + stock + ",\n    objectId=" + objectId + ",\n    createdAt = " + createdAt + ",\n    updatedAt = " + updatedAt + "}";
     }
 }

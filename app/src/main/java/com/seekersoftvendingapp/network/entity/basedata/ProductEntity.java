@@ -21,10 +21,4 @@ public class ProductEntity implements Serializable {
         return new Product(isDel, productName, cusProductName, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
     }
 
-
-    @Override
-    public String toString() {
-        return "{ \n    name = " + productName + ",\n  objectId = " + objectId + ",\n  createdAt = " + createdAt + ",\n    updateAt = " + updatedAt + ",\n     cusProduct = " + cusProductName + "}";
-    }
-
 }

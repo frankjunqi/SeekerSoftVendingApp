@@ -6,7 +6,7 @@ package com.seekersoftvendingapp.util;
 
 public class SeekerSoftConstant {
 
-    // TODO 正式包变成false
+    // 正式包变成false
     public static final boolean DEBUG = false;
 
     // 设备号

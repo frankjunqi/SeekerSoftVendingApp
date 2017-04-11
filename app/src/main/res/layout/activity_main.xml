@@ -76,7 +76,7 @@
         <Button
             android:id="@+id/btn_getproduct"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="@dimen/height_btn_manager"
             android:layout_marginTop="70dp"
             android:background="@drawable/selector_btn_dialog"
             android:minHeight="@dimen/min_height"
@@ -87,7 +87,7 @@
         <Button
             android:id="@+id/btn_borrow"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="@dimen/height_btn_manager"
             android:layout_marginTop="70dp"
             android:background="@drawable/selector_btn_dialog"
             android:minHeight="@dimen/min_height"
@@ -98,7 +98,7 @@
         <Button
             android:id="@+id/btn_back"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="@dimen/height_btn_manager"
             android:layout_marginTop="70dp"
             android:background="@drawable/selector_btn_dialog"
             android:minHeight="@dimen/min_height"
