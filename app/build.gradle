@@ -55,4 +55,6 @@ dependencies {
 
     // android test unit lib
     testCompile 'junit:junit:4.12'
+
+    compile 'com.tencent.bugly:crashreport:latest.release'
 }

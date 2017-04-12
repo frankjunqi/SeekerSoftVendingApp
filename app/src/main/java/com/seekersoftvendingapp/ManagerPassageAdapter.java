@@ -3,6 +3,7 @@ package com.seekersoftvendingapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -113,26 +114,50 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
         }
 
 
-        new AlertDialog.Builder(mContext)
-                .setTitle("货道补货")
-                .setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selecteStock = which + 1;
-                    }
-                })
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (selecteStock == 0) {
-                            Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        passage.setKeeptwo(String.valueOf(selecteStock));
-                        tv_modify_down.setText("-" + String.valueOf(selecteStock));
-                        // 重置
-                        selecteStock = 0;
-                    }
-                }).setNegativeButton("取消", null).show();
+        /*final AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle("货道补货");
+        alertDialog.setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selecteStock = which + 1;
+            }
+        });
+        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (selecteStock == 0) {
+                    Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                passage.setKeeptwo(String.valueOf(selecteStock));
+                tv_modify_down.setText("-" + String.valueOf(selecteStock));
+                // 重置
+                selecteStock = 0;
+            }
+        });
+        alertDialog.setNegativeButton("取消", null).show();*/
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("货道补货");
+        /**
+         * 1、public Builder setItems(int itemsId, final OnClickListener
+         * listener) itemsId表示字符串数组的资源ID，该资源指定的数组会显示在列表中。 2、public Builder
+         * setItems(CharSequence[] items, final OnClickListener listener)
+         * items表示用于显示在列表中的字符串数组
+         */
+        builder.setItems(intlist, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selecteStock = which + 1;
+                if (selecteStock == 0) {
+                    Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                passage.setKeeptwo(String.valueOf(selecteStock));
+                tv_modify_down.setText("-" + String.valueOf(selecteStock));
+                // 重置
+                selecteStock = 0;
+            }
+        });
+        builder.create().show();
     }
 }

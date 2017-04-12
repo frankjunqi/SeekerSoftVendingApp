@@ -24,6 +24,7 @@ import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -122,6 +123,8 @@ public class StartAppActivity extends BaseActivity {
                     SeekerSoftConstant.machine = response.body().getMachine();
                     SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
                     SeekerSoftConstant.versionDesc = response.body().getModle();
+
+                    CrashReport.setAppChannel(getApplicationContext(), SeekerSoftConstant.machine);
 
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                     empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());

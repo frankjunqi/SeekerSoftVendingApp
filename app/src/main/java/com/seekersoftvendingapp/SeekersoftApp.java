@@ -7,6 +7,7 @@ import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -28,6 +29,8 @@ public class SeekersoftApp extends Application {
     public void onCreate() {
         super.onCreate();
         mSeekersoftApp = this;
+        // 初始化bugly
+        CrashReport.initCrashReport(getApplicationContext(), "900004362", true);
 
         // Database Application Init
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? "notes-db-encrypted" : "notes-db");
@@ -36,7 +39,6 @@ public class SeekersoftApp extends Application {
 
         // 初始化设备信息
         SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
-
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();
 

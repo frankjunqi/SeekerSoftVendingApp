@@ -25,7 +25,7 @@ public class SeekerSoftConstant {
 
     public final static int BASEDATALOOPER = 1500;
 
-    public final static String PASSAGE = "PASSAGE";// new Passga()
+    public final static String PASSAGE = "PASSAGE";
     public final static String TAKEOUTERROR = "TAKEOUTERROR";
 
     public final static String TakeoutNum = "TakeoutNum";

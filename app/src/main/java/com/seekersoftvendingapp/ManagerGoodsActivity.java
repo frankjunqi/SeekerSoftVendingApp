@@ -19,8 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.EmpCardDao;
@@ -31,16 +29,12 @@ import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
-import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
 import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
-import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
@@ -167,6 +161,24 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 startActivity(checkIntent);
                 break;
         }
+    }
+
+    private void openGeziAll() {
+        new AlertDialog.Builder(ManagerGoodsActivity.this)
+                .setTitle("格子柜打开")
+                .setMessage("是否打开所有格子柜?.")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        openGeziAllCMD();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCancelable(false).show();
     }
 
     /**
@@ -398,7 +410,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    public void openGeziAll() {
+    public void openGeziAllCMD() {
         List<Passage> passageList = passageDao.queryBuilder()
                 .where(PassageDao.Properties.IsDel.eq(false))
                 .list();
