@@ -56,7 +56,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
 
-
         <activity
             android:name=".BorrowInsertNumActivity"
             android:screenOrientation="portrait"
@@ -65,7 +64,6 @@
             android:name=".BorrowCardReadActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
-
 
         <activity
             android:name=".ReturnInsertNumActivity"
@@ -118,7 +116,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
 
-
         <receiver android:name=".util.NetworkBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -149,7 +146,6 @@
         <activity
             android:name=".test.TestNewVendingActivity"
             android:screenOrientation="portrait" />
-
 
         <!-- 配置APP ID -->
         <meta-data
