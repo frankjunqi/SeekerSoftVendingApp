@@ -152,6 +152,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                 Intent intent = new Intent(ManagerGoodsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                this.finish();
                 break;
             case R.id.btn_open_all:
                 openGeziAll();
@@ -195,6 +196,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                         exitIntent.putExtra(SeekerSoftConstant.EXITAPP, SeekerSoftConstant.EXITAPPFALG);
                         exitIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(exitIntent);
+                        ManagerGoodsActivity.this.finish();
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {

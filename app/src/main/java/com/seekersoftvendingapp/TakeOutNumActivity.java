@@ -48,6 +48,7 @@ public class TakeOutNumActivity extends BaseActivity implements View.OnClickList
                 Intent intent = new Intent(TakeOutNumActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                TakeOutNumActivity.this.finish();
             }
         });
         countDownTimer.start();

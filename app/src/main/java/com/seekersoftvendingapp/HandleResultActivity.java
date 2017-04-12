@@ -47,6 +47,7 @@ public class HandleResultActivity extends BaseActivity {
                 Intent intent = new Intent(HandleResultActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                HandleResultActivity.this.finish();
             }
         });
 

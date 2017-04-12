@@ -50,6 +50,7 @@ public class BorrowInsertNumActivity extends BaseActivity {
                 Intent intent = new Intent(BorrowInsertNumActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                BorrowInsertNumActivity.this.finish();
             }
         });
 

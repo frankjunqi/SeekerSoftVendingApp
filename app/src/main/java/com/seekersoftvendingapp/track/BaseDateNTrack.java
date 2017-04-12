@@ -94,9 +94,19 @@ public class BaseDateNTrack implements InterfaceTrack {
         try {
             Response<SynchroBaseDataResBody> response = updateAction.execute();
             if (response != null && response.body() != null) {
-                adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
-                empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
-                empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
+
+                if (response.body().getAdminCardList() != null && response.body().getAdminCardList().size() > 0) {
+                    adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
+                }
+                if (response.body().getEmpCardList() != null && response.body().getEmpCardList().size() > 0) {
+                    empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
+                }
+                if (response.body().getEmpPowerList() != null && response.body().getEmpPowerList().size() > 0) {
+                    empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
+                }
+                if (response.body().getProductList() != null && response.body().getProductList().size() > 0) {
+                    productDao.insertOrReplaceInTx(response.body().getProductList());
+                }
 
                 if (TextUtils.isEmpty(timestamp)) {
                     // 第一次请求，直接全部更新
@@ -104,33 +114,28 @@ public class BaseDateNTrack implements InterfaceTrack {
                 } else {
                     // 更新操作，不更新库存，不更新借还状态
                     List<Passage> onlineList = response.body().getPassageList();
-                    List<Passage> passageList = passageDao.queryBuilder()
-                            .where(PassageDao.Properties.IsDel.eq(false))
-                            .where(PassageDao.Properties.Stock.gt(0)) // 判断库存
-                            .list();
-                    for (Passage passage : onlineList) {
-                        for (Passage dbPassage : passageList) {
-                            if (dbPassage.getSeqNo().equals(passage.getSeqNo()) && dbPassage.getFlag().equals(passage.getFlag())) {
-                                passage.setBorrowState(dbPassage.getBorrowState());
-                                passage.setStock(dbPassage.getStock());
+                    if (onlineList.size() > 0) {
+                        List<Passage> passageList = passageDao.queryBuilder()
+                                .where(PassageDao.Properties.IsDel.eq(false))
+                                .where(PassageDao.Properties.Stock.gt(0)) // 判断库存
+                                .list();
+                        for (Passage passage : onlineList) {
+                            for (Passage dbPassage : passageList) {
+                                if (dbPassage.getSeqNo().equals(passage.getSeqNo()) && dbPassage.getFlag().equals(passage.getFlag())) {
+                                    passage.setBorrowState(dbPassage.getBorrowState());
+                                    passage.setStock(dbPassage.getStock());
+                                }
                             }
                         }
+                        passageDao.insertOrReplaceInTx(onlineList);
                     }
-                    passageDao.insertOrReplaceInTx(onlineList);
                 }
-
-                productDao.insertOrReplaceInTx(response.body().getProductList());
-                // 成功初始化基础数据
-            } else {
-                // 失败
             }
         } catch (IOException e) {
-            // 异常
+            // do nothing
         }
         if (!StopMesage) {
             mHandle.sendEmptyMessageDelayed(SENDBASEDATEUPDATE, SeekerSoftConstant.TIMELOGN);
-        } else {
-            // do noting
         }
     }
 

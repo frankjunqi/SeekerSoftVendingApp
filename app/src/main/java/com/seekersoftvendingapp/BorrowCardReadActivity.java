@@ -65,6 +65,7 @@ public class BorrowCardReadActivity extends BaseActivity {
                 Intent intent = new Intent(BorrowCardReadActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                BorrowCardReadActivity.this.finish();
             }
         });
 

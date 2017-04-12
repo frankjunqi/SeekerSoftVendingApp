@@ -94,6 +94,7 @@ public class ManagerCardReadActivity extends BaseActivity {
                 Intent intent = new Intent(ManagerCardReadActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                ManagerCardReadActivity.this.finish();
             }
         });
 

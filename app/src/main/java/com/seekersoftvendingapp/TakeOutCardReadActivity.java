@@ -69,6 +69,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                 Intent intent = new Intent(TakeOutCardReadActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                TakeOutCardReadActivity.this.finish();
             }
         });
 

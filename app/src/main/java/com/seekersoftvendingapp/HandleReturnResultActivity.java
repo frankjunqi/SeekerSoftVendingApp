@@ -97,6 +97,7 @@ public class HandleReturnResultActivity extends BaseActivity {
                 Intent intent = new Intent(HandleReturnResultActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                HandleReturnResultActivity.this.finish();
             }
         });
 

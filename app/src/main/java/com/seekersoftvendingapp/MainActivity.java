@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btn_manage.setOnClickListener(this);
 
         // 开启更新
-        Track.getInstance(MainActivity.this).setBaseDataNTrackCommand();
+        Track.getInstance(MainActivity.this);
     }
 
     @Override

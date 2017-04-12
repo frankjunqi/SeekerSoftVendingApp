@@ -67,6 +67,7 @@ public class ReturnCardReadActivity extends BaseActivity {
                 Intent intent = new Intent(ReturnCardReadActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                ReturnCardReadActivity.this.finish();
             }
         });
 

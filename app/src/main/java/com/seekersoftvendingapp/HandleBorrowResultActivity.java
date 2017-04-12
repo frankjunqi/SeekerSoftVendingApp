@@ -97,6 +97,7 @@ public class HandleBorrowResultActivity extends BaseActivity {
                 Intent intent = new Intent(HandleBorrowResultActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                HandleBorrowResultActivity.this.finish();
             }
         });
 

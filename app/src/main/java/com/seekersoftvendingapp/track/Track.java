@@ -31,6 +31,7 @@ public class Track {
         this.mErrorNTrack = new ErrorNTrack(context.getApplicationContext());
         DaoSession daoSession = ((SeekersoftApp) context.getApplicationContext()).getDaoSession();
         passageDao = daoSession.getPassageDao();
+        setBaseDataNTrackCommand();
     }
 
     public static Track getInstance(Context context) {
@@ -86,7 +87,7 @@ public class Track {
     /**
      * 基础数据的同步
      */
-    public void setBaseDataNTrackCommand() {
+    private void setBaseDataNTrackCommand() {
         mBaseDataNTrack.asyncBaseData();
     }
 

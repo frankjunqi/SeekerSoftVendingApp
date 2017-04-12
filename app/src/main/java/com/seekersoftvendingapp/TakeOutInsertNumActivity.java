@@ -52,6 +52,7 @@ public class TakeOutInsertNumActivity extends BaseActivity {
                 Intent intent = new Intent(TakeOutInsertNumActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                TakeOutInsertNumActivity.this.finish();
             }
         });
 
