@@ -183,7 +183,7 @@ public class HandleReturnResultActivity extends BaseActivity {
     private void handleStoreSerialPort(boolean isSuccess, String objectId) {
         if (isSuccess) {
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端 -- 本地数据库进行库存的消耗
-            BorrowRecord borrowRecord = new BorrowRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, true, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, true,DataFormat.getNowTime(), "", "", "");
             passage.setStock(passage.getStock() + passage.getCapacity());
             passage.setBorrowState(false);
             passage.setUsed("");
@@ -201,7 +201,7 @@ public class HandleReturnResultActivity extends BaseActivity {
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
         } else {
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            BorrowRecord borrowRecord = new BorrowRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, false, new Date(), "", "", "");
+            BorrowRecord borrowRecord = new BorrowRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, false, false, DataFormat.getNowTime(), "", "", "");
             Track.getInstance(HandleReturnResultActivity.this).setBorrowReturnRecordCommand(passage, borrowRecord, objectId);
             // 串口打开柜子失败
             handleResult(new TakeOutError(TakeOutError.OPEN_GEZI_SERIAL_FAILED_FLAG));

@@ -143,8 +143,14 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             // 设置库存
             passage.setStock(passage.getStock() + count);
 
-            supplyRecordObj.count = count;
             supplyRecordObj.time = DataFormat.getNowTime();
+            supplyRecordObj.count = count;
+
+            // 过滤补货count==0的的情况
+            if (count == 0) {
+                continue;
+            }
+
             supplyRecordReqBody.record.add(supplyRecordObj);
         }
 

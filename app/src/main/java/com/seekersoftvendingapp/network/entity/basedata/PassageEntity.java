@@ -28,6 +28,6 @@ public class PassageEntity implements Serializable {
     public String updatedAt;
 
     public Passage getPassage() {
-        return new Passage(capacity, isDel, seqNo, used, product, borrowState, stock, isSend, TextUtils.isEmpty(flag) ? "" : flag, whorlSize, "", objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
+        return new Passage(capacity, isDel, seqNo, used, product, borrowState, stock, isSend, TextUtils.isEmpty(flag) ? "" : flag, whorlSize, "", objectId, createdAt, updatedAt, "", "", "");
     }
 }

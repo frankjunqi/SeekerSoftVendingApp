@@ -22,6 +22,6 @@ public class EmpPowerEntity implements Serializable {
     public String updatedAt;
 
     public EmpPower getEmpPower() {
-        return new EmpPower(emp, unit, isDel, product, count, period, used, objectId, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), "", "", "");
+        return new EmpPower(emp, unit, isDel, product, count, period, used, objectId, createdAt, updatedAt, "", "", "");
     }
 }

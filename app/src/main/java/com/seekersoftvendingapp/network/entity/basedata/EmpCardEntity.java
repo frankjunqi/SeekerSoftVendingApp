@@ -19,6 +19,6 @@ public class EmpCardEntity implements Serializable {
     public String objectId;//"58da790e5c497d00570d61e7"
 
     public EmpCard getEmpCard() {
-        return new EmpCard(card, emp, isDel, DataFormat.fromISODate(createdAt), DataFormat.fromISODate(updatedAt), objectId, "", "", "");
+        return new EmpCard(card, emp, isDel, createdAt, updatedAt, objectId, "", "", "");
     }
 }

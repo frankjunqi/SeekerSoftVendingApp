@@ -294,7 +294,8 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         } else {
             handleNewVendingSerialPort(false);
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
+                    cardId, passage.getProduct(), DataFormat.getNowTime(), -1, "", "", "");
             Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         }
     }
@@ -306,7 +307,8 @@ public class HandleTakeOutResultActivity extends BaseActivity {
                 tv_handle_result.setText("取货第" + recordNum + "个失败...");
             }
             //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), -1, "", "", "");
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
+                    cardId, passage.getProduct(), DataFormat.getNowTime(), -1, "", "", "");
             Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         } else {
             recordSuccess++;
@@ -330,7 +332,8 @@ public class HandleTakeOutResultActivity extends BaseActivity {
                 empPowerDao.insertOrReplace(empPower);
             }
             // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, passage.getProduct(), new Date(), recordSuccess, "", "", "");
+            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
+                    cardId, passage.getProduct(), DataFormat.getNowTime(), recordSuccess, "", "", "");
             passage.setStock(passage.getStock() - recordSuccess);
             Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord);
 

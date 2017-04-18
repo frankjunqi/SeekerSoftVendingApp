@@ -12,7 +12,7 @@
     <Button
         android:id="@+id/btn_sync_data"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/il_actionbar"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -27,7 +27,7 @@
     <Button
         android:id="@+id/btn_onebyoneinsert"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_sync_data"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -41,7 +41,7 @@
     <Button
         android:id="@+id/btn_open_all"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_onebyoneinsert"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -55,7 +55,7 @@
     <Button
         android:id="@+id/btn_check_stock"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_open_all"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -69,7 +69,7 @@
     <Button
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_check_stock"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
@@ -83,7 +83,7 @@
     <Button
         android:id="@+id/btn_exit"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager"
+        android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_update"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"

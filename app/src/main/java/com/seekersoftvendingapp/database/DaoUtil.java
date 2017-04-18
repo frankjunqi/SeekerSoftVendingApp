@@ -41,8 +41,8 @@ public class DaoUtil {
         empCard.addStringProperty("card").notNull();
         empCard.addStringProperty("emp");
         empCard.addBooleanProperty("isDel");
-        empCard.addDateProperty("createdAt");
-        empCard.addDateProperty("updatedAt");
+        empCard.addStringProperty("createdAt");
+        empCard.addStringProperty("updatedAt");
         empCard.addStringProperty("objectId");
         empCard.addStringProperty("keepone");
         empCard.addStringProperty("keeptwo");
@@ -64,8 +64,8 @@ public class DaoUtil {
         adminCard.addBooleanProperty("isDel");
         adminCard.addStringProperty("card").notNull();
         adminCard.addStringProperty("objectId").primaryKey();
-        adminCard.addDateProperty("createdAt");
-        adminCard.addDateProperty("updatedAt");
+        adminCard.addStringProperty("createdAt");
+        adminCard.addStringProperty("updatedAt");
         adminCard.addStringProperty("keepone");
         adminCard.addStringProperty("keeptwo");
         adminCard.addStringProperty("keepthree");
@@ -95,8 +95,8 @@ public class DaoUtil {
         empPower.addIntProperty("period");
         empPower.addIntProperty("used");
         empPower.addStringProperty("objectId").primaryKey();
-        empPower.addDateProperty("createdAt");
-        empPower.addDateProperty("updatedAt");
+        empPower.addStringProperty("createdAt");
+        empPower.addStringProperty("updatedAt");
 
         empPower.addStringProperty("keepone");
         empPower.addStringProperty("keeptwo");
@@ -137,8 +137,8 @@ public class DaoUtil {
         passage.addStringProperty("borrowUser");
 
         passage.addStringProperty("objectId").primaryKey();
-        passage.addDateProperty("createdAt");
-        passage.addDateProperty("updatedAt");
+        passage.addStringProperty("createdAt");
+        passage.addStringProperty("updatedAt");
         passage.addStringProperty("keepone");
         passage.addStringProperty("keeptwo");
         passage.addStringProperty("keepthree");
@@ -161,8 +161,8 @@ public class DaoUtil {
         product.addStringProperty("productName");
         product.addStringProperty("cusProductName");
         product.addStringProperty("objectId").primaryKey();
-        product.addDateProperty("createdAt");
-        product.addDateProperty("updatedAt");
+        product.addStringProperty("createdAt");
+        product.addStringProperty("updatedAt");
         product.addStringProperty("keepone");
         product.addStringProperty("keeptwo");
         product.addStringProperty("keepthree");
@@ -179,7 +179,7 @@ public class DaoUtil {
         takeoutRecord.addStringProperty("passage");
         takeoutRecord.addStringProperty("card");
         takeoutRecord.addStringProperty("productId");
-        takeoutRecord.addDateProperty("time");
+        takeoutRecord.addStringProperty("time");
         takeoutRecord.addIntProperty("count");
         takeoutRecord.addStringProperty("keepone");
         takeoutRecord.addStringProperty("keeptwo");
@@ -214,7 +214,7 @@ public class DaoUtil {
         borrowRecord.addStringProperty("card");
         borrowRecord.addBooleanProperty("borrow");
         borrowRecord.addBooleanProperty("result");//示这条取货记录是成功有效的
-        borrowRecord.addDateProperty("time");
+        borrowRecord.addStringProperty("time");
         borrowRecord.addStringProperty("keepone");
         borrowRecord.addStringProperty("keeptwo");
         borrowRecord.addStringProperty("keepthree");

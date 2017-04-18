@@ -7,6 +7,8 @@
 
     <dimen name="height_btn_manager">126dp</dimen>
 
+    <dimen name="height_btn_manager_goods">110dp</dimen>
+
 
     <dimen name="padding_left_right">100dp</dimen>
 
