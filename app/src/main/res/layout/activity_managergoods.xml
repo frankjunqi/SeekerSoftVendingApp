@@ -8,33 +8,30 @@
         android:id="@+id/il_actionbar"
         layout="@layout/actionbar_title" />
 
-
     <Button
-        android:id="@+id/btn_sync_data"
+        android:id="@+id/btn_check_stock"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_btn_manager_goods"
-        android:layout_below="@id/il_actionbar"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
         android:layout_marginTop="50dp"
         android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
-        android:text="基础数据同步"
+        android:text="查看库存"
         android:textColor="@color/textcolor"
-        android:textSize="@dimen/big_text_size"
-        android:visibility="visible" />
+        android:textSize="@dimen/big_text_size" />
 
     <Button
         android:id="@+id/btn_onebyoneinsert"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_btn_manager_goods"
-        android:layout_below="@id/btn_sync_data"
+        android:layout_below="@id/btn_check_stock"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
         android:layout_marginTop="50dp"
         android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
-        android:text="货道补货"
+        android:text="差异补货"
         android:textColor="@color/textcolor"
         android:textSize="@dimen/big_text_size" />
 
@@ -53,7 +50,7 @@
         android:textSize="@dimen/big_text_size" />
 
     <Button
-        android:id="@+id/btn_check_stock"
+        android:id="@+id/btn_sync_data"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_btn_manager_goods"
         android:layout_below="@id/btn_open_all"
@@ -62,21 +59,23 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
-        android:text="查看库存"
+        android:text="同步业务数据"
         android:textColor="@color/textcolor"
-        android:textSize="@dimen/big_text_size" />
+        android:textSize="@dimen/big_text_size"
+        android:visibility="visible" />
+
 
     <Button
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_btn_manager_goods"
-        android:layout_below="@id/btn_check_stock"
+        android:layout_below="@id/btn_sync_data"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
         android:layout_marginTop="40dp"
         android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
-        android:text="软件升级"
+        android:text="系统升级"
         android:textColor="@color/textcolor"
         android:textSize="@dimen/big_text_size" />
 
@@ -90,7 +89,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/selector_btn_dialog"
         android:minHeight="@dimen/min_height"
-        android:text="退出程序"
+        android:text="退出系统"
         android:textColor="@color/textcolor"
         android:textSize="@dimen/big_text_size" />
 
