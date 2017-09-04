@@ -103,6 +103,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.exit(0);//直接结束程序
+    }
+
     /**
      * 取货
      */

@@ -28,7 +28,7 @@ public class NewVendingSerialPort {
     private OnCmdCallBackListen onCmdCallBackListen = null;
 
     private ReadThread mReadThread;
-    private boolean isStop = false;
+    private static boolean isStop = false;
     private String devicePath = "/dev/ttymxc1";// tty02
     private int baudrate = 19200;
 
@@ -56,6 +56,15 @@ public class NewVendingSerialPort {
         FIND_ALL_DATA,
         FIND_CHECKSUM,
         FIND_TAIL
+    }
+
+    public static NewVendingSerialPort SingleInit() {
+        // 如果停止监听 或者 第一次启动
+        if (isStop || null == portUtil) {
+            portUtil = new NewVendingSerialPort();
+            portUtil.onCreate();
+        }
+        return portUtil;
     }
 
     // 往堆栈中压人出货指令
@@ -271,14 +280,6 @@ public class NewVendingSerialPort {
     public NewVendingSerialPort setOnCmdCallBackListen(OnCmdCallBackListen onCmdCallBackListen) {
         this.onCmdCallBackListen = onCmdCallBackListen;
         return this;
-    }
-
-    public static NewVendingSerialPort SingleInit() {
-        if (null == portUtil) {
-            portUtil = new NewVendingSerialPort();
-            portUtil.onCreate();
-        }
-        return portUtil;
     }
 
     /**
