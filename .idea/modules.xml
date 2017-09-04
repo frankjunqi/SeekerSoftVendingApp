@@ -3,9 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DaoCore/DaoCore.iml" filepath="$PROJECT_DIR$/DaoCore/DaoCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DaoCore/DaoCore.iml" filepath="$PROJECT_DIR$/DaoCore/DaoCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DaoGenerator/DaoGenerator.iml" filepath="$PROJECT_DIR$/DaoGenerator/DaoGenerator.iml" />
       <module fileurl="file://$PROJECT_DIR$/DaoGenerator/DaoGenerator.iml" filepath="$PROJECT_DIR$/DaoGenerator/DaoGenerator.iml" />
       <module fileurl="file://$PROJECT_DIR$/SeekerSoftVendingApp.iml" filepath="$PROJECT_DIR$/SeekerSoftVendingApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SeekerSoftVendingApp.iml" filepath="$PROJECT_DIR$/SeekerSoftVendingApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/greendao-api/greendao-api.iml" filepath="$PROJECT_DIR$/greendao-api/greendao-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/greendao-api/greendao-api.iml" filepath="$PROJECT_DIR$/greendao-api/greendao-api.iml" />
     </modules>
   </component>

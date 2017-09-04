@@ -48,6 +48,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Track.getInstance(MainActivity.this);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tv_number != null) {
+            tv_number.setText(SeekerSoftConstant.machine);
+        }
+        if (tv_phone != null) {
+            tv_phone.setText(SeekerSoftConstant.phoneDesc);
+        }
+        if (tv_versiondesc != null) {
+            tv_versiondesc.setText("软件版本 1.0.0, 设备型号 " + SeekerSoftConstant.versionDesc);
+        }
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

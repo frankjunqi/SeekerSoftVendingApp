@@ -95,6 +95,10 @@ public class BaseDateNTrack implements InterfaceTrack {
             Response<SynchroBaseDataResBody> response = updateAction.execute();
             if (response != null && response.body() != null) {
 
+                SeekerSoftConstant.machine = response.body().getMachine();
+                SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
+                SeekerSoftConstant.versionDesc = response.body().getModle();
+
                 if (response.body().getAdminCardList() != null && response.body().getAdminCardList().size() > 0) {
                     adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
                 }
