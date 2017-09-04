@@ -149,9 +149,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             // 过滤补货count==0的的情况
             if (count == 0) {
                 continue;
+            } else {
+                supplyRecordReqBody.record.add(supplyRecordObj);
             }
-
-            supplyRecordReqBody.record.add(supplyRecordObj);
         }
 
         Gson gson = new Gson();
