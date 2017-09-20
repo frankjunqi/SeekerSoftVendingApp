@@ -61,6 +61,7 @@ public class NewVendingSerialPort {
     public static NewVendingSerialPort SingleInit() {
         // 如果停止监听 或者 第一次启动
         if (isStop || null == portUtil) {
+            isStop = false;
             portUtil = new NewVendingSerialPort();
             portUtil.onCreate();
         }
