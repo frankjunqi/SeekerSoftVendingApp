@@ -17,10 +17,29 @@ import com.seekersoftvendingapp.database.table.Passage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAdapter.ManagerPassageViewHolder> {
+public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAdapter.ManagerPassageViewHolder> implements View.OnClickListener {
 
     private List<Passage> dataset;
     private Context mContext;
+
+    private OnItemClickListener mOnItemClickListener = null;
+
+    //define interface
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取position
+            mOnItemClickListener.onItemClick(v, (int) v.getTag());
+        }
+    }
 
     class ManagerPassageViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,8 +77,8 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
 
     @Override
     public ManagerPassageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_modify_stock, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_modify_stock, parent, false);
+        view.setOnClickListener(this);
         return new ManagerPassageViewHolder(view);
     }
 
@@ -80,6 +99,7 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
                 alertRadioListDialog(holder.tv_modify_down, getPassage(position));
             }
         });
+        holder.itemView.setTag(position);
     }
 
     @Override
