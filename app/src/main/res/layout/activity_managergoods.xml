@@ -19,6 +19,7 @@
         android:minHeight="@dimen/min_height"
         android:text="查看库存"
         android:textColor="@color/textcolor"
+        android:layout_below="@id/il_actionbar"
         android:textSize="@dimen/big_text_size" />
 
     <Button
