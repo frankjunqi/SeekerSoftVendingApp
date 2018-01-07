@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.ErrorRecord;
 import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.newtakeoutserial.CardReadSerialPort;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
@@ -32,6 +33,8 @@ public class BorrowCardReadActivity extends BaseActivity {
     private String cardId = "";
     private Passage passage;
     private TextView tv_upup;
+
+    private CardReadSerialPort cardReadSerialPort;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +104,35 @@ public class BorrowCardReadActivity extends BaseActivity {
                 // do nothing
             }
         });
+
+        cardReadSerialPort = new CardReadSerialPort();
+        cardReadSerialPort.setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
+            @Override
+            public void onDataReceiveString(final String IDNUM) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        et_getcard.setText(IDNUM);
+                        cardId = et_getcard.getText().toString().replace("\r\n", "");
+                        if (TextUtils.isEmpty(cardId)) {
+                            // 读到的卡号为null or ""
+                            ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "还货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                            Toast.makeText(BorrowCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // 处理业务
+                            gotoResult();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onDataReceiveBuffer(byte[] buffer, int size) {
+
+            }
+        });
+
     }
 
     public void gotoResult() {
@@ -109,5 +141,23 @@ public class BorrowCardReadActivity extends BaseActivity {
         intent.putExtra(SeekerSoftConstant.CardNum, cardId);
         startActivity(intent);
         this.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cardReadSerialPort != null) {
+            cardReadSerialPort.closeReadSerial();
+            cardReadSerialPort = null;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (cardReadSerialPort != null) {
+            cardReadSerialPort.closeReadSerial();
+            cardReadSerialPort = null;
+        }
     }
 }

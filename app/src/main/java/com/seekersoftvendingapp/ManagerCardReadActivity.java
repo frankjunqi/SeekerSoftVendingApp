@@ -17,6 +17,7 @@ import com.seekersoftvendingapp.database.table.AdminCard;
 import com.seekersoftvendingapp.database.table.AdminCardDao;
 import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.ErrorRecord;
+import com.seekersoftvendingapp.newtakeoutserial.CardReadSerialPort;
 import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
@@ -37,6 +38,8 @@ public class ManagerCardReadActivity extends BaseActivity {
     private TextView tv_upup;
 
     private AdminCardDao adminCardDao;
+
+    private CardReadSerialPort cardReadSerialPort;
 
     /**
      * 查询是否是管理员
@@ -130,6 +133,49 @@ public class ManagerCardReadActivity extends BaseActivity {
 
         countDownTimer.start();
 
+        cardReadSerialPort = new CardReadSerialPort();
+        cardReadSerialPort.setOnDataReceiveListener(new CardReadSerialPort.OnDataReceiveListener() {
+            @Override
+            public void onDataReceiveString(final String IDNUM) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        et_getcard.setText(IDNUM);
+                        cardId = et_getcard.getText().toString().replace("\r\n", "");
+                        if (TextUtils.isEmpty(cardId)) {
+                            // 读到的卡号为null or ""
+                            ErrorRecord errorRecord = new ErrorRecord(null, false, "", "", "管理员读卡", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
+                            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
+                        } else {
+                            // 处理业务
+                            handleReadCardAfterBusniess(cardId);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onDataReceiveBuffer(byte[] buffer, int size) {
+
+            }
+        });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cardReadSerialPort != null) {
+            cardReadSerialPort.closeReadSerial();
+            cardReadSerialPort = null;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (cardReadSerialPort != null) {
+            cardReadSerialPort.closeReadSerial();
+            cardReadSerialPort = null;
+        }
+    }
 }

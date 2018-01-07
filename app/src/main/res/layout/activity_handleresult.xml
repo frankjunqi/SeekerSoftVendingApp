@@ -44,7 +44,7 @@
         android:minHeight="@dimen/btn_min_height"
         android:text="返回"
         android:textSize="@dimen/mainpage_small_text_size"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 
 </RelativeLayout>

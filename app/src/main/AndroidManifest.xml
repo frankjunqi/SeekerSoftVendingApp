@@ -147,6 +147,9 @@
             android:name=".test.TestNewVendingActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".TestReadActivity"
+            android:screenOrientation="portrait"/>
+
         <!-- 配置APP ID -->
         <meta-data
             android:name="BUGLY_APPID"

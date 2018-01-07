@@ -1,6 +1,9 @@
 package com.seekersoftvendingapp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.MutableContextWrapper;
+import android.support.multidex.MultiDex;
 
 import com.seekersoftvendingapp.database.table.DaoMaster;
 import com.seekersoftvendingapp.database.table.DaoSession;
@@ -42,6 +45,13 @@ public class SeekersoftApp extends Application {
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();
 
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     public static Application getInstance() {
