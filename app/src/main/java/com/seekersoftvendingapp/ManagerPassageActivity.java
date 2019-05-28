@@ -13,13 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.seekersoftvendingapp.database.table.DaoSession;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.database.table.Product;
-import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekWorkService;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.api.SrvResult;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordObj;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordReqBody;
 import com.seekersoftvendingapp.network.entity.supplyrecord.SupplyRecordResBody;
@@ -51,13 +50,16 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
 
     private ManagerPassageAdapter managerPassageAdapter;
 
-    private PassageDao passageDao;
-    private ProductDao productDao;
 
-    private List<Passage> passageListMain = new ArrayList<>();
-    private List<Passage> passageListA = new ArrayList<>();
-    private List<Passage> passageListB = new ArrayList<>();
-    private List<Passage> passageListC = new ArrayList<>();
+    private List<MRoad> list;
+    private ArrayList<MRoad> zhuList = new ArrayList<>();
+
+    private ArrayList<MRoad> aList = new ArrayList<>();
+
+    private ArrayList<MRoad> bList = new ArrayList<>();
+
+    private ArrayList<MRoad> cList = new ArrayList<>();
+
 
     private int flag = 0;
     // 单货道补货数量
@@ -67,7 +69,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         public void onItemClick(View view, int position) {
             Toast.makeText(ManagerPassageActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
 
-            final Passage passage = passageListMain.get(position);
+            final MRoad passage = list.get(position);
 
             // 最大库存
             int capacity = passage.getCapacity();
@@ -84,29 +86,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             for (int i = 0; i < canSupply; i++) {
                 intlist[i] = String.valueOf(i + 1);
             }
-
-            /*final AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-            alertDialog.setTitle("货道补货");
-            alertDialog.setSingleChoiceItems(intlist, currentStock - 1, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    selecteStock = which + 1;
-                }
-            });
-            alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (selecteStock == 0) {
-                        Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    passage.setKeeptwo(String.valueOf(selecteStock));
-                    tv_modify_down.setText("-" + String.valueOf(selecteStock));
-                    // 重置
-                    selecteStock = 0;
-                }
-            });
-            alertDialog.setNegativeButton("取消", null).show();*/
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ManagerPassageActivity.this);
             builder.setTitle("货道补货: "+passage.getSeqNo());
@@ -174,10 +153,6 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(this);
 
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        passageDao = daoSession.getPassageDao();
-        productDao = daoSession.getProductDao();
-
         recyclerView = (EmptyRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -186,10 +161,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         recyclerView.setAdapter(managerPassageAdapter);
         recyclerView.setEmptyView(rl_empty);
 
-        updatePassageList();
+        getProList();
 
         // 默认主柜信息列表
-        managerPassageAdapter.setPassageList(passageListMain);
         managerPassageAdapter.setOnItemClickListener(itemClickListener);
     }
 
@@ -347,77 +321,74 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    /**
-     * 读取最新数据库数据
-     */
-    private void updatePassageList() {
-        List<Passage> passageList = passageDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .orderAsc(PassageDao.Properties.SeqNo)
-                .where(PassageDao.Properties.IsSend.eq(true))// issend: "true:销售 false:借还"
-                .list();
-        List<Product> productList = productDao.queryBuilder().where(ProductDao.Properties.IsDel.eq(false)).list();
+    private void getProList() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<List<MRoad>>> mRoadAction = service.queryRoad(SeekerSoftConstant.machine);
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<List<MRoad>>>() {
+            @Override
+            public void onResponse(Call<SrvResult<List<MRoad>>> call, Response<SrvResult<List<MRoad>>> response) {
+                if (response != null && response.body() != null && response.body().getData() != null && response.body().getData().size() > 0) {
+                    // 成功逻辑
+                    list = response.body().getData();
+                    zhuList.clear();
+                    aList.clear();
+                    bList.clear();
+                    cList.clear();
 
-        passageListMain.clear();
-        passageListA.clear();
-        passageListB.clear();
-        passageListC.clear();
-        for (Passage passage : passageList) {
+                    for (int i = 0; i < list.size(); i++) {
+                        String cabNo = list.get(i).getCabNo();
+                        if ("主柜".equals(cabNo)) {
+                            zhuList.add(list.get(i));
+                        } else if ("A".equals(cabNo)) {
+                            aList.add(list.get(i));
+                        } else if ("B".equals(cabNo)) {
+                            bList.add(list.get(i));
+                        } else if ("C".equals(cabNo)) {
+                            cList.add(list.get(i));
+                        }
+                    }
 
-            // Keepone 商品名称
-            for (Product product : productList) {
-                if (product.getObjectId().equals(passage.getProduct())) {
-                    passage.setKeepone(product.getProductName());
-                    break;
+                    managerPassageAdapter.setPassageList(zhuList);
+
+                } else {
+                    // 无数据
+                    Toast.makeText(ManagerPassageActivity.this, "提示：此货柜没有配置货道信息，不可进行任何操作。", Toast.LENGTH_LONG).show();
                 }
             }
 
-            // Keeptwo 差异补货的数量的统计
-            passage.setKeeptwo("0");
-
-            if (TextUtils.isEmpty(passage.getFlag())) {
-                passageListMain.add(passage);
-            } else {
-                switch (passage.getFlag()) {
-                    case "1":
-                        passageListA.add(passage);
-                        break;
-                    case "2":
-                        passageListB.add(passage);
-                        break;
-                    case "3":
-                        passageListC.add(passage);
-                        break;
-                    default:
-                        passageListMain.add(passage);
-                        break;
-                }
+            @Override
+            public void onFailure(Call<SrvResult<List<MRoad>>> call, Throwable throwable) {
+                // 异常
+                Toast.makeText(ManagerPassageActivity.this, "提示：网络异常。", Toast.LENGTH_LONG).show();
             }
-        }
+        });
 
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_main:
                 flag = 0;
-                managerPassageAdapter.setPassageList(passageListMain);
+                managerPassageAdapter.setPassageList(zhuList);
                 managerPassageAdapter.setOnItemClickListener(itemClickListener);
                 break;
             case R.id.btn_a:
                 flag = 1;
-                managerPassageAdapter.setPassageList(passageListA);
+                managerPassageAdapter.setPassageList(aList);
                 managerPassageAdapter.setOnItemClickListener(null);
                 break;
             case R.id.btn_b:
                 flag = 2;
-                managerPassageAdapter.setPassageList(passageListB);
+                managerPassageAdapter.setPassageList(bList);
                 managerPassageAdapter.setOnItemClickListener(null);
                 break;
             case R.id.btn_c:
                 flag = 3;
-                managerPassageAdapter.setPassageList(passageListC);
+                managerPassageAdapter.setPassageList(cList);
                 managerPassageAdapter.setOnItemClickListener(null);
                 break;
             case R.id.btn_return_mainpage:

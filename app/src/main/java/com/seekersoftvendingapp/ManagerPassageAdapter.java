@@ -13,13 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAdapter.ManagerPassageViewHolder> implements View.OnClickListener {
 
-    private List<Passage> dataset;
+    private List<MRoad> dataset;
     private Context mContext;
 
     private OnItemClickListener mOnItemClickListener = null;
@@ -62,16 +63,16 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
         this.dataset = new ArrayList<>();
     }
 
-    public void setPassageList(@NonNull List<Passage> managerPassage) {
+    public void setPassageList(@NonNull List<MRoad> managerPassage) {
         dataset = managerPassage;
         notifyDataSetChanged();
     }
 
-    public List<Passage> getPassageList() {
+    public List<MRoad> getPassageList() {
         return dataset;
     }
 
-    public Passage getPassage(int position) {
+    public MRoad getPassage(int position) {
         return dataset.get(position);
     }
 
@@ -84,15 +85,15 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
 
     @Override
     public void onBindViewHolder(final ManagerPassageViewHolder holder, final int position) {
-        Passage passage = dataset.get(position);
-        holder.tv_passageid.setText(String.valueOf(passage.getSeqNo()));
-        holder.tv_productname.setText(String.valueOf(passage.getKeepone()));
-        if (passage.getCapacity() - passage.getStock() <= 0) {
+        MRoad passage = dataset.get(position);
+        holder.tv_passageid.setText(String.valueOf(passage.getNo()));
+        holder.tv_productname.setText(String.valueOf(passage.getProductName()));
+        if (passage.getCapacity() - passage.getLackNum() <= 0) {
             holder.tv_modify_num.setText("0");
         } else {
-            holder.tv_modify_num.setText(String.valueOf(passage.getCapacity() - passage.getStock()));
+            holder.tv_modify_num.setText(String.valueOf(passage.getCapacity() - passage.getLackNum()));
         }
-        holder.tv_modify_down.setText(passage.getKeeptwo());
+        holder.tv_modify_down.setText(passage.getChaLackNum());
         holder.tv_modify_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +112,7 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
     int selecteStock = 0;
 
     // 当前库存
-    public void alertRadioListDialog(final TextView tv_modify_down, final Passage passage) {
+    public void alertRadioListDialog(final TextView tv_modify_down, final MRoad passage) {
         if (passage == null) {
             Toast.makeText(mContext, "货道信息为null.", Toast.LENGTH_SHORT).show();
             return;
@@ -119,7 +120,7 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
         // 最大库存
         int capacity = passage.getCapacity();
         // 当前库存
-        int currentStock = passage.getStock();
+        int currentStock = passage.getLackNum();
         // 可以补货的数量
         int canSupply = capacity - currentStock;
 
@@ -172,7 +173,7 @@ public class ManagerPassageAdapter extends RecyclerView.Adapter<ManagerPassageAd
                     Toast.makeText(mContext, "请选择补货数量.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                passage.setKeeptwo(String.valueOf(selecteStock));
+                passage.setChaLackNum(selecteStock);
                 tv_modify_down.setText("-" + String.valueOf(selecteStock));
                 // 重置
                 selecteStock = 0;

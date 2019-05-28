@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManagerCheckPassageAdapter extends RecyclerView.Adapter<ManagerCheckPassageAdapter.ManagerPassageViewHolder> {
 
-    private List<Passage> dataset;
+    private List<MRoad> dataset;
     private Context mContext;
 
     class ManagerPassageViewHolder extends RecyclerView.ViewHolder {
@@ -37,12 +37,12 @@ public class ManagerCheckPassageAdapter extends RecyclerView.Adapter<ManagerChec
         this.dataset = new ArrayList<>();
     }
 
-    public void setPassageList(@NonNull List<Passage> managerPassage) {
+    public void setPassageList(@NonNull List<MRoad> managerPassage) {
         dataset = managerPassage;
         notifyDataSetChanged();
     }
 
-    public Passage getPassage(int position) {
+    public MRoad getPassage(int position) {
         return dataset.get(position);
     }
 
@@ -55,10 +55,10 @@ public class ManagerCheckPassageAdapter extends RecyclerView.Adapter<ManagerChec
 
     @Override
     public void onBindViewHolder(final ManagerPassageViewHolder holder, final int position) {
-        Passage passage = dataset.get(position);
-        holder.tv_passageid.setText(String.valueOf(passage.getSeqNo()));
-        holder.tv_productname.setText(String.valueOf(passage.getKeepone()));
-        holder.tv_modify_num.setText(String.valueOf(passage.getStock()));
+        MRoad passage = dataset.get(position);
+        holder.tv_passageid.setText(String.valueOf(passage.getNo()));
+        holder.tv_productname.setText(String.valueOf(passage.getProductName()));
+        holder.tv_modify_num.setText(String.valueOf(passage.getLackNum()));
     }
 
     @Override

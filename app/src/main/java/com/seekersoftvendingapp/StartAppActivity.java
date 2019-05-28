@@ -11,15 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.AdminCardDao;
-import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpCardDao;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
-import com.seekersoftvendingapp.network.api.SeekerSoftService;
-import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
+import com.seekersoftvendingapp.network.api.SeekWorkService;
+import com.seekersoftvendingapp.network.api.SrvResult;
+import com.seekersoftvendingapp.network.entity.seekwork.MMachineInfo;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.util.DeviceInfoTool;
 import com.seekersoftvendingapp.util.LogCat;
@@ -52,13 +47,6 @@ public class StartAppActivity extends BaseActivity {
     private static Button btn_tryagain;
     private static TextView tv_resultdata;
 
-    private AdminCardDao adminCardDao;
-    private EmpCardDao empCardDao;
-    private EmpPowerDao empPowerDao;
-    private PassageDao passageDao;
-    private ProductDao productDao;
-
-
     private static Handler mHander = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -88,13 +76,6 @@ public class StartAppActivity extends BaseActivity {
         // 初始化网络状态
         DeviceInfoTool.handleConnect(getApplicationContext());
 
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        adminCardDao = daoSession.getAdminCardDao();
-        empPowerDao = daoSession.getEmpPowerDao();
-        passageDao = daoSession.getPassageDao();
-        productDao = daoSession.getProductDao();
-        empCardDao = daoSession.getEmpCardDao();
-
         asyncGetBaseDataRequest();
 
         btn_tryagain.setOnClickListener(new View.OnClickListener() {
@@ -112,43 +93,34 @@ public class StartAppActivity extends BaseActivity {
     private void asyncGetBaseDataRequest() {
         // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, "");
-        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
-        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
-            @Override
-            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
-                if (response != null && response.body() != null && response.body().status != 201) {
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<MMachineInfo>> updateAction = service.getMachineInfo(SeekerSoftConstant.DEVICEID);
+        LogCat.e("url = " + updateAction.request().url().toString());
 
-                    SeekerSoftConstant.machine = response.body().getMachine();
-                    SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
-                    SeekerSoftConstant.versionDesc = response.body().getModle();
+        updateAction.enqueue(new Callback<SrvResult<MMachineInfo>>() {
+            @Override
+            public void onResponse(Call<SrvResult<MMachineInfo>> call, Response<SrvResult<MMachineInfo>> response) {
+                if (response != null && response.body() != null && response.body().getStatus() == 1 && response.body().getData() != null && response.body().getData().isAuthorize()) {
+
+                    SeekerSoftConstant.machine = response.body().getData().getMachineNo();
+                    SeekerSoftConstant.phoneDesc = response.body().getData().getContacts();
+                    SeekerSoftConstant.versionDesc = response.body().getData().getNumbers();
 
                     CrashReport.setAppChannel(getApplicationContext(), SeekerSoftConstant.machine);
 
-                    adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
-                    empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
-                    empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
-                    // 第一次请求，直接全部更新
-                    passageDao.insertOrReplaceInTx(response.body().getPassageList());
-                    productDao.insertOrReplaceInTx(response.body().getProductList());
                     // 成功初始化基础数据
                     successInit();
                 } else {
                     mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
 
-                    Toast.makeText(StartAppActivity.this, "【" + ((response != null && response.body() != null && !TextUtils.isEmpty(response.body().message)) ? response.body().message : "服务端无描述信息.") + "】", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartAppActivity.this, "【" + ((response != null && response.body() != null && !TextUtils.isEmpty(response.body().getMsg())) ? response.body().getMsg() : "服务端无描述信息.") + "】", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
-                if (passageDao.queryBuilder().list().size() > 0) {
-                    successInit();
-                } else {
-                    mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
-                    Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
-                }
+            public void onFailure(Call<SrvResult<MMachineInfo>> call, Throwable throwable) {
+                mHander.sendEmptyMessageDelayed(RequestError, SeekerSoftConstant.BASEDATALOOPER);
+                Toast.makeText(StartAppActivity.this, "基础数据获取失败. Failure", Toast.LENGTH_LONG).show();
             }
         });
     }

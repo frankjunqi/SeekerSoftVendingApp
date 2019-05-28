@@ -19,23 +19,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.AdminCardDao;
-import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpCardDao;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
 import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.database.table.ProductDao;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
-import com.seekersoftvendingapp.network.entity.SynchroBaseDataResBody;
 import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
-import com.seekersoftvendingapp.track.Track;
 import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
-import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 import java.util.List;
@@ -52,20 +43,11 @@ import retrofit2.Retrofit;
 
 public class ManagerGoodsActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button btn_sync_data;
-
     private Button btn_onebyoneinsert;
     private Button btn_exit;
     private Button btn_update;
     private Button btn_open_all;
     private Button btn_check_stock;
-
-    private PassageDao passageDao;
-    private AdminCardDao adminCardDao;
-    private EmpCardDao empCardDao;
-    private EmpPowerDao empPowerDao;
-    private ProductDao productDao;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,23 +59,12 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
         setTitle("管理页面");
 
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        adminCardDao = daoSession.getAdminCardDao();
-        empPowerDao = daoSession.getEmpPowerDao();
-        passageDao = daoSession.getPassageDao();
-        productDao = daoSession.getProductDao();
-        empCardDao = daoSession.getEmpCardDao();
-
-        btn_sync_data = (Button) findViewById(R.id.btn_sync_data);
-
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);
         btn_update = (Button) findViewById(R.id.btn_update);
         btn_open_all = (Button) findViewById(R.id.btn_open_all);
         btn_check_stock = (Button) findViewById(R.id.btn_check_stock);
-
-        btn_sync_data.setOnClickListener(this);
 
         btn_onebyoneinsert.setOnClickListener(this);
         btn_exit.setOnClickListener(this);
@@ -102,20 +73,11 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         btn_open_all.setOnClickListener(this);
         btn_check_stock.setOnClickListener(this);
 
-        // 同步基础数据
-        Track.getInstance(getApplicationContext()).synchroDataToServer();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_sync_data:
-                if (SeekerSoftConstant.NETWORKCONNECT) {
-                    plainDialogDemo();
-                } else {
-                    needNetwork();
-                }
-                break;
             case R.id.btn_onebyoneinsert:
                 if (true) {
                     startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
@@ -205,67 +167,6 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
                     }
                 }).setCancelable(false).show();
-    }
-
-    /**
-     * 同步基础数据
-     */
-    private void plainDialogDemo() {
-        new AlertDialog.Builder(ManagerGoodsActivity.this)
-                .setTitle("同步基础数据")
-                .setMessage("同步当前服务器中基础数据到本地.")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        asyncGetBaseDataRequest();
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).setCancelable(false).show();
-    }
-
-    /**
-     * 提交补货记录 POST
-     */
-    private void asyncGetBaseDataRequest() {
-        showProgress();
-        // 异步加载(get)
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<SynchroBaseDataResBody> updateAction = service.getSynchroBaseData(SeekerSoftConstant.DEVICEID, "");
-        LogCat.e("getSynchroBaseData = " + updateAction.request().url().toString());
-        updateAction.enqueue(new Callback<SynchroBaseDataResBody>() {
-            @Override
-            public void onResponse(Call<SynchroBaseDataResBody> call, Response<SynchroBaseDataResBody> response) {
-                if (response != null && response.body() != null && response.body().status != 201) {
-
-                    SeekerSoftConstant.machine = response.body().getMachine();
-                    SeekerSoftConstant.phoneDesc = response.body().getPhoneDesc();
-                    SeekerSoftConstant.versionDesc = response.body().getModle();
-
-                    adminCardDao.insertOrReplaceInTx(response.body().getAdminCardList());
-                    empCardDao.insertOrReplaceInTx(response.body().getEmpCardList());
-                    empPowerDao.insertOrReplaceInTx(response.body().getEmpPowerList());
-                    // 第一次请求，直接全部更新
-                    passageDao.insertOrReplaceInTx(response.body().getPassageList());
-                    productDao.insertOrReplaceInTx(response.body().getProductList());
-                    Toast.makeText(ManagerGoodsActivity.this, "基础数据同步成功...", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(ManagerGoodsActivity.this, "【" + ((response != null && response.body() != null && !TextUtils.isEmpty(response.body().message)) ? response.body().message : "服务端无描述信息.") + "】", Toast.LENGTH_SHORT).show();
-                }
-                hideProgress();
-            }
-
-            @Override
-            public void onFailure(Call<SynchroBaseDataResBody> call, Throwable throwable) {
-                hideProgress();
-                Toast.makeText(ManagerGoodsActivity.this, "基础数据获取失败...", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     private void needNetwork() {
@@ -412,10 +313,9 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    // TODO 打开格子柜子测试
     public void openGeziAllCMD() {
-        List<Passage> passageList = passageDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .list();
+        List<Passage> passageList = null;
         if (passageList != null && passageList.size() > 0) {
 
             NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {

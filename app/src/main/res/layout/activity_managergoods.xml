@@ -50,27 +50,12 @@
         android:textColor="@color/textcolor"
         android:textSize="@dimen/big_text_size" />
 
-    <Button
-        android:id="@+id/btn_sync_data"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_btn_manager_goods"
-        android:layout_below="@id/btn_open_all"
-        android:layout_marginLeft="@dimen/manager_padding_left_right"
-        android:layout_marginRight="@dimen/manager_padding_left_right"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/selector_btn_dialog"
-        android:minHeight="@dimen/min_height"
-        android:text="同步业务数据"
-        android:textColor="@color/textcolor"
-        android:textSize="@dimen/big_text_size"
-        android:visibility="visible" />
-
 
     <Button
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_btn_manager_goods"
-        android:layout_below="@id/btn_sync_data"
+        android:layout_below="@id/btn_open_all"
         android:layout_marginLeft="@dimen/manager_padding_left_right"
         android:layout_marginRight="@dimen/manager_padding_left_right"
         android:layout_marginTop="40dp"
