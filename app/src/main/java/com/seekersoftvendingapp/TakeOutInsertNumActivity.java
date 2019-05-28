@@ -10,14 +10,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.util.KeyChangeUtil;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekWorkService;
+import com.seekersoftvendingapp.network.api.SrvResult;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * 1. 取货 输入货道号页面
@@ -30,7 +37,9 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
     private KeyBordView keyBordView;
 
-    private PassageDao passageDao;
+    private List<MRoad> list;
+
+    private MRoad mRoad = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +50,6 @@ public class TakeOutInsertNumActivity extends BaseActivity {
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("取货");
-
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        passageDao = daoSession.getPassageDao();
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
@@ -66,52 +72,66 @@ public class TakeOutInsertNumActivity extends BaseActivity {
         });
         ll_keyboard.addView(keyBordView);
 
-        countDownTimer.start();
+        queryRoad();
+
     }
 
-    /**
-     * 货道号 ----> 查询Passage表 ----> product编号（唯一） ---->  查询权限表 ----> 权限id（List<emppower>[权限的周期过滤]） ----> 查询用户表 ----> 得到crads的集合（List<Card>）
-     *
-     * @param keyPassage
-     */
+
+    // 查询货道信息
+    private void queryRoad() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<List<MRoad>>> mRoadAction = service.queryRoad(SeekerSoftConstant.machine);
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<List<MRoad>>>() {
+            @Override
+            public void onResponse(Call<SrvResult<List<MRoad>>> call, Response<SrvResult<List<MRoad>>> response) {
+                if (response != null && response.body() != null && response.body().getData() != null && response.body().getData().size() > 0) {
+                    // 成功逻辑
+                    list = response.body().getData();
+                    // 可以让输入货道可点击
+                    countDownTimer.start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SrvResult<List<MRoad>>> call, Throwable throwable) {
+                // 异常
+                Toast.makeText(TakeOutInsertNumActivity.this, "提示：网络异常。", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
     private void checkPassageDirectUser(String keyPassage) {
         // 检查用户输入的货道号的校验
         if (TextUtils.isEmpty(keyPassage)) {
-            Toast.makeText(TakeOutInsertNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
+            // 检验
+            Toast.makeText(TakeOutInsertNumActivity.this, "提示：请输入货道号", Toast.LENGTH_LONG).show();
             return;
         }
 
-        String isFirstFlag = keyPassage.substring(0, 1);
-        String outNum = KeyChangeUtil.getFlagInt(isFirstFlag);
-        if (!TextUtils.isEmpty(outNum)) {
-            keyPassage = keyPassage.substring(1, keyPassage.length());
-        }
-        // 检查数据库是否有该货道的资源数据（唯一）
-        // isDel = false & Stock > 0 & seqNo == keyPassage
-        List<Passage> list = passageDao.queryBuilder()
-                .where(PassageDao.Properties.IsDel.eq(false))
-                .where(PassageDao.Properties.Stock.gt(0)) // 判断库存
-                .where(PassageDao.Properties.IsSend.eq(true))// issend: "true:销售 false:借还"
-                .where(PassageDao.Properties.SeqNo.eq(keyPassage))
-                .where(PassageDao.Properties.Flag.eq(outNum))
-                .list();
-        if (list != null && list.size() > 0) {
-            // 检查是否有该硬件货道??
-
-            // 货道实体
-            Passage passage = list.get(0);
-            Intent intent = null;
-            if (TextUtils.isEmpty(passage.getFlag())) {
-                intent = new Intent(TakeOutInsertNumActivity.this, TakeOutNumActivity.class);
-            } else {
-                intent = new Intent(TakeOutInsertNumActivity.this, TakeOutCardReadActivity.class);
+        for (int i = 0; list != null && i < list.size(); i++) {
+            if (!TextUtils.isEmpty(keyPassage) && keyPassage.equals(list.get(i).getBorderRoad())) {
+                mRoad = list.get(i);
+                break;
             }
-            intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
-            intent.putExtra(SeekerSoftConstant.TakeoutNum, 1);
-            startActivity(intent);
-            this.finish();
+        }
+
+        if (mRoad == null) {
+            // 没有货道提示
+            Toast.makeText(TakeOutInsertNumActivity.this, "提示：当前货道暂未启用。", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(TakeOutInsertNumActivity.this, "货道暂不能进行消费，可能无库存，请联系管理员。", Toast.LENGTH_LONG).show();
+            if (mRoad.getQty() == 0) {
+                Toast.makeText(TakeOutInsertNumActivity.this, "提示：当前货道没有库存。", Toast.LENGTH_LONG).show();
+            }else{
+                Intent intent = null;
+                intent = new Intent(TakeOutInsertNumActivity.this, TakeOutNumActivity.class);
+                intent.putExtra(SeekerSoftConstant.PASSAGE, mRoad);
+                intent.putExtra(SeekerSoftConstant.TakeoutNum, 1);
+                startActivity(intent);
+                this.finish();
+            }
         }
     }
 }

@@ -49,6 +49,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_open_all;
     private Button btn_check_stock;
 
+    private String cardNo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("管理页面");
+
+        cardNo = getIntent().getStringExtra("cardNo");
 
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
@@ -80,7 +84,9 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_onebyoneinsert:
                 if (true) {
-                    startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                    Intent intent = new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class);
+                    intent.putExtra("cardNo", cardNo);
+                    startActivity(intent);
                 } else {
                     needNetwork();
                 }

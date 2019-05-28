@@ -23,6 +23,7 @@ import com.seekersoftvendingapp.database.table.TakeoutRecord;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.ResultObj;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
@@ -51,7 +52,7 @@ public class HandleTakeOutResultActivity extends BaseActivity {
 
     private TextView tv_handle_result;
 
-    private Passage passage;
+    private MRoad passage;
     private int number = 1;
     private String cardId = "";
 
@@ -103,16 +104,12 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         empPowerDao = daoSession.getEmpPowerDao();
         empCardDao = daoSession.getEmpCardDao();
 
-        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        passage = (MRoad) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         number = getIntent().getIntExtra(SeekerSoftConstant.TakeoutNum, 1);
         cardId = getIntent().getStringExtra(SeekerSoftConstant.CardNum);
 
         if (passage != null) {
             // 判断是否是格子柜消费
-            if (!TextUtils.isEmpty(passage.getFlag()) && passage.getIsSend()) {
-                isStoreSend = true;
-                number = passage.getStock();
-            }
         }
 
         tv_handle_result = (TextView) findViewById(R.id.tv_handle_result);
