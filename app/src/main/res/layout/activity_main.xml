@@ -15,8 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/mainpage_machine_size" />
 
@@ -82,7 +82,8 @@
             android:minHeight="@dimen/min_height"
             android:text="取货"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/big_text_size" />
+            android:textSize="@dimen/big_text_size"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_borrow"
@@ -93,7 +94,8 @@
             android:minHeight="@dimen/min_height"
             android:text="借货"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/big_text_size" />
+            android:textSize="@dimen/big_text_size"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/btn_back"
@@ -104,25 +106,19 @@
             android:minHeight="@dimen/min_height"
             android:text="还货"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/big_text_size" />
+            android:textSize="@dimen/big_text_size"
+            android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/tv_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:gravity="center"
-            android:textSize="@dimen/middle_text_size" />
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/ll_middle"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:gravity="bottom"
         android:orientation="vertical">
 
@@ -131,25 +127,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginBottom="30dp"
             android:text="版本: 1.0.0"
             android:textSize="@dimen/mainpage_bottom_text_size" />
 
+
         <TextView
             android:id="@+id/btn_manage"
-            android:layout_width="360dp"
-            android:layout_height="@dimen/btn_height"
-            android:layout_alignParentBottom="true"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="14dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/selector_btn_dialog"
             android:gravity="center"
-            android:paddingBottom="6dp"
-            android:paddingTop="6dp"
+            android:minHeight="@dimen/min_height"
             android:text="管理"
             android:textColor="@color/textcolor"
-            android:textSize="@dimen/mainpage_small_text_size" />
+            android:textSize="@dimen/mainpage_bottom_text_size" />
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="30dp"
+            android:layout_toLeftOf="@id/btn_manage"
+            android:layout_toRightOf="@id/tv_versiondesc"
+            android:gravity="center"
+            android:textSize="@dimen/mainpage_bottom_text_size" />
+
+
     </RelativeLayout>
 </RelativeLayout>
