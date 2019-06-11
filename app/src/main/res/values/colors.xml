@@ -11,6 +11,49 @@
     <color name="uikit_dark_transparent_blue_dark">#A67ac2fd</color>
     <color name="uikit_blue">#ff7ac2fd</color>
 
+
+    <color name="colorPrimaryDarkTrans">#CCf57257</color>
+
+
+    <color name="darker_manager_gray">#dcdbdb</color>
+
+    <color name="manager_blue_gray">#cbe8f9</color>
+
+    <color name="darker_green">#2e6c09</color>
+    <color name="darker_more_green">#214909</color>
+    <color name="little_green">#ebefe8</color>
+
+    <color name="pop_origin">#d28609</color>
+
+
     <color name="title">#CC080606</color>
+    <color name="un_title">#ccb4b1b1</color>
     <color name="sub_title">#CC383636</color>
+
+    <color name="bg_sure">#4A90E2</color>
+    <color name="bg_scan">#F5A623</color>
+    <color name="bg_info">#DDDDDD</color>
+
+    <color name="bg_ok">#FF50E3C2</color>
+    <color name="bg_no">#FFD0021B</color>
+    <color name="bg_or">#FFF5A623</color>
+
+    <color name="tv_color">#4A4A4A</color>
+
+    <color name="tv_tips_bg">#FF4A90E2</color>
+
+
+    <color name="btn_take_un_press">#5abc20</color>
+    <color name="btn_take_press">#43AF04</color>
+
+    <color name="btn_borrow_un_press">#E19A28</color>
+    <color name="btn_borrow_press">#E49105</color>
+
+    <color name="btn_back_un_press">#CAAC1E</color>
+    <color name="btn_back_press">#BD9D09</color>
+
+    <color name="btn_red_un_press">#D23548</color>
+    <color name="btn_red_press">#FFD0021B</color>
+
+>>>>>>> 0a71e658a7b12b467405fa5b973893c028664d5d
 </resources>

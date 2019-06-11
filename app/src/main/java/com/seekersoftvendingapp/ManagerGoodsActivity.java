@@ -56,6 +56,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         setTitle("管理页面");
         cardNo = getIntent().getStringExtra("cardNo");
 
+        cardNo = getIntent().getStringExtra("cardNo");
+
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_return_mainpage = (Button) findViewById(R.id.btn_backtomain);

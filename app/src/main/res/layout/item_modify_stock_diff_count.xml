@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,10 +14,9 @@
         android:gravity="left|center_vertical"
         android:minHeight="68dp"
         android:paddingLeft="10dp"
-        android:text="货道号"
-        android:textStyle="bold"
+        android:text="11"
         android:textColor="@color/title"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/ll_right"
@@ -38,8 +38,7 @@
             android:gravity="center"
             android:text="+"
             android:textColor="@color/title"
-            android:textSize="30sp"
-            android:visibility="gone" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/tv_cut"
@@ -51,8 +50,7 @@
             android:gravity="center"
             android:text="一"
             android:textColor="@color/title"
-            android:textSize="30sp"
-            android:visibility="gone" />
+            android:textSize="30sp" />
 
 
         <TextView
@@ -65,10 +63,8 @@
             android:minHeight="68dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="差异"
             android:textColor="@color/sub_title"
-            android:textStyle="bold"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
@@ -82,10 +78,9 @@
         android:gravity="left|center_vertical"
         android:minHeight="68dp"
         android:paddingLeft="10dp"
-        android:text="补货"
-        android:textStyle="bold"
+        android:text="15"
         android:textColor="@color/sub_title"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_productname"
@@ -100,8 +95,7 @@
         android:minHeight="68dp"
         android:paddingLeft="10dp"
         android:paddingRight="4dp"
-        android:text="产品名称"
-        android:textStyle="bold"
+        android:text="110110眼镜"
         android:textColor="@color/title"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 </RelativeLayout>

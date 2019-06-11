@@ -38,20 +38,17 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
     private EmptyRecyclerView recyclerView;
     private RelativeLayout rl_empty;
 
-    private TextView tv_modify_down;
     private int currentFlag = 0;
 
     private ManagerPassageAdapter managerPassageAdapter;
 
     private List<MRoad> list;
     private ArrayList<MRoad> zhuList = new ArrayList<>();
-
     private ArrayList<MRoad> aList = new ArrayList<>();
-
     private ArrayList<MRoad> bList = new ArrayList<>();
-
     private ArrayList<MRoad> cList = new ArrayList<>();
 
+    private int flag = 0;
 
     private String cardNo;
 
@@ -70,13 +67,9 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
         setRightTitle("保 存", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 提交补货
                 pushReplian();
             }
         });
-
-        tv_modify_down = (TextView) findViewById(R.id.tv_modify_down);
-        tv_modify_down.setBackground(null);
 
         rl_empty = (RelativeLayout) findViewById(R.id.rl_empty);
 
@@ -150,18 +143,17 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
 
     }
 
-
     private void pushReplian() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        final SeekWorkService service = retrofit.create(SeekWorkService.class);
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
 
         MReplenish mReplenish = new MReplenish();
         mReplenish.setCardNo(cardNo);
         mReplenish.setMachineCode(SeekerSoftConstant.machine);
         List<MNum> RodeList = new ArrayList<>();
 
-        if (currentFlag == 0) {
+        if (flag == 0) {
             // 主柜
             for (int i = 0; i < zhuList.size(); i++) {
                 MNum mNum = new MNum();
@@ -171,7 +163,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 RodeList.add(mNum);
             }
 
-        } else if (currentFlag == 1) {
+        } else if (flag == 1) {
             // A
             for (int i = 0; i < aList.size(); i++) {
                 MNum mNum = new MNum();
@@ -180,7 +172,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 mNum.setRoadCode(aList.get(i).getRoadCode());
                 RodeList.add(mNum);
             }
-        } else if (currentFlag == 2) {
+        } else if (flag == 2) {
             // B
             for (int i = 0; i < bList.size(); i++) {
                 MNum mNum = new MNum();
@@ -189,7 +181,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
                 mNum.setRoadCode(bList.get(i).getRoadCode());
                 RodeList.add(mNum);
             }
-        } else if (currentFlag == 3) {
+        } else if (flag == 3) {
             // C
             for (int i = 0; i < cList.size(); i++) {
                 MNum mNum = new MNum();
@@ -220,6 +212,7 @@ public class ManagerPassageActivity extends BaseActivity implements View.OnClick
             }
         });
     }
+
 
     @Override
     public void onClick(View v) {

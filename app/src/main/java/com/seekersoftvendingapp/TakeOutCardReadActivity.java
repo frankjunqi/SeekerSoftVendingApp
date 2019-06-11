@@ -29,7 +29,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private EditText et_getcard;
 
     private MRoad passage;
-
     private int number = 1;
     private String cardId = "";
     private TextView tv_upup;
@@ -49,11 +48,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
 
         passage = (MRoad) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         number = getIntent().getIntExtra(SeekerSoftConstant.TakeoutNum, 1);
-        if (passage == null) {
-            // 判断是否是格子柜消费
-            Toast.makeText(TakeOutCardReadActivity.this, "输入货道信息有异常，请重试...", Toast.LENGTH_SHORT).show();
-            this.finish();
-        }
 
         ll_keyboard = (RelativeLayout) findViewById(R.id.ll_keyboard);
         ll_keyboard.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +69,6 @@ public class TakeOutCardReadActivity extends BaseActivity {
         });
 
         et_getcard = (EditText) findViewById(R.id.et_getcard);
-
 
         et_getcard.setOnKeyListener(new View.OnKeyListener() {
             @Override

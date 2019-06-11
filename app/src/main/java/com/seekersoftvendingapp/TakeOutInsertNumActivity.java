@@ -93,19 +93,18 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<SrvResult<List<MRoad>>> call, Throwable throwable) {
+                // 异常
+                Toast.makeText(TakeOutInsertNumActivity.this, "提示：网络异常。", Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
-    /**
-     *
-     * @param keyPassage
-     */
     private void checkPassageDirectUser(String keyPassage) {
         // 检查用户输入的货道号的校验
         if (TextUtils.isEmpty(keyPassage)) {
-            Toast.makeText(TakeOutInsertNumActivity.this, "请输入货道号。", Toast.LENGTH_SHORT).show();
+            // 检验
+            Toast.makeText(TakeOutInsertNumActivity.this, "提示：请输入货道号", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -143,7 +142,6 @@ public class TakeOutInsertNumActivity extends BaseActivity {
                 startActivity(intent);
                 this.finish();
             }
-
         }
     }
 
