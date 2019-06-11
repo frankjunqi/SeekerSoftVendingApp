@@ -2,7 +2,6 @@ package com.seekersoftvendingapp;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.MutableContextWrapper;
 import android.support.multidex.MultiDex;
 
 import com.seekersoftvendingapp.database.table.DaoMaster;
@@ -41,7 +40,7 @@ public class SeekersoftApp extends Application {
         daoSession = new DaoMaster(db).newSession();
 
         // 初始化设备信息
-        //SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
+        SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();
 

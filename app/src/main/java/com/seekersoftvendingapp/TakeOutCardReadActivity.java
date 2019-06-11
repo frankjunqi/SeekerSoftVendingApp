@@ -13,11 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.ErrorRecord;
-import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 import com.seekersoftvendingapp.newtakeoutserial.CardReadSerialPort;
-import com.seekersoftvendingapp.track.Track;
-import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 
@@ -31,7 +28,8 @@ public class TakeOutCardReadActivity extends BaseActivity {
     private RelativeLayout ll_keyboard;
     private EditText et_getcard;
 
-    private Passage passage;
+    private MRoad passage;
+
     private int number = 1;
     private String cardId = "";
     private TextView tv_upup;
@@ -49,7 +47,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
 
         setTitle("刷卡确认");
 
-        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        passage = (MRoad) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         number = getIntent().getIntExtra(SeekerSoftConstant.TakeoutNum, 1);
         if (passage == null) {
             // 判断是否是格子柜消费
@@ -86,12 +84,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                     cardId = et_getcard.getText().toString().replace("\n", "");
                     if (TextUtils.isEmpty(cardId)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false,
-                                (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) +
-                                        passage.getSeqNo(), cardId, "出货", "读到的卡号为空.",
-                                DataFormat.getNowTime(), "", "", "");
-                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                        Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TakeOutCardReadActivity.this, "卡号为空,请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         // 处理业务
                         gotoResult();
@@ -123,12 +116,7 @@ public class TakeOutCardReadActivity extends BaseActivity {
                         cardId = et_getcard.getText().toString().replace("\n", "");
                         if (TextUtils.isEmpty(cardId)) {
                             // 读到的卡号为null or ""
-                            ErrorRecord errorRecord = new ErrorRecord(null, false,
-                                    (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) +
-                                            passage.getSeqNo(), cardId, "出货", "读到的卡号为空.",
-                                    DataFormat.getNowTime(), "", "", "");
-                            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-                            Toast.makeText(TakeOutCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TakeOutCardReadActivity.this, "卡号为空,请重新读卡...", Toast.LENGTH_SHORT).show();
                         } else {
                             // 处理业务
                             gotoResult();

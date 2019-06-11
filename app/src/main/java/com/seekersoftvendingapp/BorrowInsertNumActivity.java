@@ -10,14 +10,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.PassageDao;
-import com.seekersoftvendingapp.util.KeyChangeUtil;
+import com.seekersoftvendingapp.network.api.Host;
+import com.seekersoftvendingapp.network.api.SeekWorkService;
+import com.seekersoftvendingapp.network.api.SrvResult;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
+import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
+import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.view.KeyBordView;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * 2. 借 输入货道号页面
@@ -28,7 +35,8 @@ public class BorrowInsertNumActivity extends BaseActivity {
 
     private LinearLayout ll_keyboard;
     private KeyBordView keyBordView;
-    private PassageDao passageDao;
+    private List<MRoad> list;
+    private MRoad mRoad = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,8 +48,6 @@ public class BorrowInsertNumActivity extends BaseActivity {
 
         setTitle("借还");
 
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        passageDao = daoSession.getPassageDao();
 
         btn_return_mainpage = (Button) findViewById(R.id.btn_return_mainpage);
         btn_return_mainpage.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +70,31 @@ public class BorrowInsertNumActivity extends BaseActivity {
         });
         ll_keyboard.addView(keyBordView);
 
-        countDownTimer.start();
+        queryRoad();
+
+    }
+
+    // 查询货道信息
+    private void queryRoad() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<List<MRoad>>> mRoadAction = service.queryRoad(SeekerSoftConstant.machine);
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<List<MRoad>>>() {
+            @Override
+            public void onResponse(Call<SrvResult<List<MRoad>>> call, Response<SrvResult<List<MRoad>>> response) {
+                if (response != null && response.body() != null && response.body().getData() != null && response.body().getData().size() > 0) {
+                    // 成功逻辑
+                    list = response.body().getData();
+                    // 可以让输入货道可点击
+                    countDownTimer.start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SrvResult<List<MRoad>>> call, Throwable throwable) {
+            }
+        });
 
     }
 
@@ -81,31 +111,58 @@ public class BorrowInsertNumActivity extends BaseActivity {
                 return;
             }
 
-            keyPassage = keyPassage.replace(" ", "");
+            for (int i = 0; list != null && i < list.size(); i++) {
+                if (!TextUtils.isEmpty(keyPassage) && keyPassage.equals(list.get(i).getBorderRoad())) {
+                    mRoad = list.get(i);
+                    break;
+                }
+            }
 
-            // 检查数据库是否有该货道的资源数据
-            // isDel = false & Stock > 0 & seqNo == keyPassage
-            String x = keyPassage.substring(0, 1);
-            List<Passage> list = passageDao.queryBuilder()
-                    .where(PassageDao.Properties.IsDel.eq(false))
-                    .where(PassageDao.Properties.IsSend.eq(false))
-                    .where(PassageDao.Properties.Stock.gt(0))
-                    .where(PassageDao.Properties.Flag.eq(KeyChangeUtil.getFlagInt(x)))
-                    .where(PassageDao.Properties.Used.eq(""))// 保证可以没有被人借走
-                    .where(PassageDao.Properties.BorrowState.eq(false))// 判断此货道是否可以借出去: true是借出,false是归还
-                    .where(PassageDao.Properties.SeqNo.eq(keyPassage.replace("A", "").replace("B", "").replace("C", "")))
-                    .list();
-            if (list != null && list.size() > 0) {
-                Passage passage = list.get(0);
-                Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
-                intent.putExtra(SeekerSoftConstant.PASSAGE, passage);
-                startActivity(intent);
-                this.finish();
+            if (mRoad == null) {
+                // 没有货道提示
+                Toast.makeText(BorrowInsertNumActivity.this, "提示：当前货道暂未启用。", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_LONG).show();
+                // 货道实体
+                if ("1".equals(mRoad.getCabType()) && mRoad.getQty() == 0) {
+                    // 格子柜 & 库存 ＝＝ 0 & 借操作
+                    // 调用查询被谁借走的接口
+                    getLastBorrowName();
+                } else if ("1".equals(mRoad.getCabType()) && mRoad.getQty() > 0) {
+                    // 格子柜 & 库存 > 0 & 还操作
+                    Intent intent = new Intent(BorrowInsertNumActivity.this, BorrowCardReadActivity.class);
+                    intent.putExtra(SeekerSoftConstant.PASSAGE, mRoad);
+                    startActivity(intent);
+                    this.finish();
+                } else {
+                    Toast.makeText(BorrowInsertNumActivity.this, "货道暂不能进行出借，请联系管理员。", Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (Exception e) {
             Toast.makeText(BorrowInsertNumActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    // 此货道被谁借走
+    private void getLastBorrowName() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<String>> mRoadAction = service.getLastBorrowName(SeekerSoftConstant.machine, mRoad.getCabNo(), mRoad.getRoadCode());
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<String>>() {
+            @Override
+            public void onResponse(Call<SrvResult<String>> call, Response<SrvResult<String>> response) {
+                // 提示 是谁借走 此货柜的货物
+                if (response != null && response.body() != null) {
+                    Toast.makeText(BorrowInsertNumActivity.this, "提示：当前货道已借出，已被 " + response.body().getData() + "借出。", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BorrowInsertNumActivity.this, "提示：查询最后一次借出信息失败。", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SrvResult<String>> call, Throwable throwable) {
+            }
+        });
     }
 }

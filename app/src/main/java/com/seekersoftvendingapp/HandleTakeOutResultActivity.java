@@ -12,29 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.DaoSession;
-import com.seekersoftvendingapp.database.table.EmpCard;
-import com.seekersoftvendingapp.database.table.EmpCardDao;
-import com.seekersoftvendingapp.database.table.EmpPower;
-import com.seekersoftvendingapp.database.table.EmpPowerDao;
-import com.seekersoftvendingapp.database.table.ErrorRecord;
-import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.database.table.TakeoutRecord;
 import com.seekersoftvendingapp.network.api.Host;
-import com.seekersoftvendingapp.network.api.SeekerSoftService;
+import com.seekersoftvendingapp.network.api.SeekWorkService;
+import com.seekersoftvendingapp.network.api.SrvResult;
 import com.seekersoftvendingapp.network.entity.ResultObj;
-import com.seekersoftvendingapp.network.entity.takeout.TakeOutResBody;
+import com.seekersoftvendingapp.network.entity.seekwork.MPickQueryByRFID;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
 import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
-import com.seekersoftvendingapp.track.Track;
-import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.LogCat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.seekersoftvendingapp.util.TakeOutError;
-
-import java.util.Date;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +40,7 @@ public class HandleTakeOutResultActivity extends BaseActivity {
 
     private TextView tv_handle_result;
 
-    private Passage passage;
+    private MRoad passage;
     private int number = 1;
     private String cardId = "";
 
@@ -68,9 +57,6 @@ public class HandleTakeOutResultActivity extends BaseActivity {
     // 判断是否是格子柜子消费
     private boolean isStoreSend = false;
 
-    private EmpPowerDao empPowerDao;
-    private EmpCardDao empCardDao;
-    private EmpPower empPower;
 
     private Handler mHnadler = new Handler() {
         @Override
@@ -99,19 +85,15 @@ public class HandleTakeOutResultActivity extends BaseActivity {
 
         setTitle("取货结果");
 
-        DaoSession daoSession = ((SeekersoftApp) getApplication()).getDaoSession();
-        empPowerDao = daoSession.getEmpPowerDao();
-        empCardDao = daoSession.getEmpCardDao();
-
-        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        passage = (MRoad) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         number = getIntent().getIntExtra(SeekerSoftConstant.TakeoutNum, 1);
         cardId = getIntent().getStringExtra(SeekerSoftConstant.CardNum);
 
         if (passage != null) {
             // 判断是否是格子柜消费
-            if (!TextUtils.isEmpty(passage.getFlag()) && passage.getIsSend()) {
+            if ("1".equals(passage.getCabType())) {
                 isStoreSend = true;
-                number = passage.getStock();
+                number = passage.getQty();
             }
         }
 
@@ -130,7 +112,10 @@ public class HandleTakeOutResultActivity extends BaseActivity {
             }
         });
 
-        handleReadCardAfterBusniess(cardId);
+        if (SeekerSoftConstant.NETWORKCONNECT) {
+            pickQueryByRFID(cardId);
+        }
+
     }
 
     @Override
@@ -138,104 +123,46 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         return SeekerSoftConstant.ENDTIEMSHORT;
     }
 
-    /**
-     * 处理读到卡之后的业务
-     */
-    private void handleReadCardAfterBusniess(String cardId) {
-        // 网络判断是否可以出货(网络优先)
-        if (SeekerSoftConstant.NETWORKCONNECT) {
-            isTakeOutPro(cardId);
-        } else {
-            // 本地判断是否可以出货
-            TakeOutError takeOutError = localTakeOutPro(passage.getProduct(), cardId);
-            outProResult(takeOutError);
-        }
-    }
 
-    /**
-     * （接口）判断是否能出货
-     */
-    private void isTakeOutPro(final String cardId) {
+    // 刷卡取货
+    private void pickQueryByRFID(final String cardNo) {
         showProgress();
-        // 异步加载(get)
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
-        SeekerSoftService service = retrofit.create(SeekerSoftService.class);
-        Call<TakeOutResBody> updateAction = service.takeOut(SeekerSoftConstant.DEVICEID, cardId, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), String.valueOf(number));
-        LogCat.e("takeOut = " + updateAction.request().url().toString());
-        updateAction.enqueue(new Callback<TakeOutResBody>() {
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        final Call<SrvResult<MPickQueryByRFID>> mRoadAction = service.pickQueryByRFID(cardNo, SeekerSoftConstant.machine, passage.getCabNo(), passage.getRoadCode(), number
+        );
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<MPickQueryByRFID>>() {
             @Override
-            public void onResponse(Call<TakeOutResBody> call, Response<TakeOutResBody> response) {
-                if (response != null && response.body() != null && response.body().data.result) {
-                    cmdBufferVendingStoreSerial(response.body().data.objectId);
+            public void onResponse(Call<SrvResult<MPickQueryByRFID>> call, Response<SrvResult<MPickQueryByRFID>> response) {
+                if (response != null && response.body() != null && response.body().getData() != null) {
+                    // 成功逻辑
+                    if (response.body().getData().isAuthorize()) {
+                        // 硬件编号，用户出货
+                        cmdBufferVendingStoreSerial("");
+                    } else {
+                        handleResult(new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG));
+                        Toast.makeText(HandleTakeOutResultActivity.this, "提示：此卡无权取货。", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    // 此人没有权限,不可以出货
-                    TakeOutError takeOutError = new TakeOutError(TakeOutError.HAS_NOPOWER_FLAG);
-                    takeOutError.serverMsg = response != null && response.body() != null && !TextUtils.isEmpty(response.body().message) ? response.body().message : "";
-                    handleResult(takeOutError);
+                    // 无数据
+                    handleResult(new TakeOutError(TakeOutError.ERROR_FLAG));
+                    Toast.makeText(HandleTakeOutResultActivity.this, "提示：" + response.body().getMsg() + "。", Toast.LENGTH_LONG).show();
                 }
                 hideProgress();
             }
 
             @Override
-            public void onFailure(Call<TakeOutResBody> call, Throwable throwable) {
+            public void onFailure(Call<SrvResult<MPickQueryByRFID>> call, Throwable throwable) {
+                // 异常
                 hideProgress();
-                Toast.makeText(HandleTakeOutResultActivity.this, "网络链接问题，本地进行出货操作", Toast.LENGTH_LONG).show();
-                TakeOutError takeOutError = localTakeOutPro(passage.getProduct(), cardId);
-                outProResult(takeOutError);
+                handleResult(new TakeOutError(TakeOutError.NO_NETWORK_FLAG));
+                Toast.makeText(HandleTakeOutResultActivity.this, "提示：网络异常。", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
-    /**
-     * 当无网络时候进行本地判断，否则全部走网络判断为准；
-     * 库存以本地为准；
-     * 本地进行判断是否可以出货
-     */
-    private TakeOutError localTakeOutPro(String productId, String cardId) {
-        // 具体查询card对应的用户
-        List<EmpCard> empCardList = empCardDao.queryBuilder()
-                .where(EmpCardDao.Properties.IsDel.eq(false))
-                .where(EmpCardDao.Properties.Card.like(cardId)).list();
-        if (empCardList != null && empCardList.size() > 0) {
-            EmpCard empCard = empCardList.get(0);
-            // 同一个商品 权限详细信息list 消费频次 周期消费次数
-            List<EmpPower> listEmpPowers = empPowerDao.queryBuilder()
-                    .where(EmpPowerDao.Properties.IsDel.eq(false))
-                    .where(EmpPowerDao.Properties.Emp.like(empCard.getEmp()))
-                    .where(EmpPowerDao.Properties.Product.eq(productId)).list();
-            if (listEmpPowers == null || listEmpPowers.size() == 0) {
-                // 此商品暂时没有赋予出货权限
-                return new TakeOutError(TakeOutError.PRO_HAS_NOPOWER_FLAG);
-            }
-            empPower = listEmpPowers.get(0);
-            int used = empPower.getUsed();
-            int count = used + number;
-            if (count <= empPower.getCount()) {
-                return new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG);
-            } else {
-                // 此人消费次数已满，不可以进行消费
-                return new TakeOutError(TakeOutError.FAILE_TAKEOUT_FLAG);
-            }
-        } else {
-            // 无此员工
-            return new TakeOutError(TakeOutError.HAS_NOEMPLOYEE_FLAG);
-        }
-    }
-
-    /**
-     * 出货并且进行成功失败的跳转
-     *
-     * @param takeOutError
-     */
-    private void outProResult(TakeOutError takeOutError) {
-        if (takeOutError.isSuccess()) {
-            // 串口螺纹passageID操作 || 格子消费柜子的passageId操作
-            cmdBufferVendingStoreSerial("");
-        } else {
-            // 不可以出货
-            handleResult(takeOutError);
-        }
-    }
 
     /**
      * 打开螺纹柜子串口设备出货
@@ -259,8 +186,17 @@ public class HandleTakeOutResultActivity extends BaseActivity {
             });
             ShipmentObject shipmentObject = new ShipmentObject();
             // 格子柜子
-            shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
-            shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+            // 1:主柜 2:A 3:B 4:C
+            if ("主柜".equals(passage.getCabNo())) {
+                shipmentObject.containerNum = 1;
+            } else if ("A".equals(passage.getCabNo())) {
+                shipmentObject.containerNum = 2;
+            } else if ("B".equals(passage.getCabNo())) {
+                shipmentObject.containerNum = 3;
+            } else if ("C".equals(passage.getCabNo())) {
+                shipmentObject.containerNum = 4;
+            }
+            shipmentObject.proNum = passage.getRealCode();
             shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
             NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
         } else {
@@ -279,8 +215,17 @@ public class HandleTakeOutResultActivity extends BaseActivity {
             for (int i = 0; i < number; i++) {
                 ShipmentObject shipmentObject = new ShipmentObject();
                 // 螺纹柜子
-                shipmentObject.containerNum = TextUtils.isEmpty(passage.getFlag()) ? 1 : Integer.parseInt(passage.getFlag()) + 1;
-                shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
+                // 1:主柜 2:A 3:B 4:C
+                if ("主柜".equals(passage.getCabNo())) {
+                    shipmentObject.containerNum = 1;
+                } else if ("A".equals(passage.getCabNo())) {
+                    shipmentObject.containerNum = 2;
+                } else if ("B".equals(passage.getCabNo())) {
+                    shipmentObject.containerNum = 3;
+                } else if ("C".equals(passage.getCabNo())) {
+                    shipmentObject.containerNum = 4;
+                }
+                shipmentObject.proNum = passage.getRealCode();
                 shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
                 NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
             }
@@ -289,14 +234,10 @@ public class HandleTakeOutResultActivity extends BaseActivity {
 
     private void gezi(boolean isSuccess, String objectId) {
         if (isSuccess) {
-            recordSuccess = passage.getStock();
+            recordSuccess = passage.getQty();
             handleNewVendingSerialPort(true);
         } else {
             handleNewVendingSerialPort(false);
-            //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
-                    cardId, passage.getProduct(), DataFormat.getNowTime(), -1, "", "", "");
-            Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         }
     }
 
@@ -306,10 +247,6 @@ public class HandleTakeOutResultActivity extends BaseActivity {
             if (number > 1) {
                 tv_handle_result.setText("取货第" + recordNum + "个失败...");
             }
-            //  调用失败接口 如果接口错误，则加入到同步队列里面去
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
-                    cardId, passage.getProduct(), DataFormat.getNowTime(), -1, "", "", "");
-            Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord, objectId);
         } else {
             recordSuccess++;
             if (number > 1) {
@@ -327,18 +264,10 @@ public class HandleTakeOutResultActivity extends BaseActivity {
     private void handleNewVendingSerialPort(boolean isSuccessOpen) {
         // 成功
         if (isSuccessOpen) {
-            if (empPower != null) {
-                empPower.setUsed(empPower.getUsed() + 1);
-                empPowerDao.insertOrReplace(empPower);
-            }
-            // 打开成功之后逻辑 加入线程池队列 --- 交付线程池进行消费入本地库以及通知远程服务端  --- 本地数据库进行库存的消耗
-            TakeoutRecord takeoutRecord = new TakeoutRecord(null, true, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(),
-                    cardId, passage.getProduct(), DataFormat.getNowTime(), recordSuccess, "", "", "");
-            passage.setStock(passage.getStock() - recordSuccess);
-            Track.getInstance(HandleTakeOutResultActivity.this).setTakeOutRecordCommand(passage, takeoutRecord);
-
             // 串口打开螺纹柜子成功
             handleResult(new TakeOutError(TakeOutError.CAN_TAKEOUT_FLAG));
+            // 接口 成功
+            pickSuccess(cardId);
         }
         // 失败
         else {
@@ -351,14 +280,30 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         }
     }
 
+    // 取货成功调用接口
+    private void pickSuccess(String cardNo) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
+        SeekWorkService service = retrofit.create(SeekWorkService.class);
+        Call<SrvResult<Boolean>> mRoadAction = service.pickSuccess(cardNo, SeekerSoftConstant.machine, passage.getCabNo(), passage.getRoadCode(), recordSuccess);
+        LogCat.e("url = " + mRoadAction.request().url().toString());
+        mRoadAction.enqueue(new Callback<SrvResult<Boolean>>() {
+            @Override
+            public void onResponse(Call<SrvResult<Boolean>> call, Response<SrvResult<Boolean>> response) {
+                // 提示出货成功，关闭取货页面，返回道首页
+
+            }
+
+            @Override
+            public void onFailure(Call<SrvResult<Boolean>> call, Throwable throwable) {
+
+            }
+        });
+    }
+
     /**
      * 处理本地消费结果（到结果页面）
      */
     private void handleResult(TakeOutError takeOutError) {
-        if (!takeOutError.isSuccess()) {
-            ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "消费问题: " + cardId + takeOutError.serverMsg, takeOutError.getTakeOutMsg(), DataFormat.getNowTime(), "", "", "");
-            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
-        }
         if (takeOutError != null) {
             if (TextUtils.isEmpty(takeOutError.serverMsg)) {
                 tv_handle_result.setText(takeOutError.getTakeOutMsg());

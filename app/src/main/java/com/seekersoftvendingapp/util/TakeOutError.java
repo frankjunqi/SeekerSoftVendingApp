@@ -36,6 +36,13 @@ public class TakeOutError implements Serializable {
     private static final String OPEN_GEZI_SERIAL_FAILED = "串口打开格子柜子失败...";
     public static final int OPEN_GEZI_SERIAL_FAILED_FLAG = 7;
 
+
+    private static final String NO_NETWORK = "提示：网络异常。";
+    public static final int NO_NETWORK_FLAG = 8;
+
+    private static final String ERROR = "提示：异常信息。";
+    public static final int ERROR_FLAG = 9;
+
     private int takeOutFLag;
 
     // 接口返回的错误信息
@@ -66,6 +73,10 @@ public class TakeOutError implements Serializable {
                 return OPEN_LUOWEN_SERIAL_FAILED;
             case OPEN_GEZI_SERIAL_FAILED_FLAG:
                 return OPEN_GEZI_SERIAL_FAILED;
+            case NO_NETWORK_FLAG:
+                return NO_NETWORK;
+            case ERROR_FLAG:
+                return ERROR;
             default:
                 return FAILE_TAKEOUT;
         }

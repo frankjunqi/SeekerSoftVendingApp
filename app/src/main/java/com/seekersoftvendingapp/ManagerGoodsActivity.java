@@ -13,23 +13,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.Passage;
 import com.seekersoftvendingapp.network.api.Host;
 import com.seekersoftvendingapp.network.api.SeekerSoftService;
 import com.seekersoftvendingapp.network.entity.updata.UpdateResBody;
 import com.seekersoftvendingapp.network.gsonfactory.GsonConverterFactory;
-import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
-import com.seekersoftvendingapp.newtakeoutserial.ShipmentObject;
 import com.seekersoftvendingapp.updateapk.TCTInsatllActionBroadcastReceiver;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +43,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
     private Button btn_open_all;
     private Button btn_check_stock;
 
+    private String cardNo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +54,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         tv_right = (TextView) findViewById(R.id.tv_right);
 
         setTitle("管理页面");
+        cardNo = getIntent().getStringExtra("cardNo");
 
         btn_onebyoneinsert = (Button) findViewById(R.id.btn_onebyoneinsert);
         btn_exit = (Button) findViewById(R.id.btn_exit);
@@ -80,7 +77,9 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_onebyoneinsert:
                 if (true) {
-                    startActivity(new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class));
+                    Intent intent = new Intent(ManagerGoodsActivity.this, ManagerPassageActivity.class);
+                    intent.putExtra("cardNo", cardNo);
+                    startActivity(intent);
                 } else {
                     needNetwork();
                 }
@@ -254,10 +253,8 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
                             Cursor my = downloadManager.query(query);
                             if (my != null) {
                                 if (my.moveToFirst()) {
-                                    int fileSize = my.getInt(my
-                                            .getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-                                    int bytesDL = my.getInt(my
-                                            .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                                    int fileSize = my.getInt(my.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                                    int bytesDL = my.getInt(my.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                                     int percent = bytesDL * 100 / fileSize;
 
                                     if (percent == 100) {
@@ -315,34 +312,7 @@ public class ManagerGoodsActivity extends BaseActivity implements View.OnClickLi
 
     // TODO 打开格子柜子测试
     public void openGeziAllCMD() {
-        List<Passage> passageList = null;
-        if (passageList != null && passageList.size() > 0) {
 
-            NewVendingSerialPort.SingleInit().setOnCmdCallBackListen(new NewVendingSerialPort.OnCmdCallBackListen() {
-                @Override
-                public void onCmdCallBack(boolean isSuccess) {
-
-                }
-            });
-            for (Passage passage : passageList) {
-                if (TextUtils.isEmpty(passage.getFlag())) {
-                    continue;
-                }
-                try {
-                    ShipmentObject shipmentObject = new ShipmentObject();
-                    shipmentObject.containerNum = Integer.parseInt(passage.getFlag()) + 1;
-                    shipmentObject.proNum = Integer.parseInt(passage.getSeqNo());
-                    shipmentObject.objectId = shipmentObject.containerNum + shipmentObject.proNum;
-                    NewVendingSerialPort.SingleInit().pushCmdOutShipment(shipmentObject);
-                } catch (Exception e) {
-
-                }
-            }
-
-
-        } else {
-            Toast.makeText(ManagerGoodsActivity.this, "暂时无货道配置。", Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

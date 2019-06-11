@@ -10,4 +10,7 @@
     <color name="uikit_dark_transparent_blue">#1A7ac2fd</color>
     <color name="uikit_dark_transparent_blue_dark">#A67ac2fd</color>
     <color name="uikit_blue">#ff7ac2fd</color>
+
+    <color name="title">#CC080606</color>
+    <color name="sub_title">#CC383636</color>
 </resources>

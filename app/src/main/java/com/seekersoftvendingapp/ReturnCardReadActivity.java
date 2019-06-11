@@ -13,11 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seekersoftvendingapp.database.table.ErrorRecord;
-import com.seekersoftvendingapp.database.table.Passage;
+import com.seekersoftvendingapp.network.entity.seekwork.MRoad;
 import com.seekersoftvendingapp.newtakeoutserial.CardReadSerialPort;
-import com.seekersoftvendingapp.track.Track;
-import com.seekersoftvendingapp.util.DataFormat;
 import com.seekersoftvendingapp.util.SeekerSoftConstant;
 
 /**
@@ -32,7 +29,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
     private String cardId = "";
 
-    private Passage passage;
+    private MRoad passage;
 
     private TextView tv_upup;
 
@@ -49,7 +46,7 @@ public class ReturnCardReadActivity extends BaseActivity {
 
         setTitle("刷卡确认");
 
-        passage = (Passage) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
+        passage = (MRoad) getIntent().getSerializableExtra(SeekerSoftConstant.PASSAGE);
         if (passage == null) {
             Toast.makeText(ReturnCardReadActivity.this, "输入货道信息有异常，请重试...", Toast.LENGTH_SHORT).show();
             this.finish();
@@ -83,8 +80,6 @@ public class ReturnCardReadActivity extends BaseActivity {
                     cardId = et_getcard.getText().toString().replace("\n", "");
                     if (TextUtils.isEmpty(cardId)) {
                         // 读到的卡号为null or ""
-                        ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "还货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                        Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                         Toast.makeText(ReturnCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                     } else {
                         // 处理业务
@@ -116,8 +111,6 @@ public class ReturnCardReadActivity extends BaseActivity {
                         cardId = et_getcard.getText().toString().replace("\n", "");
                         if (TextUtils.isEmpty(cardId)) {
                             // 读到的卡号为null or ""
-                            ErrorRecord errorRecord = new ErrorRecord(null, false, (TextUtils.isEmpty(passage.getFlag()) ? "" : passage.getFlag()) + passage.getSeqNo(), cardId, "还货", "读到的卡号为空.", DataFormat.getNowTime(), "", "", "");
-                            Track.getInstance(getApplicationContext()).setErrorCommand(errorRecord);
                             Toast.makeText(ReturnCardReadActivity.this, "请重新读卡...", Toast.LENGTH_SHORT).show();
                         } else {
                             // 处理业务
