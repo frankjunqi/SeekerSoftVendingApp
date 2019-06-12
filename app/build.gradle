@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.seekersoftvendingapp"
         minSdkVersion 16
@@ -33,31 +33,25 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    
-    compile project(':DaoCore')
-    compile project(':DaoGenerator')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //compile project(':DaoCore')
+    //compile project(':DaoGenerator')
 
     // This is only needed if you want to use encrypted databases
-    compile 'net.zetetic:android-database-sqlcipher:3.5.4'
+    //compile 'net.zetetic:android-database-sqlcipher:3.5.4'
 
     // android rxjava rxandroid rxbinging
-    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.1.8'
+    api 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    api 'io.reactivex:rxandroid:1.2.1'
+    api 'io.reactivex:rxjava:1.1.8'
 
     // android support libs
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile "com.android.support:recyclerview-v7:23.2.0"
-    compile 'com.android.support:design:23.2.0'
+    api 'com.android.support:appcompat-v7:23.2.0'
+    api "com.android.support:recyclerview-v7:23.2.0"
+    api 'com.android.support:design:23.2.0'
 
-    // android test unit lib
-    testCompile 'junit:junit:4.12'
 
-    compile 'com.tencent.bugly:crashreport:latest.release'
+    api 'com.tencent.bugly:crashreport:latest.release'
 
-    compile 'com.android.support:multidex:1.0.1'
+    api 'com.android.support:multidex:1.0.1'
 }

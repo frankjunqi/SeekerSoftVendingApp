@@ -1,8 +1,5 @@
 package com.seekersoftvendingapp.network.entity.basedata;
 
-import com.seekersoftvendingapp.database.table.AdminCard;
-import com.seekersoftvendingapp.util.DataFormat;
-
 import java.io.Serializable;
 
 /**
@@ -17,7 +14,4 @@ public class AdminCardEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
-    public AdminCard getAdminCard() {
-        return new AdminCard(isDel, card, objectId, createdAt, updatedAt, "", "", "");
-    }
 }

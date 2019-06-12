@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.seekersoftvendingapp.track.Track;
-
 /**
  * 监听网络变化
  * Created by kjh08490 on 2016/12/14.
@@ -25,7 +23,6 @@ public class NetworkBroadcastReceiver extends BroadcastReceiver {
                 /////////////网络连接(如果之前是断网情况下，则连上网络需要同步所有数据到服务端)
                 if (!SeekerSoftConstant.NETWORKCONNECT) {
                     SeekerSoftConstant.NETWORKCONNECT = true;
-                    Track.getInstance(context).synchroDataToServer();
                 }
             } else {
                 ////////网络断开

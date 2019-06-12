@@ -8,10 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/DaoCore" />
-            <option value="$PROJECT_DIR$/DaoGenerator" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/greendao-api" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

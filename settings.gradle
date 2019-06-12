@@ -1,1 +1,2 @@
-include ':app', ':greendao-api', ':DaoCore', ':DaoGenerator'
+include ':app'
+//, ':greendao-api', ':DaoCore', ':DaoGenerator'

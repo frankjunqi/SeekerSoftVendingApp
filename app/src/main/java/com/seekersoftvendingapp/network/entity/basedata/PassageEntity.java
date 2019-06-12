@@ -1,10 +1,5 @@
 package com.seekersoftvendingapp.network.entity.basedata;
 
-import android.text.TextUtils;
-
-import com.seekersoftvendingapp.database.table.Passage;
-import com.seekersoftvendingapp.util.DataFormat;
-
 import java.io.Serializable;
 
 /**
@@ -27,7 +22,4 @@ public class PassageEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
-    public Passage getPassage() {
-        return new Passage(capacity, isDel, seqNo, used, product, borrowState, stock, isSend, TextUtils.isEmpty(flag) ? "" : flag, whorlSize, "", objectId, createdAt, updatedAt, "", "", "");
-    }
 }

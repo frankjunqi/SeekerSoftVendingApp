@@ -1,8 +1,5 @@
 package com.seekersoftvendingapp.network.entity.basedata;
 
-import com.seekersoftvendingapp.database.table.EmpCard;
-import com.seekersoftvendingapp.util.DataFormat;
-
 import java.io.Serializable;
 
 /**
@@ -18,7 +15,4 @@ public class EmpCardEntity implements Serializable {
     public String updatedAt;//"2017-03-28T15:45:09.070Z",
     public String objectId;//"58da790e5c497d00570d61e7"
 
-    public EmpCard getEmpCard() {
-        return new EmpCard(card, emp, isDel, createdAt, updatedAt, objectId, "", "", "");
-    }
 }

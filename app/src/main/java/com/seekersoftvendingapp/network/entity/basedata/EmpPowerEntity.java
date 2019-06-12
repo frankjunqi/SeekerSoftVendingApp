@@ -1,8 +1,5 @@
 package com.seekersoftvendingapp.network.entity.basedata;
 
-import com.seekersoftvendingapp.database.table.EmpPower;
-import com.seekersoftvendingapp.util.DataFormat;
-
 import java.io.Serializable;
 
 /**
@@ -21,7 +18,4 @@ public class EmpPowerEntity implements Serializable {
     public String createdAt;
     public String updatedAt;
 
-    public EmpPower getEmpPower() {
-        return new EmpPower(emp, unit, isDel, product, count, period, used, objectId, createdAt, updatedAt, "", "", "");
-    }
 }
