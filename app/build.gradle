@@ -12,10 +12,38 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            keyAlias 'seeksoftapp'
+            keyPassword 'seeksoftapp'
+            storeFile file('seeksoftapp')
+            storePassword 'seeksoftapp'
+            v2SigningEnabled false
+        }
+        debug {
+            keyAlias 'seeksoftapp'
+            keyPassword 'seeksoftapp'
+            storeFile file('seeksoftapp')
+            storePassword 'seeksoftapp'
+            v2SigningEnabled false
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.debug
+
+            aaptOptions.cruncherEnabled = false
+            aaptOptions.useNewCruncher = false
         }
     }
     splits {

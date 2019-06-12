@@ -2,9 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/DaoCore" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/DaoGenerator" vcs="svn" />
     <mapping directory="$PROJECT_DIR$/app" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/greendao-api" vcs="svn" />
   </component>
 </project>
