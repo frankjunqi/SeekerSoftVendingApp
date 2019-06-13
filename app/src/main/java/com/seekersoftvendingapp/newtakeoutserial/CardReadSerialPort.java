@@ -59,21 +59,8 @@ public class CardReadSerialPort {
         onDataReceiveListener = dataReceiveListener;
     }
 
-    byte[] testbyte = new byte[11];
 
     public CardReadSerialPort() {
-        testbyte[0]=0x02;
-        testbyte[1]= 0x30;
-        testbyte[2]=0x31;
-        testbyte[3]=0x38;
-        testbyte[4]= 0x31;
-        testbyte[5]= 0x30;
-        testbyte[6]= 0x31;
-        testbyte[7]=0x44;
-        testbyte[7]= 0x34;
-        testbyte[8]= 0x0D;
-        testbyte[9]=0x0A;
-        testbyte[10]=0x03;
         onCreate();
     }
 

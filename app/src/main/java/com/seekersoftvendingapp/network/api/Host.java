@@ -7,6 +7,6 @@ public class Host {
 
     //public static String HOST = "http://smartbox.leanapp.cn/";
 
-    public static String HOST = "http://27.54.248.35:7852/api/";
+    public static String HOST = "http://vendingapi.seekersoft.cn/api/";
 
 }
