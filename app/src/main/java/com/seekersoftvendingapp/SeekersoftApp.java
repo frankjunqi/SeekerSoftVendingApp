@@ -5,6 +5,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.seekersoftvendingapp.newtakeoutserial.NewVendingSerialPort;
+import com.seekersoftvendingapp.util.DeviceInfoTool;
+import com.seekersoftvendingapp.util.SeekerSoftConstant;
 import com.tencent.bugly.crashreport.CrashReport;
 
 /**
@@ -28,7 +30,7 @@ public class SeekersoftApp extends Application {
         CrashReport.initCrashReport(getApplicationContext(), "900004362", true);
 
         // 初始化设备信息
-        //SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
+        SeekerSoftConstant.DEVICEID = DeviceInfoTool.getDeviceId();
         // 初始化串口设备
         NewVendingSerialPort.SingleInit();
 
