@@ -101,8 +101,7 @@ public class CardReadSerialPort {
         @Override
         public void run() {
             super.run();
-            // 起始码 字节码 地址码 功能码 排序 Yn行 Xn列 转数 卸货时间S 开关状态 掉货状态 CRC低 CRC高 停止码
-            byte[] backData = new byte[16];
+            String IDNUM = "";
             while (!isStop && !isInterrupted()) {
                 // 串口开启，做读取数据
                 int size = 1;
@@ -110,42 +109,24 @@ public class CardReadSerialPort {
                     if (mInputStream == null) {
                         return;
                     }
-                    size = mInputStream.read(backData);
-                    String hexStr = bytesToHexString(backData);
-                    Log.e("TAG", "byte to str= " + hexStr + ",size=" + size);
-                    // 默认以 "0xFE" 结束读取
-                    if (hexStr.contains("0D0A03")) {
+                    byte[] buffer = new byte[1];
+                    size = mInputStream.read(buffer);
+                    IDNUM = IDNUM + new String(buffer, 0, size);
+                    Log.e("test", "idnum = " + IDNUM);
+
+                    // 默认以 "\r\n" 结束读取
+                    if (IDNUM.endsWith("\r\n")) {
                         if (null != onDataReceiveListener) {
-                            String tmp = hexStr.replace("02", "").replace("0D0A03 ", "");
-                            String[] strlist = new String[tmp.length() / 2];
-                            for (int i = 0; i < tmp.length() / 2; i++) {
-                                strlist[i] = tmp.substring(i * 2, (i + 1) * 2);
-                            }
+                            String tmpIDNUM = getStringIn(IDNUM);
+                            String cat = Integer.valueOf(tmpIDNUM.substring(tmpIDNUM.length() - 8), 16).toString();
+                            int addChar = 10 - cat.length();
                             String out = "";
-                            for (int i = strlist.length; i < strlist.length; i++) {
-                                if ("30".equals(strlist[i])) {
-                                    out = out + "0";
-                                } else if ("31".equals(strlist[i])) {
-                                    out = out + "1";
-                                } else if ("32".equals(strlist[i])) {
-                                    out = out + "2";
-                                } else if ("33".equals(strlist[i])) {
-                                    out = out + "3";
-                                } else if ("34".equals(strlist[i])) {
-                                    out = out + "4";
-                                } else if ("35".equals(strlist[i])) {
-                                    out = out + "5";
-                                } else if ("36".equals(strlist[i])) {
-                                    out = out + "6";
-                                } else if ("37".equals(strlist[i])) {
-                                    out = out + "7";
-                                } else if ("38".equals(strlist[i])) {
-                                    out = out + "8";
-                                } else if ("39".equals(strlist[i])) {
-                                    out = out + "9";
-                                }
+                            for (int i = 0; i < addChar; i++) {
+                                out = out + "0";
                             }
+                            out = out + cat;
                             onDataReceiveListener.onDataReceiveString(out);
+                            IDNUM = "";
                         }
                     }
                 } catch (Exception e) {
