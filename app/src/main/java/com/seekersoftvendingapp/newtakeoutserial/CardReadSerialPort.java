@@ -96,29 +96,56 @@ public class CardReadSerialPort {
     }
 
 
-
     private class ReadThread extends Thread {
 
         @Override
         public void run() {
-            String IDNUM = "";
+            super.run();
+            // 起始码 字节码 地址码 功能码 排序 Yn行 Xn列 转数 卸货时间S 开关状态 掉货状态 CRC低 CRC高 停止码
+            byte[] backData = new byte[16];
             while (!isStop && !isInterrupted()) {
                 // 串口开启，做读取数据
-                int size=1;
+                int size = 1;
                 try {
                     if (mInputStream == null) {
                         return;
                     }
-                    byte[] buffer = new byte[1];
-                    size = mInputStream.read(buffer);
-                    IDNUM = IDNUM + new String(buffer, 0, size);
-                    Log.e("test","idnum = "+ IDNUM);
-
-                    // 默认以 "\r\n" 结束读取
-                    if (IDNUM.endsWith("\r\n")) {
+                    size = mInputStream.read(backData);
+                    String hexStr = bytesToHexString(backData);
+                    Log.e("TAG", "byte to str= " + hexStr + ",size=" + size);
+                    // 默认以 "0xFE" 结束读取
+                    if (hexStr.contains("0D0A03")) {
                         if (null != onDataReceiveListener) {
-                            onDataReceiveListener.onDataReceiveString(getStringIn(IDNUM));
-                            IDNUM = "";
+                            String tmp = hexStr.replace("02", "").replace("0D0A03 ", "");
+                            String[] strlist = new String[tmp.length() / 2];
+                            for (int i = 0; i < tmp.length() / 2; i++) {
+                                strlist[i] = tmp.substring(i * 2, (i + 1) * 2);
+                            }
+                            String out = "";
+                            for (int i = strlist.length; i < strlist.length; i++) {
+                                if ("30".equals(strlist[i])) {
+                                    out = out + "0";
+                                } else if ("31".equals(strlist[i])) {
+                                    out = out + "1";
+                                } else if ("32".equals(strlist[i])) {
+                                    out = out + "2";
+                                } else if ("33".equals(strlist[i])) {
+                                    out = out + "3";
+                                } else if ("34".equals(strlist[i])) {
+                                    out = out + "4";
+                                } else if ("35".equals(strlist[i])) {
+                                    out = out + "5";
+                                } else if ("36".equals(strlist[i])) {
+                                    out = out + "6";
+                                } else if ("37".equals(strlist[i])) {
+                                    out = out + "7";
+                                } else if ("38".equals(strlist[i])) {
+                                    out = out + "8";
+                                } else if ("39".equals(strlist[i])) {
+                                    out = out + "9";
+                                }
+                            }
+                            onDataReceiveListener.onDataReceiveString(out);
                         }
                     }
                 } catch (Exception e) {
@@ -126,6 +153,7 @@ public class CardReadSerialPort {
                     return;
                 }
             }
+
         }
     }
 
@@ -139,8 +167,25 @@ public class CardReadSerialPort {
         return (byte) Integer.parseInt(inHex, 16);
     }
 
-    public String getStringIn(String str){
-        String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+    /**
+     * 数组转换成十六进制字符串
+     *
+     * @return HexString
+     */
+    public String bytesToHexString(byte[] bArray) {
+        StringBuffer sb = new StringBuffer(bArray.length);
+        String sTemp;
+        for (int i = 0; i < bArray.length; i++) {
+            sTemp = Integer.toHexString(0xFF & bArray[i]);
+            if (sTemp.length() < 2)
+                sb.append(0);
+            sb.append(sTemp.toUpperCase());
+        }
+        return sb.toString();
+    }
+
+    public String getStringIn(String str) {
+        String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
