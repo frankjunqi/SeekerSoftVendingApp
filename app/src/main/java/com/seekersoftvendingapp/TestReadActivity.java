@@ -45,11 +45,6 @@ public class TestReadActivity extends BaseActivity {
                 });
 
             }
-
-            @Override
-            public void onDataReceiveBuffer(byte[] buffer, int size) {
-
-            }
         });
 
         btn_click.setOnClickListener(new View.OnClickListener() {

@@ -120,10 +120,6 @@ public class BorrowCardReadActivity extends BaseActivity {
                 });
             }
 
-            @Override
-            public void onDataReceiveBuffer(byte[] buffer, int size) {
-
-            }
         });
 
     }

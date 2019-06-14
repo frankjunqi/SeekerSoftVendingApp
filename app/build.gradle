@@ -7,8 +7,8 @@ android {
         applicationId "com.seekersoftvendingapp"
         minSdkVersion 16
         targetSdkVersion 19
-        versionCode 110
-        versionName "1.1.0"
+        versionCode 120
+        versionName "1.2.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

@@ -52,7 +52,6 @@ public class CardReadSerialPort {
     public interface OnDataReceiveListener {
         void onDataReceiveString(String IDNUM);
 
-        void onDataReceiveBuffer(byte[] buffer, int size);
     }
 
     public void setOnDataReceiveListener(OnDataReceiveListener dataReceiveListener) {
@@ -115,8 +114,6 @@ public class CardReadSerialPort {
                     IDNUM = IDNUM + new String(buffer, 0, size);
                     Log.e("test","idnum = "+ IDNUM);
 
-                    // 实时传出buffer,让业务进行处理。什么时候开始,什么时候结束
-                    onDataReceiveListener.onDataReceiveBuffer(buffer, size);
                     // 默认以 "\r\n" 结束读取
                     if (IDNUM.endsWith("\r\n")) {
                         if (null != onDataReceiveListener) {

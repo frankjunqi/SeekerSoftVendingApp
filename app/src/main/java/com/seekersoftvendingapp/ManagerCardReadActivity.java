@@ -111,10 +111,6 @@ public class ManagerCardReadActivity extends BaseActivity {
                 });
             }
 
-            @Override
-            public void onDataReceiveBuffer(byte[] buffer, int size) {
-
-            }
         });
     }
 

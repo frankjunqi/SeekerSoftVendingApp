@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_versiondesc = (TextView) findViewById(R.id.tv_versiondesc);
         tv_number.setText(SeekerSoftConstant.machine);
         tv_phone.setText(SeekerSoftConstant.phoneDesc + ": " + SeekerSoftConstant.versionDesc);
-        tv_versiondesc.setText("软件版本 1.0.0, 设备型号 " + SeekerSoftConstant.machine);
+        tv_versiondesc.setText("软件版本 1.2.0, ");
 
         btn_getproduct.setOnClickListener(this);
         btn_borrow.setOnClickListener(this);
@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tv_phone.setText(SeekerSoftConstant.phoneDesc + ": " + SeekerSoftConstant.versionDesc);
         }
         if (tv_versiondesc != null) {
-            tv_versiondesc.setText("软件版本 1.0.0, 设备型号 " + SeekerSoftConstant.machine);
+            tv_versiondesc.setText("软件版本 1.2.0, ");
         }
     }
 
