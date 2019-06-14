@@ -56,9 +56,9 @@ public class ManagerCheckPassageAdapter extends RecyclerView.Adapter<ManagerChec
     @Override
     public void onBindViewHolder(final ManagerPassageViewHolder holder, final int position) {
         MRoad passage = dataset.get(position);
-        holder.tv_passageid.setText(String.valueOf(passage.getNo()));
+        holder.tv_passageid.setText(String.valueOf(passage.getRoadCode()));
         holder.tv_productname.setText(String.valueOf(passage.getProductName()));
-        holder.tv_modify_num.setText(String.valueOf(passage.getLackNum()));
+        holder.tv_modify_num.setText(String.valueOf(passage.getCapacity()));
     }
 
     @Override
