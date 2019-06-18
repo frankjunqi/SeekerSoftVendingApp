@@ -117,15 +117,15 @@ public class CardReadSerialPort {
                     // 默认以 "\r\n" 结束读取
                     if (IDNUM.endsWith("\r\n")) {
                         if (null != onDataReceiveListener) {
-                            String tmpIDNUM = getStringIn(IDNUM);
+                            /*String tmpIDNUM = getStringIn(IDNUM);
                             String cat = Integer.valueOf(tmpIDNUM.substring(tmpIDNUM.length() - 8), 16).toString();
                             int addChar = 10 - cat.length();
                             String out = "";
                             for (int i = 0; i < addChar; i++) {
                                 out = out + "0";
                             }
-                            out = out + cat;
-                            onDataReceiveListener.onDataReceiveString(out);
+                            out = out + cat;*/
+                            onDataReceiveListener.onDataReceiveString(getStringIn(IDNUM));
                             IDNUM = "";
                         }
                     }

@@ -76,6 +76,7 @@ public class TakeOutInsertNumActivity extends BaseActivity {
 
     // 查询货道信息
     private void queryRoad() {
+        showProgress();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Host.HOST).addConverterFactory(GsonConverterFactory.create()).build();
         SeekWorkService service = retrofit.create(SeekWorkService.class);
         Call<SrvResult<List<MRoad>>> mRoadAction = service.queryRoad(SeekerSoftConstant.machine);
@@ -89,12 +90,14 @@ public class TakeOutInsertNumActivity extends BaseActivity {
                     // 可以让输入货道可点击
                     countDownTimer.start();
                 }
+                hideProgress();
             }
 
             @Override
             public void onFailure(Call<SrvResult<List<MRoad>>> call, Throwable throwable) {
                 // 异常
                 Toast.makeText(TakeOutInsertNumActivity.this, "提示：网络异常。", Toast.LENGTH_LONG).show();
+                hideProgress();
             }
         });
 

@@ -131,7 +131,6 @@ public class HandleTakeOutResultActivity extends BaseActivity {
         SeekWorkService service = retrofit.create(SeekWorkService.class);
         final Call<SrvResult<MPickQueryByRFID>> mRoadAction = service.pickQueryByRFID(cardNo, SeekerSoftConstant.machine, passage.getCabNo(), passage.getRoadCode(), number
         );
-        LogCat.e("url = " + mRoadAction.request().url().toString());
         mRoadAction.enqueue(new Callback<SrvResult<MPickQueryByRFID>>() {
             @Override
             public void onResponse(Call<SrvResult<MPickQueryByRFID>> call, Response<SrvResult<MPickQueryByRFID>> response) {
@@ -147,7 +146,7 @@ public class HandleTakeOutResultActivity extends BaseActivity {
                 } else {
                     // 无数据
                     handleResult(new TakeOutError(TakeOutError.ERROR_FLAG));
-                    Toast.makeText(HandleTakeOutResultActivity.this, "提示：" + response.body().getMsg() + "。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(HandleTakeOutResultActivity.this, "提示：后台权限校验失败，请联系管理员。", Toast.LENGTH_LONG).show();
                 }
                 hideProgress();
             }
